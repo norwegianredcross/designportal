@@ -6,7 +6,7 @@ Two services, one repo: `services/xp` (Enonic XP, headless CMS) and `services/ne
 ## Non-negotiables
 
 - The redaktørvisning (Content Studio editor experience) and the block model must stay
-  aligned with rodekors.no's CMS repo (`CMS100002-webpage`). Block definitions come from
+  aligned with the rodekors.no CMS architecture. Block definitions come from
   `no.item:lib-xp-item-blocks`; this app selects blocks by shadowing
   `site/mixins/blocks/blocks.xml`. Do not fork the block forms.
 - The Next side renders with `rk-designsystem` components. No hand-rolled UI where a design

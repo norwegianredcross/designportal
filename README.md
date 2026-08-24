@@ -1,7 +1,7 @@
 # Røde Kors Designsystem — dokumentasjonsplattform
 
 Documentation platform for the Røde Kors design system, built in the same shape as
-rodekors.no's CMS repo (`CMS100002-webpage`): two cooperating services under
+the rodekors.no CMS architecture: two cooperating services under
 [`services/`](./services):
 
 - **Enonic XP** ([`services/xp`](./services/xp)) — headless CMS. Defines the block-based
