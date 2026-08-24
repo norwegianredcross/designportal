@@ -1,0 +1,115 @@
+plugins {
+  id 'com.enonic.xp.app' version '3.6.2'
+  id 'com.github.node-gradle.node' version '7.1.0'
+  id "no.item.xp.codegen" version "2.7.0"
+}
+
+app {
+  name = "${appName}"
+  displayName = "Røde kors"
+  vendorName = "${vendorName}"
+  vendorUrl = "${vendorUrl}"
+  systemVersion = "${xpVersion}"
+}
+
+dependencies {
+  implementation "com.enonic.xp:core-api:${xpVersion}"
+
+  include "com.enonic.xp:lib-auth:${xpVersion}"
+  include "com.enonic.xp:lib-content:${xpVersion}"
+  include "com.enonic.xp:lib-context:${xpVersion}"
+  include "com.enonic.xp:lib-i18n:${xpVersion}"
+
+  include 'com.enonic.lib:lib-http-client:3.2.2'
+
+  include "no.item:lib-xp-item-blocks:0.5.0"
+  include "no.item:lib-xp-time:1.6.1"
+  include "no.item:lib-xp-feature-toggles:1.0.0"
+}
+
+repositories {
+  mavenLocal()
+  mavenCentral()
+  xp.enonicRepo()
+  maven { url = uri("https://repo.itemtest.no/releases") }
+  maven { url = uri("https://repo.itemtest.no/snapshots") }
+}
+
+node {
+  // Whether to download and install a specific Node.js version or not
+  // If false, it will use the globally installed Node.js
+  // If true, it will download node using above parameters
+  // Note that npm is bundled with Node.js
+  download = true
+
+  // Version of node to download and install (only used if download is true)
+  // It will be unpacked in the workDir
+  version = '22.22.3'
+}
+
+processResources {
+	exclude '**/.gitkeep'
+  exclude '**/*.json'
+	exclude '**/*.ts'
+	exclude '**/*.tsx'
+}
+
+tasks.register('dev', Exec) {
+  if (org.gradle.internal.os.OperatingSystem.current().isWindows()) {
+    commandLine 'cmd', '/c', 'gradlew.bat', 'deploy', '-t'
+  } else {
+    commandLine './gradlew', 'deploy', '-t'
+  }
+}
+
+tasks.register('npmBuild', NpmTask) {
+  args = [
+    'run',
+    '--silent',
+    'build'
+  ]
+  dependsOn npmInstall
+  environment = [
+    'FORCE_COLOR': 'true',
+    'LOG_LEVEL_FROM_GRADLE': gradle.startParameter.logLevel.toString(),
+    'NODE_ENV': project.hasProperty('dev') || project.hasProperty('development') ? 'development' : 'production'
+  ]
+  inputs.dir 'src/main/resources'
+  outputs.dir 'build/resources/main'
+  outputs.upToDateWhen { false }
+}
+
+jar.dependsOn npmBuild
+
+tasks.register('npmCheck', NpmTask) {
+	dependsOn npmInstall
+	args = [
+		'run',
+		'check'
+	]
+	environment = [
+		'FORCE_COLOR': 'true',
+	]
+}
+
+check.dependsOn npmCheck
+
+tasks.register('npmTest', NpmTask) {
+	args = [
+		'run',
+		'cov'
+	]
+	dependsOn npmInstall
+	environment = [
+		'FORCE_COLOR': 'true',
+	]
+  inputs.dir 'src/jest'
+  outputs.dir 'coverage'
+  outputs.upToDateWhen { false }
+}
+
+test.dependsOn npmTest
+
+tasks.withType(Copy).configureEach {
+  includeEmptyDirs = false
+}

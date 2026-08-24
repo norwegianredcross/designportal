@@ -1,0 +1,8 @@
+schema: schema.graphql
+extensions:
+  endpoints:
+    dev:
+      url: http://localhost:8080/site/rodekors/master
+      subscription:
+        url: ws://localhost:8080/site/rodekors/master
+      introspect: true

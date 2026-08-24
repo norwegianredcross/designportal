@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<x-data xmlns="urn:enonic:xp:model:1.0">
+  <display-name i18n="x-data.frontpage.displayName">Frontpage content</display-name>
+
+  <form>
+    <mixin name="content-header" />
+    <mixin name="blocks" />
+  </form>
+</x-data>

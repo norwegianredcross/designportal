@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<content-type xmlns="urn:enonic:xp:model:1.0">
+  <display-name i18n="contentType.page.displayName">Page</display-name>
+  <description i18n="contentType.page.description">Versatile page for block based content</description>
+  <super-type>base:structured</super-type>
+
+  <form>
+    <mixin name="content-header" />
+    <mixin name="blocks" />
+  </form>
+</content-type>

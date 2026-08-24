@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mixin xmlns="urn:enonic:xp:model:1.0">
+  <display-name i18n="mixin.content-header.displayName">Content header</display-name>
+
+  <form>
+    <field-set>
+      <label i18n="mixin.content-header.displayName">Content header</label>
+      <items>
+        <input type="TextLine" name="title">
+          <label i18n="mixin.content-header.title">Title</label>
+          <occurrences minimum="0" maximum="1"/>
+        </input>
+
+        <input name="intro" type="HtmlArea">
+          <label i18n="mixin.content-header.intro">Intro</label>
+          <occurrences minimum="0" maximum="1"/>
+          <config>
+            <exclude>*</exclude>
+            <include>Bold Italic Strike | RemoveFormat | SpecialChar Macro | Link Unlink</include>
+          </config>
+        </input>
+      </items>
+    </field-set>
+  </form>
+</mixin>
