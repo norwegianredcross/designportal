@@ -1,3 +1,20 @@
+/**
+ * Guillotine schema extension — the bridge between how editors STORE blocks
+ * and how the frontend wants to READ them.
+ *
+ * Editors fill an option-set (site/mixins/blocks/blocks.xml): each entry is
+ * one chosen block type with its fields nested under the option name and a
+ * `_selected` discriminator. That raw shape is awkward to consume, so this
+ * file exposes a flattened `blocks(key)` field on the API instead: a list of
+ * a GraphQL UNION, one member type per block, each tagged with __typename.
+ * The frontend then dispatches on __typename (see the Next side's
+ * components/blocks/registry.ts).
+ *
+ * Adding a block always touches the union member type and the
+ * `resolveBlocks` switch that maps `_selected` -> typed object — plus field
+ * resolvers when a field needs server-side processing (rich text, image
+ * URLs); plain string fields resolve on their own.
+ */
 import { type Content, get as getOne } from "/lib/xp/content";
 import { imageUrl, type ImageUrlParams } from "/lib/xp/portal";
 import { forceArray } from "/lib/rodekors/arrays";
@@ -78,6 +95,10 @@ export function extensions(graphQL: GraphQL): Extensions {
           },
         },
       },
+      // Every field declared here must be mirrored by the resolveBlocks
+      // switch below AND by the fragments in the Next side's query files —
+      // GraphQL only serves what the type declares, and the frontend only
+      // receives what the fragment selects.
       [OBJECT_TYPE_BLOCK_FACTBOX]: {
         description: "A box containing text that can have different background colors",
         fields: {

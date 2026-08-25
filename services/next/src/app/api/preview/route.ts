@@ -1,3 +1,11 @@
+/**
+ * Called by the XP-side Next.XP app when Content Studio opens a preview.
+ * Enables Next's draft mode and redirects to the requested path. The cookie
+ * itself does not choose the branch — it makes fetchContent forward the
+ * request headers (and opt out of static rendering); the draft branch is
+ * selected by XP's render-mode header on those forwarded requests.
+ * Token-gated: only XP, which shares ENONIC_API_TOKEN, can enable it.
+ */
 import { draftMode } from "next/headers";
 import { redirect } from "next/navigation";
 import type { NextRequest } from "next/server";

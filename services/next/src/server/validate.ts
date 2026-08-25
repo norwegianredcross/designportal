@@ -1,3 +1,7 @@
+/**
+ * Shared gate for the /api/* routes: XP authenticates itself with the same
+ * ENONIC_API_TOKEN both sides read from config, passed as ?token=.
+ */
 import { NextResponse } from "next/server";
 
 export function validateToken(token: string | null) {

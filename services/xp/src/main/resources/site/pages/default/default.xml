@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- Descriptor only - no server-side controller. It exists so Content
+     Studio can offer "Standard" as a page controller and expose the two
+     regions; the actual rendering happens in the Next app (pages/Default
+     mapping in _mappings.tsx). -->
 <page xmlns="urn:enonic:xp:model:1.0">
   <display-name i18n="page.default.displayName">Default</display-name>
   <description i18n="page.default.description">Default page view adding headers with menus and footer</description>

@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- Title + intro shown at the top of every page. The intro's toolbar is
+     deliberately stripped to a minimal set (exclude * / include list below)
+     - same trimmed editor experience as rodekors.no. -->
 <mixin xmlns="urn:enonic:xp:model:1.0">
   <display-name i18n="mixin.content-header.displayName">Content header</display-name>
 

@@ -1,3 +1,12 @@
+/**
+ * Builds the RichText shape ({raw, processedHtml, links, images, macros})
+ * that the Next adapter's RichTextView expects, from a stored HtmlArea
+ * string: internal content://, media:// and image:// hrefs are replaced with
+ * data-link-ref/data-image-ref markers, portal.processHtml resolves URLs,
+ * and macro comments become editor-macro tags. The Next side re-joins the
+ * markers with the links/images arrays at render time — this contract is
+ * shared with rodekors.no and must not drift.
+ */
 import { processHtml } from "/lib/xp/portal";
 import { UUID } from "/lib/rodekors/uuid";
 

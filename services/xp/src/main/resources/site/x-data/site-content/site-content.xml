@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- x-data can attach extra form fields to existing content types without
+     changing them. This one (header+blocks on arbitrary content) is kept
+     from the reference scaffold but is currently UNWIRED: site.xml does not
+     mount it and no query selects it. Delete or wire it when a need
+     appears. -->
 <x-data xmlns="urn:enonic:xp:model:1.0">
   <display-name i18n="x-data.frontpage.displayName">Frontpage content</display-name>
 

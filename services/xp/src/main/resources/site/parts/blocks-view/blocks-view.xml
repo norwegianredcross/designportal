@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- Descriptor only - the Next app renders it (BlocksView mapping). Editors
+     place this part in a region to output the page's block sequence. -->
 <part xmlns="urn:enonic:xp:model:1.0">
   <display-name i18n="part.blocks-view.displayName">Blocks view</display-name>
   <description i18n="part.blocks-view.description">Your page content is build by a sequence of blocks</description>

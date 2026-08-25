@@ -1,3 +1,16 @@
+/**
+ * Wraps every content render with the editor-awareness Content Studio needs:
+ *
+ * - In EDIT mode (the page editor iframe) the output is wrapped in
+ *   StaticContent, which disables hydration — clicks select components in
+ *   the editor instead of triggering app interactivity.
+ * - For COMPONENT requests, Content Studio is live-refreshing ONE component
+ *   after an edit; the `data-single-component-output` wrapper is the marker
+ *   the XP-side Next.XP proxy looks for to lift that fragment out of the
+ *   full page response before handing it to the editor.
+ *
+ * Neither branch affects normal visitors (renderMode NEXT).
+ */
 import { RENDER_MODE, XP_REQUEST_TYPE } from "@enonic/nextjs-adapter";
 import { fetchContent } from "@enonic/nextjs-adapter/server";
 import StaticContent from "@enonic/nextjs-adapter/views/StaticContent";

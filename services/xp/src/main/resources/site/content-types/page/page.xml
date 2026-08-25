@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- The one editorial content type: a page IS a content header plus a
+     sequence of blocks. Both parts come from mixins so the same form pieces
+     can be reused by x-data and parts. The editor form you see in Content
+     Studio for a "Side" is exactly these two mixins. -->
 <content-type xmlns="urn:enonic:xp:model:1.0">
   <display-name i18n="contentType.page.displayName">Page</display-name>
   <description i18n="contentType.page.description">Versatile page for block based content</description>

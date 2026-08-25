@@ -1,3 +1,9 @@
+/**
+ * Called by XP on publish/unpublish so Next drops its cached render of the
+ * affected path (or everything, when no path is given). With the catch-all
+ * currently force-dynamic this is belt-and-braces, but it keeps publish
+ * semantics correct if caching is ever enabled.
+ */
 import { revalidatePath } from "next/cache";
 import type { NextRequest } from "next/server";
 import { validateToken } from "@/server/validate";

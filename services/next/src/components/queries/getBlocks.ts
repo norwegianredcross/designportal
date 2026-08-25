@@ -7,6 +7,10 @@ export default () =>
   stripOperationName(/* GraphQL */ `
     query GetBlocks($path:ID!) {
       guillotine {
+        # blocks(key) is our own flattened field (defined in the XP app's
+        # guillotine.ts), not standard Guillotine. One inline fragment per
+        # union member; each must select every field its React view reads —
+        # anything not selected here arrives as undefined in the component.
         blocks(key:$path) {
           ...on no_rodekors_docs_BlockText {
             __typename

@@ -1,3 +1,11 @@
+/**
+ * Content Studio probes this endpoint before showing its preview/editor:
+ * "can the frontend render this content?" 200 = yes, 418 = no (404/500 pass
+ * through). The answer drives whether the page-editor panel opens at all —
+ * which is why the Side content-type mapping matters: it makes every Side
+ * renderable from the moment it is saved, so editors never meet a dead
+ * preview panel on fresh content.
+ */
 import { IS_DEV_MODE, RENDER_MODE } from "@enonic/nextjs-adapter";
 import { fetchContent } from "@enonic/nextjs-adapter/server";
 

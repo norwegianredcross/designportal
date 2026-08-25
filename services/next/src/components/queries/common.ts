@@ -1,5 +1,6 @@
-// This query is executed for every page rendering.
-// Result is included in props.common
+// Executed for every page render regardless of which view wins; the result
+// is handed to all views as props.common. Keep it minimal — everything here
+// is paid for on every single request.
 
 import { stripOperationName } from "@/utils";
 
