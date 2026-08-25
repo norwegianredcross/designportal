@@ -140,6 +140,15 @@ export function extensions(graphQL: GraphQL): Extensions {
           caption: {
             type: graphQL.GraphQLString,
           },
+          // Original pixel size of the media, read from the image content's
+          // metadata in resolveBlocks. The frontend only uses the RATIO —
+          // reserving layout space before the file loads (no CLS).
+          width: {
+            type: graphQL.GraphQLInt,
+          },
+          height: {
+            type: graphQL.GraphQLInt,
+          },
         },
       },
       [OBJECT_TYPE_BLOCK_IMAGES]: {
@@ -177,6 +186,12 @@ export function extensions(graphQL: GraphQL): Extensions {
             type: graphQL.GraphQLString,
           },
           kicker: {
+            type: graphQL.GraphQLString,
+          },
+          // Alt text for the card image, taken from the image CONTENT
+          // (its own alt-text/caption fields) since the card form has no
+          // alt field of its own — resolved in resolveBlocks.
+          imageAlt: {
             type: graphQL.GraphQLString,
           },
           // Plain string, not RichText: the editor field is a TextArea.
@@ -377,6 +392,8 @@ type ResolvedImageItem = {
   imageId?: string;
   altText?: string;
   caption?: string;
+  width?: number;
+  height?: number;
 };
 
 type ResolvedImagesBlock = {
@@ -394,6 +411,7 @@ type ResolvedCardItem = {
   kicker?: string;
   text?: string;
   imageId?: string;
+  imageAlt?: string;
   theme?: string;
   url?: string;
   contentPath?: string;
@@ -426,6 +444,35 @@ type ResolvedAccordionBlock = {
   theme?: string;
   items: ResolvedTextBlock[];
 };
+
+/**
+ * Original pixel size from the image content's media metadata (the x-data
+ * XP's media-info extraction fills in at upload). Missing metadata just
+ * omits the fields — the frontend falls back to loading without reserved
+ * space.
+ */
+function mediaPixelSize(imageId?: string): { width?: number; height?: number } {
+  if (!imageId) return {};
+  const media = getOne({ key: imageId }) as {
+    x?: { media?: { imageInfo?: { imageWidth?: number; imageHeight?: number } } };
+  } | null;
+  const info = media?.x?.media?.imageInfo;
+  // Number(): guillotine types these as strings on some content vintages.
+  return info?.imageWidth && info?.imageHeight
+    ? { width: Number(info.imageWidth), height: Number(info.imageHeight) }
+    : {};
+}
+
+/** Alt text stored ON the image content (Content Studio's own alt-text
+ * field, falling back to its caption). */
+function mediaAltText(imageId?: string): string | undefined {
+  if (!imageId) return undefined;
+  // Only the media's actual alt-text field: captions are visible prose
+  // ("Foto: ..."), and on cards the alt lands inside the wrapping link's
+  // accessible name — caption text does not belong there.
+  const media = getOne({ key: imageId }) as { data?: { altText?: string } } | null;
+  return media?.data?.altText ?? undefined;
+}
 
 function resolveBlocks(
   block: BlockRaw,
@@ -479,11 +526,15 @@ function resolveBlocks(
       return {
         __typename: OBJECT_TYPE_BLOCK_IMAGES,
         // forceArray: XP stores a single repeatable entry as a bare object.
-        items: forceArray(block["blocks-images"].items).map((item) => ({
-          imageId: item.imageId,
-          altText: item.altText,
-          caption: item.caption,
-        })),
+        items: forceArray(block["blocks-images"].items).map((item) => {
+          const size = mediaPixelSize(item.imageId);
+          return {
+            imageId: item.imageId,
+            altText: item.altText,
+            caption: item.caption,
+            ...size,
+          };
+        }),
         // The silhouette fields from the app's shadowed mixin, passed
         // through verbatim — the frontend owns clamping and defaults.
         form: block["blocks-images"].form,
@@ -514,6 +565,9 @@ function resolveBlocks(
             kicker: item.kicker,
             text: item.text,
             imageId: item.imageId,
+            // The card form has no alt field, so the image CONTENT's own
+            // alt text (or caption) speaks for it; empty means decorative.
+            imageAlt: mediaAltText(item.imageId),
             theme: item.theme,
             url: item.link?._selected === "external" ? item.link.external.externalLink : undefined,
             contentPath: target?._path ?? undefined,

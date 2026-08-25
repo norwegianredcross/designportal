@@ -66,6 +66,8 @@ export const Default: Story = {
       items: [
         {
           imageUrl: "https://placehold.co/600x800/D52B1E/fff?text=Bilde",
+          width: null,
+          height: null,
           altText: "Frivillige fra Røde Kors deler ut mat",
           caption: "Frivillige i aksjon under vinterberedskapen.",
         },
@@ -89,11 +91,15 @@ export const Gallery: Story = {
       items: [
         {
           imageUrl: "https://placehold.co/768x432/D52B1E/fff?text=1",
+          width: null,
+          height: null,
           altText: "Første bilde",
           caption: "Med bildetekst.",
         },
         {
           imageUrl: "https://placehold.co/768x432/1E1E1E/fff?text=2",
+          width: null,
+          height: null,
           altText: "Andre bilde",
           caption: null,
         },
@@ -102,6 +108,8 @@ export const Gallery: Story = {
           // (auto-fill keeps the empty track) instead of stretching. Its
           // portrait source also pins the uniform 2:1 crop.
           imageUrl: "https://placehold.co/600x800/78909C/fff?text=3",
+          width: null,
+          height: null,
           altText: "Tredje bilde",
           caption: "Oddetall wrapper pent.",
         },
@@ -110,8 +118,8 @@ export const Gallery: Story = {
   },
 };
 
-/** The Design retning notched step form: a shallow bite clipped from one
- * bottom corner, built as the union of two rounded image regions. */
+/** The Design retning notched step form: a bite clipped from one edge by
+ * the generated SVG mask (notchMask.ts). */
 export const Notch: Story = {
   args: {
     size: "medium",
@@ -129,6 +137,8 @@ export const Notch: Story = {
       items: [
         {
           imageUrl: "https://placehold.co/800x600/2E7D32/fff?text=Bilde",
+          width: null,
+          height: null,
           altText: "Telt i skogen",
           caption: null,
         },
@@ -156,6 +166,8 @@ export const NotchWide: Story = {
       items: [
         {
           imageUrl: "https://placehold.co/1600x686/D52B1E/fff?text=Bred",
+          width: null,
+          height: null,
           altText: "Bredt heltebilde",
           caption: null,
         },

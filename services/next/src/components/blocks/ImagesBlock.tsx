@@ -90,6 +90,10 @@ export function ImagesBlock({ data, size = "medium", shape = "rounded", notch }:
     >
       {items.map((item, index) => {
         const notched = !gallery && effectiveShape === "notch";
+        // Reserve the image's own aspect ratio (from the media metadata)
+        // before the file loads; without both dimensions the browser sizes
+        // it on arrival like before.
+        const naturalRatio = item.width && item.height ? `${item.width} / ${item.height}` : undefined;
         const img = (
           <img
             src={item.imageUrl ?? undefined}
@@ -103,12 +107,7 @@ export function ImagesBlock({ data, size = "medium", shape = "rounded", notch }:
                     // sheet. A lone image keeps its natural shape up to a
                     // height cap — beyond it, cover-cropping keeps the
                     // column tidy instead of towering over the article.
-                    // TODO: the lone image still has no reserved height
-                    // below the cap (the GraphQL fragment exposes no
-                    // dimensions), so the article can shift when it loads.
-                    // Fixing CLS properly means resolving width/height on
-                    // the XP side first.
-                    aspectRatio: gallery ? "2 / 1" : undefined,
+                    aspectRatio: gallery ? "2 / 1" : naturalRatio,
                     // cover in BOTH modes: gallery tiles crop to 2:1, and a
                     // capped single image crops instead of squashing when
                     // the height cap kicks in before its natural height.

@@ -57,6 +57,7 @@ export type GetBlocksQuery = {
             title: string | null;
             kicker: string | null;
             imageUrl: string | null;
+            imageAlt: string | null;
             theme: string | null;
             url: string | null;
             contentPath: string | null;
@@ -94,7 +95,13 @@ export type GetBlocksQuery = {
           notchOffset: number | null;
           notchWidth: number | null;
           notchDepth: number | null;
-          items: Array<{ imageUrl: string | null; altText: string | null; caption: string | null } | null> | null;
+          items: Array<{
+            imageUrl: string | null;
+            altText: string | null;
+            caption: string | null;
+            width: number | null;
+            height: number | null;
+          } | null> | null;
         } & { __typename: "no_rodekors_docs_BlockImages" })
       | ({
           author: string | null;
@@ -228,6 +235,7 @@ export type GetSidePageQuery = {
             title: string | null;
             kicker: string | null;
             imageUrl: string | null;
+            imageAlt: string | null;
             theme: string | null;
             url: string | null;
             contentPath: string | null;
@@ -265,7 +273,13 @@ export type GetSidePageQuery = {
           notchOffset: number | null;
           notchWidth: number | null;
           notchDepth: number | null;
-          items: Array<{ imageUrl: string | null; altText: string | null; caption: string | null } | null> | null;
+          items: Array<{
+            imageUrl: string | null;
+            altText: string | null;
+            caption: string | null;
+            width: number | null;
+            height: number | null;
+          } | null> | null;
         } & { __typename: "no_rodekors_docs_BlockImages" })
       | ({
           author: string | null;

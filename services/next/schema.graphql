@@ -1941,6 +1941,7 @@ type no_rodekors_docs_BlockAccordion {
 type no_rodekors_docs_BlockCard {
   title: String
   kicker: String
+  imageAlt: String
   text: String
   imageUrl(scale: String!): String
   theme: String
@@ -1981,6 +1982,8 @@ type no_rodekors_docs_BlockImage {
   imageUrl(scale: String!): String
   altText: String
   caption: String
+  width: Int
+  height: Int
 }
 
 """An image gallery or an image that can be expanded"""

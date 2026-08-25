@@ -24,7 +24,8 @@ const RADIUS = 30;
 
 function parseAspect(aspect: string): [number, number] {
   const [w, h] = aspect.split("/").map((part) => Number.parseFloat(part.trim()));
-  if (!w || !h || Number.isNaN(w) || Number.isNaN(h)) return [4, 3];
+  // Guards zero, NaN and negatives — a negative would flip the viewBox.
+  if (!w || !h || Number.isNaN(w) || Number.isNaN(h) || w <= 0 || h <= 0) return [4, 3];
   return [w, h];
 }
 
@@ -119,6 +120,6 @@ export function notchMaskDataUri({ edge, offset, width, depth, aspect }: NotchOp
     if (edge === "right") return [v, u];
     return [W - v, u]; // left
   });
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none"><path d="${roundedPath(pts)}" fill="#000"/></svg>`;
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${Math.round(H * 10) / 10}" preserveAspectRatio="none"><path d="${roundedPath(pts)}" fill="#000"/></svg>`;
   return `url("data:image/svg+xml,${encodeURIComponent(svg)}")`;
 }

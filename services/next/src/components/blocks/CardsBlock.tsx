@@ -77,7 +77,9 @@ export function CardsBlock({ data, meta }: CardsProps) {
               reverse={placement === "bottom" || placement === "right"}
             />
           );
-          const hasText = Boolean(item.title || item.kicker || item.cardText);
+          // imageAlt counts as text: an aria-label here would OVERRIDE the
+          // image's alt in the link's accessible name.
+          const hasText = Boolean(item.title || item.kicker || item.cardText || item.imageAlt);
           return href ? (
             <a
               // biome-ignore lint/suspicious/noArrayIndexKey: card order is stable
@@ -156,8 +158,10 @@ function Card({
     // inside it — per the Figma masks, which are plain rounded rectangles.
     const image = (
       <img
+        // Alt from the image content itself; empty (decorative) when the
+        // editor gave the media no alt text.
         src={item.imageUrl}
-        alt=""
+        alt={item.imageAlt ?? ""}
         style={{
           width: "100%",
           aspectRatio: "16 / 9",
@@ -208,7 +212,7 @@ function Card({
         className={reverse ? styles.rowReverse : styles.row}
         style={{ backgroundColor: surface, borderRadius: radius, padding: pad, gap: pad }}
       >
-        <img src={item.imageUrl} alt="" className={styles.sideImage} style={imageVars} />
+        <img src={item.imageUrl} alt={item.imageAlt ?? ""} className={styles.sideImage} style={imageVars} />
         {text}
       </div>
     );

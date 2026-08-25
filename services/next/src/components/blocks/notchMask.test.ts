@@ -32,9 +32,16 @@ describe("notchMaskDataUri", () => {
       // Only the path data — the xmlns URL contains numbers too.
       const d = svg.match(/ d="([^"]+)"/)?.[1] ?? "";
       const coords = [...d.matchAll(/-?\d+(?:\.\d+)?/g)].map(Number);
-      // viewBox 1000 x 562.5 — nothing may stick out (negatives included).
+      // viewBox 1000 x 562.5 — bound each axis separately so a y-overshoot
+      // can't hide under the wider x-limit.
+      const pairs = [...d.matchAll(/(-?\d+(?:\.\d+)?) (-?\d+(?:\.\d+)?)/g)];
+      for (const [, x, y] of pairs) {
+        expect(Number(x)).toBeGreaterThanOrEqual(0);
+        expect(Number(x)).toBeLessThanOrEqual(1000);
+        expect(Number(y)).toBeGreaterThanOrEqual(0);
+        expect(Number(y)).toBeLessThanOrEqual(562.5);
+      }
       expect(Math.min(...coords)).toBeGreaterThanOrEqual(0);
-      expect(Math.max(...coords)).toBeLessThanOrEqual(1000);
     }
   });
 

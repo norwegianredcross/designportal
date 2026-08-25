@@ -78,6 +78,10 @@ export default () =>
               imageUrl(scale: "width(2180)")
               altText
               caption
+              # Original pixel size — the view derives the aspect ratio and
+              # reserves space before the file loads (no layout shift).
+              width
+              height
             }
           }
           # Card links come pre-resolved from XP: url = external address
@@ -97,6 +101,8 @@ export default () =>
               # string.
               cardText: text
               imageUrl(scale: "width(768)")
+              # Alt from the image CONTENT (the card form has no alt field).
+              imageAlt
               theme
               url
               contentPath
