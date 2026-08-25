@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import { AccordionBlock } from "@/components/blocks/AccordionBlock";
 
 const meta: MetaData = {
-  apiUrl: "http://localhost:8080/site/rodekors/master",
+  apiUrl: "http://localhost:8080/site/designsystem-docs/master",
   baseUrl: "/",
   canRender: true,
   catchAll: false,
