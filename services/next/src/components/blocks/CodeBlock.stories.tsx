@@ -57,3 +57,16 @@ export const Markup: Story = {
     },
   },
 };
+
+/** Stress case: unbreakable label + long one-liner — the label wraps, the
+ * controls stay pinned, and the code scrolls under nothing. */
+export const LongLabel: Story = {
+  args: {
+    data: {
+      __typename: "no_rodekors_docs_BlockCode",
+      code: "npm install rk-designsystem @digdir/designsystemet-react@1.13.3 @digdir/designsystemet-css@1.13.3 rk-design-tokens",
+      language: null,
+      label: "services/next/src/components/blocks/CodeBlock.stories.tsx-eksempel-med-veldig-lang-etikett",
+    },
+  },
+};
