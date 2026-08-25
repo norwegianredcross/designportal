@@ -35,13 +35,119 @@ const storyMeta = {
 export default storyMeta;
 type Story = StoryObj<typeof storyMeta>;
 
-export const Default: Story = {
+export const Liten: Story = {
   args: {
     data: {
       __typename: "no_rodekors_docs_BlockCards",
-      title: "Kom i gang",
+      title: "Liten (3 kolonner, bilde over)",
       columns: 3,
       imagePlacement: "top",
+      items: [
+        {
+          title: "Dette er overskriften",
+          kicker: "Stikktittel",
+          cardText: "Dette er beskrivelsen",
+          imageUrl: "https://placehold.co/384x216/D52B1E/fff?text=Kort",
+          theme: null,
+          url: "https://www.rodekors.no",
+          contentPath: null,
+        },
+        {
+          title: "Dette er overskriften",
+          kicker: "Stikktittel",
+          cardText: "Dette er beskrivelsen",
+          imageUrl: "https://placehold.co/384x216/1E1E1E/fff?text=Kort",
+          theme: null,
+          url: null,
+          contentPath: "/docs/test",
+        },
+        {
+          title: "Dette er overskriften",
+          kicker: "Stikktittel",
+          cardText: "Dette er beskrivelsen",
+          imageUrl: "https://placehold.co/384x216/78909C/fff?text=Kort",
+          theme: null,
+          url: null,
+          contentPath: null,
+        },
+      ],
+    },
+  },
+};
+
+/** Medium: two horizontal cards per row, 4:3 image beside the text. */
+export const Medium: Story = {
+  args: {
+    data: {
+      __typename: "no_rodekors_docs_BlockCards",
+      title: "Medium (2 kolonner, bilde ved siden av)",
+      columns: 2,
+      imagePlacement: "left",
+      items: [
+        {
+          title: "Dette er overskriften",
+          kicker: "Stikktittel",
+          cardText: "Dette er beskrivelsen",
+          imageUrl: "https://placehold.co/384x288/D52B1E/fff?text=Kort",
+          theme: null,
+          url: "https://www.rodekors.no",
+          contentPath: null,
+        },
+        {
+          title: "Dette er overskriften",
+          kicker: "Stikktittel",
+          cardText: "Dette er beskrivelsen",
+          imageUrl: "https://placehold.co/384x288/1E1E1E/fff?text=Kort",
+          theme: null,
+          url: null,
+          contentPath: null,
+        },
+      ],
+    },
+  },
+};
+
+/** Stor: one full-width card per row with the roomier 40px padding. */
+export const Stor: Story = {
+  args: {
+    data: {
+      __typename: "no_rodekors_docs_BlockCards",
+      title: "Stor (1 kolonne)",
+      columns: 1,
+      imagePlacement: "left",
+      items: [
+        {
+          title: "Dette er overskriften",
+          kicker: "Stikktittel",
+          cardText: "Dette er beskrivelsen",
+          imageUrl: "https://placehold.co/384x216/D52B1E/fff?text=Kort",
+          theme: null,
+          url: "https://www.rodekors.no",
+          contentPath: null,
+        },
+        {
+          title: "Dette er overskriften",
+          kicker: "Stikktittel",
+          cardText: "Dette er beskrivelsen",
+          imageUrl: "https://placehold.co/384x216/1E1E1E/fff?text=Kort",
+          theme: null,
+          url: null,
+          contentPath: null,
+        },
+      ],
+    },
+  },
+};
+
+/** Uten bilde: plain tinted panels; also exercises per-card themes and the
+ * three link states (internal contentPath, external url, none). */
+export const UtenBilde: Story = {
+  args: {
+    data: {
+      __typename: "no_rodekors_docs_BlockCards",
+      title: "Uten bilde",
+      columns: 3,
+      imagePlacement: null,
       items: [
         {
           title: "For designere",
@@ -76,30 +182,32 @@ export const Default: Story = {
   },
 };
 
-/** Image cards with the block-level placement applied to every card. */
-export const WithImages: Story = {
+/** Mirrored placements (bottom/right) plus a theme on an image card and a
+ * card without title — pins the reverse layout paths. */
+export const Speilvendt: Story = {
   args: {
     data: {
       __typename: "no_rodekors_docs_BlockCards",
-      title: "Med bilder",
+      title: "Speilvendt (bilde under / til høyre)",
       columns: 2,
-      imagePlacement: "top",
+      imagePlacement: "right",
       items: [
         {
-          title: "Bilde over teksten",
-          kicker: null,
-          cardText: "imagePlacement: top stabler bildet over teksten.",
-          imageUrl: "https://placehold.co/384x216/D52B1E/fff?text=Kort",
-          theme: null,
-          url: null,
+          title: "Bilde til høyre",
+          kicker: "Stikktittel",
+          cardText: "imagePlacement: right speiler den horisontale layouten.",
+          imageUrl: "https://placehold.co/384x288/2E7D32/fff?text=Kort",
+          theme: "additional-color-jungle",
+          url: "https://www.rodekors.no",
           contentPath: null,
         },
         {
-          title: "Også med bilde",
-          kicker: null,
-          cardText: "Samme plassering gjelder alle kortene i blokken.",
-          imageUrl: "https://placehold.co/384x216/1E1E1E/fff?text=Kort",
-          theme: "additional-color-jungle",
+          // No title: the kicker and text still stack correctly.
+          title: null,
+          kicker: "Uten tittel",
+          cardText: "Kort uten tittel skal ikke etterlate tomrom.",
+          imageUrl: "https://placehold.co/384x288/1E1E1E/fff?text=Kort",
+          theme: null,
           url: null,
           contentPath: null,
         },

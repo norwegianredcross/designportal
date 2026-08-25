@@ -74,7 +74,7 @@ export default () =>
               # claim "text" as RichText while a card's text is a plain
               # string.
               cardText: text
-              imageUrl(scale: "width(384)")
+              imageUrl(scale: "width(768)")
               theme
               url
               contentPath
