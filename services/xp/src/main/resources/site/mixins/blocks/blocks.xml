@@ -62,6 +62,18 @@
             <mixin name="blocks-images"/>
           </items>
         </option>
+
+        <!-- Card grid from the lib. The cards form composes three lib
+             mixins per card (blocks-card fields + blocks-theme color +
+             blocks-link's internal/external/none choice) and adds grid
+             options (column count, image placement) on the block itself. -->
+        <option name="blocks-cards">
+          <label i18n="mixin.blocks-cards.displayName">Cards</label>
+          <help-text i18n="mixin.blocks-cards.description">Cards can have a title, text, image and can link to content</help-text>
+          <items>
+            <mixin name="blocks-cards"/>
+          </items>
+        </option>
       </options>
     </option-set>
   </form>

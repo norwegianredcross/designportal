@@ -33,6 +33,9 @@ const OBJECT_TYPE_BLOCK_FACTBOX = "no_rodekors_docs_BlockFactbox";
 const OBJECT_TYPE_BLOCK_IMAGES = "no_rodekors_docs_BlockImages";
 // Not a union member: the nested item type inside BlockImages.
 const OBJECT_TYPE_BLOCK_IMAGE = "no_rodekors_docs_BlockImage";
+const OBJECT_TYPE_BLOCK_CARDS = "no_rodekors_docs_BlockCards";
+// Not a union member: the nested item type inside BlockCards.
+const OBJECT_TYPE_BLOCK_CARD = "no_rodekors_docs_BlockCard";
 const FIELD_BLOCKS = "blocks";
 
 export function extensions(graphQL: GraphQL): Extensions {
@@ -145,6 +148,63 @@ export function extensions(graphQL: GraphQL): Extensions {
           },
         },
       },
+      // One card in a cards block. Lives outside the Block union — it only
+      // appears nested under BlockCards.items.
+      [OBJECT_TYPE_BLOCK_CARD]: {
+        description: "One card in a cards block",
+        fields: {
+          title: {
+            type: graphQL.GraphQLString,
+          },
+          kicker: {
+            type: graphQL.GraphQLString,
+          },
+          // Plain string, not RichText: the editor field is a TextArea.
+          text: {
+            type: graphQL.GraphQLString,
+          },
+          imageUrl: {
+            type: graphQL.GraphQLString,
+            args: {
+              scale: graphQL.nonNull(graphQL.GraphQLString),
+            },
+          },
+          theme: {
+            type: graphQL.GraphQLString,
+          },
+          // Exactly one of these is set, mirroring the editor's
+          // internal/external/none choice: url carries an external address
+          // verbatim, contentPath carries the internal target's content
+          // path for the frontend to map into its own URL space (the
+          // adapter's getUrl strips the site prefix).
+          url: {
+            type: graphQL.GraphQLString,
+          },
+          contentPath: {
+            type: graphQL.GraphQLString,
+          },
+        },
+      },
+      [OBJECT_TYPE_BLOCK_CARDS]: {
+        description: "Cards can have a title, text, image and can link to content",
+        fields: {
+          title: {
+            type: graphQL.GraphQLString,
+          },
+          // Derived from the stored CSS-class radio values
+          // (blocks-card--cols-3 -> 3, blocks-card--image-left -> "left"):
+          // the frontend gets intent, not the lib's class names.
+          columns: {
+            type: graphQL.GraphQLInt,
+          },
+          imagePlacement: {
+            type: graphQL.GraphQLString,
+          },
+          items: {
+            type: graphQL.list(graphQL.reference(OBJECT_TYPE_BLOCK_CARD)),
+          },
+        },
+      },
     },
     unions: {
       [OBJECT_TYPE_BLOCK]: {
@@ -155,6 +215,7 @@ export function extensions(graphQL: GraphQL): Extensions {
           graphQL.reference(OBJECT_TYPE_BLOCK_QUOTE),
           graphQL.reference(OBJECT_TYPE_BLOCK_FACTBOX),
           graphQL.reference(OBJECT_TYPE_BLOCK_IMAGES),
+          graphQL.reference(OBJECT_TYPE_BLOCK_CARDS),
         ],
       },
     },
@@ -213,6 +274,16 @@ export function extensions(graphQL: GraphQL): Extensions {
               })
             : null,
       },
+      [OBJECT_TYPE_BLOCK_CARD]: {
+        imageUrl: (env: DataFetchingEnvironment<{ scale?: string }, LocalContextRecord, ResolvedCardItem>) =>
+          env.source.imageId
+            ? imageUrl({
+                id: env.source.imageId,
+                scale: env.args.scale as ImageUrlParams["scale"],
+                type: "absolute",
+              })
+            : null,
+      },
       HeadlessCms: {
         [FIELD_BLOCKS]: (env): unknown[] => {
           const content = getOne<Content<Blocks>>({
@@ -262,6 +333,24 @@ type ResolvedImagesBlock = {
   items: ResolvedImageItem[];
 };
 
+type ResolvedCardItem = {
+  title?: string;
+  kicker?: string;
+  text?: string;
+  imageId?: string;
+  theme?: string;
+  url?: string;
+  contentPath?: string;
+};
+
+type ResolvedCardsBlock = {
+  __typename: typeof OBJECT_TYPE_BLOCK_CARDS;
+  title?: string;
+  columns?: number;
+  imagePlacement?: string;
+  items: ResolvedCardItem[];
+};
+
 type ResolvedAccordionBlock = {
   __typename: typeof OBJECT_TYPE_BLOCK_ACCORDION;
   title?: string;
@@ -271,7 +360,14 @@ type ResolvedAccordionBlock = {
 
 function resolveBlocks(
   block: BlockRaw,
-): ResolvedTextBlock | ResolvedAccordionBlock | ResolvedQuoteBlock | ResolvedFactboxBlock | ResolvedImagesBlock | null {
+):
+  | ResolvedTextBlock
+  | ResolvedAccordionBlock
+  | ResolvedQuoteBlock
+  | ResolvedFactboxBlock
+  | ResolvedImagesBlock
+  | ResolvedCardsBlock
+  | null {
   switch (block._selected) {
     case "blocks-text":
       return {
@@ -318,6 +414,35 @@ function resolveBlocks(
           caption: item.caption,
         })),
       };
+    case "blocks-cards": {
+      const cards = block["blocks-cards"];
+      return {
+        __typename: OBJECT_TYPE_BLOCK_CARDS,
+        title: cards.title,
+        // The lib stores presentation choices as its own CSS class names;
+        // parse out the intent so the frontend never sees them.
+        columns: Number(cards.columnsClass?.replace("blocks-card--cols-", "")) || undefined,
+        imagePlacement: cards.imageClass?.replace("blocks-card--image-", ""),
+        items: forceArray(cards.items).map((item) => {
+          // The link option-set stores which choice the editor made in
+          // _selected; internal targets are fetched once here, both for
+          // their path and for the title fallback below.
+          const target = item.link?._selected === "internal" ? getOne({ key: item.link.internal.internalLink }) : null;
+          return {
+            // Per the lib's form semantics the title field OVERRIDES the
+            // linked content's own title — so an internal-link card without
+            // an override inherits the target's display name.
+            title: item.title ?? target?.displayName,
+            kicker: item.kicker,
+            text: item.text,
+            imageId: item.imageId,
+            theme: item.theme,
+            url: item.link?._selected === "external" ? item.link.external.externalLink : undefined,
+            contentPath: target?._path ?? undefined,
+          };
+        }),
+      };
+    }
   }
 
   return null;

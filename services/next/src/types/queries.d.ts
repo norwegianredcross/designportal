@@ -51,6 +51,20 @@ export type GetBlocksQuery = {
         } & { __typename: "no_rodekors_docs_BlockAccordion" })
       | ({
           title: string | null;
+          columns: number | null;
+          imagePlacement: string | null;
+          items: Array<{
+            title: string | null;
+            kicker: string | null;
+            imageUrl: string | null;
+            theme: string | null;
+            url: string | null;
+            contentPath: string | null;
+            cardText: string | null;
+          } | null> | null;
+        } & { __typename: "no_rodekors_docs_BlockCards" })
+      | ({
+          title: string | null;
           theme: string | null;
           text: {
             processedHtml: string | null;
@@ -197,6 +211,20 @@ export type GetSidePageQuery = {
             } | null;
           } | null> | null;
         } & { __typename: "no_rodekors_docs_BlockAccordion" })
+      | ({
+          title: string | null;
+          columns: number | null;
+          imagePlacement: string | null;
+          items: Array<{
+            title: string | null;
+            kicker: string | null;
+            imageUrl: string | null;
+            theme: string | null;
+            url: string | null;
+            contentPath: string | null;
+            cardText: string | null;
+          } | null> | null;
+        } & { __typename: "no_rodekors_docs_BlockCards" })
       | ({
           title: string | null;
           theme: string | null;

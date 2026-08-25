@@ -650,6 +650,7 @@ type Part_no_rodekors_docs_blocks_view_Blocks {
   blocks_quote: Part_no_rodekors_docs_blocks_view_BlocksQuote
   blocks_factbox: Part_no_rodekors_docs_blocks_view_BlocksFactbox
   blocks_images: Part_no_rodekors_docs_blocks_view_BlocksImages
+  blocks_cards: Part_no_rodekors_docs_blocks_view_BlocksCards
 }
 
 """Accordion"""
@@ -657,6 +658,14 @@ type Part_no_rodekors_docs_blocks_view_BlocksAccordion {
   title: String
   items(offset: Int, first: Int): [Part_no_rodekors_docs_blocks_view_Items]
   theme: String
+}
+
+"""Cards"""
+type Part_no_rodekors_docs_blocks_view_BlocksCards {
+  title: String
+  imageClass: String
+  columnsClass: String
+  items(offset: Int, first: Int): [Part_no_rodekors_docs_blocks_view_Items_3]
 }
 
 """Factbox"""
@@ -693,6 +702,17 @@ enum Part_no_rodekors_docs_blocks_view_Blocks_OptionEnum {
   blocks_quote
   blocks_factbox
   blocks_images
+  blocks_cards
+}
+
+"""External"""
+type Part_no_rodekors_docs_blocks_view_External {
+  externalLink: String
+}
+
+"""Internal"""
+type Part_no_rodekors_docs_blocks_view_Internal {
+  internalLink: Content
 }
 
 """Accordion element"""
@@ -706,6 +726,31 @@ type Part_no_rodekors_docs_blocks_view_Items_2 {
   imageId: Content
   altText: String
   caption: String
+}
+
+"""Cards"""
+type Part_no_rodekors_docs_blocks_view_Items_3 {
+  title: String
+  link: Part_no_rodekors_docs_blocks_view_Link
+  kicker: String
+  text: String
+  imageId: Content
+  theme: String
+}
+
+"""Link"""
+type Part_no_rodekors_docs_blocks_view_Link {
+  _selected: Part_no_rodekors_docs_blocks_view_Link_OptionEnum
+  internal: Part_no_rodekors_docs_blocks_view_Internal
+  external: Part_no_rodekors_docs_blocks_view_External
+  none: String
+}
+
+"""Link option enum."""
+enum Part_no_rodekors_docs_blocks_view_Link_OptionEnum {
+  internal
+  external
+  none
 }
 
 """PathMatchDSLExpressionInput type"""
@@ -997,6 +1042,7 @@ type XData_no_rodekors_docs_site_content_DataConfig_Blocks {
   blocks_quote: XData_no_rodekors_docs_site_content_DataConfig_BlocksQuote
   blocks_factbox: XData_no_rodekors_docs_site_content_DataConfig_BlocksFactbox
   blocks_images: XData_no_rodekors_docs_site_content_DataConfig_BlocksImages
+  blocks_cards: XData_no_rodekors_docs_site_content_DataConfig_BlocksCards
 }
 
 """Accordion"""
@@ -1004,6 +1050,14 @@ type XData_no_rodekors_docs_site_content_DataConfig_BlocksAccordion {
   title: String
   items(offset: Int, first: Int): [XData_no_rodekors_docs_site_content_DataConfig_Items]
   theme: String
+}
+
+"""Cards"""
+type XData_no_rodekors_docs_site_content_DataConfig_BlocksCards {
+  title: String
+  imageClass: String
+  columnsClass: String
+  items(offset: Int, first: Int): [XData_no_rodekors_docs_site_content_DataConfig_Items_3]
 }
 
 """Factbox"""
@@ -1040,6 +1094,17 @@ enum XData_no_rodekors_docs_site_content_DataConfig_Blocks_OptionEnum {
   blocks_quote
   blocks_factbox
   blocks_images
+  blocks_cards
+}
+
+"""External"""
+type XData_no_rodekors_docs_site_content_DataConfig_External {
+  externalLink: String
+}
+
+"""Internal"""
+type XData_no_rodekors_docs_site_content_DataConfig_Internal {
+  internalLink: Content
 }
 
 """Accordion element"""
@@ -1053,6 +1118,31 @@ type XData_no_rodekors_docs_site_content_DataConfig_Items_2 {
   imageId: Content
   altText: String
   caption: String
+}
+
+"""Cards"""
+type XData_no_rodekors_docs_site_content_DataConfig_Items_3 {
+  title: String
+  link: XData_no_rodekors_docs_site_content_DataConfig_Link
+  kicker: String
+  text: String
+  imageId: Content
+  theme: String
+}
+
+"""Link"""
+type XData_no_rodekors_docs_site_content_DataConfig_Link {
+  _selected: XData_no_rodekors_docs_site_content_DataConfig_Link_OptionEnum
+  internal: XData_no_rodekors_docs_site_content_DataConfig_Internal
+  external: XData_no_rodekors_docs_site_content_DataConfig_External
+  none: String
+}
+
+"""Link option enum."""
+enum XData_no_rodekors_docs_site_content_DataConfig_Link_OptionEnum {
+  internal
+  external
+  none
 }
 
 """Folder - base:folder"""
@@ -1794,13 +1884,32 @@ type media_Video_Data {
 }
 
 """Your page content is build by a sequence of blocks."""
-union no_rodekors_docs_Block = no_rodekors_docs_BlockText | no_rodekors_docs_BlockAccordion | no_rodekors_docs_BlockQuote | no_rodekors_docs_BlockFactbox | no_rodekors_docs_BlockImages
+union no_rodekors_docs_Block = no_rodekors_docs_BlockText | no_rodekors_docs_BlockAccordion | no_rodekors_docs_BlockQuote | no_rodekors_docs_BlockFactbox | no_rodekors_docs_BlockImages | no_rodekors_docs_BlockCards
 
 """A list of expandable sections"""
 type no_rodekors_docs_BlockAccordion {
   title: String
   items: [no_rodekors_docs_BlockText]
   theme: String
+}
+
+"""One card in a cards block"""
+type no_rodekors_docs_BlockCard {
+  title: String
+  kicker: String
+  text: String
+  imageUrl(scale: String!): String
+  theme: String
+  url: String
+  contentPath: String
+}
+
+"""Cards can have a title, text, image and can link to content"""
+type no_rodekors_docs_BlockCards {
+  title: String
+  columns: Int
+  imagePlacement: String
+  items: [no_rodekors_docs_BlockCard]
 }
 
 """A box containing text that can have different background colors"""
@@ -1880,6 +1989,7 @@ type no_rodekors_docs_Page_Blocks {
   blocks_quote: no_rodekors_docs_Page_BlocksQuote
   blocks_factbox: no_rodekors_docs_Page_BlocksFactbox
   blocks_images: no_rodekors_docs_Page_BlocksImages
+  blocks_cards: no_rodekors_docs_Page_BlocksCards
 }
 
 """Accordion"""
@@ -1887,6 +1997,14 @@ type no_rodekors_docs_Page_BlocksAccordion {
   title: String
   items(offset: Int, first: Int): [no_rodekors_docs_Page_Items]
   theme: String
+}
+
+"""Cards"""
+type no_rodekors_docs_Page_BlocksCards {
+  title: String
+  imageClass: String
+  columnsClass: String
+  items(offset: Int, first: Int): [no_rodekors_docs_Page_Items_3]
 }
 
 """Factbox"""
@@ -1923,6 +2041,7 @@ enum no_rodekors_docs_Page_Blocks_OptionEnum {
   blocks_quote
   blocks_factbox
   blocks_images
+  blocks_cards
 }
 
 """Page - no.rodekors.docs:page data"""
@@ -1930,6 +2049,16 @@ type no_rodekors_docs_Page_Data {
   title: String
   intro(processHtml: ProcessHtmlInput): RichText
   blocks(offset: Int, first: Int): [no_rodekors_docs_Page_Blocks]
+}
+
+"""External"""
+type no_rodekors_docs_Page_External {
+  externalLink: String
+}
+
+"""Internal"""
+type no_rodekors_docs_Page_Internal {
+  internalLink: Content
 }
 
 """Accordion element"""
@@ -1943,6 +2072,31 @@ type no_rodekors_docs_Page_Items_2 {
   imageId: Content
   altText: String
   caption: String
+}
+
+"""Cards"""
+type no_rodekors_docs_Page_Items_3 {
+  title: String
+  link: no_rodekors_docs_Page_Link
+  kicker: String
+  text: String
+  imageId: Content
+  theme: String
+}
+
+"""Link"""
+type no_rodekors_docs_Page_Link {
+  _selected: no_rodekors_docs_Page_Link_OptionEnum
+  internal: no_rodekors_docs_Page_Internal
+  external: no_rodekors_docs_Page_External
+  none: String
+}
+
+"""Link option enum."""
+enum no_rodekors_docs_Page_Link_OptionEnum {
+  internal
+  external
+  none
 }
 
 """Fragment - portal:fragment"""

@@ -70,6 +70,28 @@ export default () =>
               caption
             }
           }
+          # Card links come pre-resolved from XP: url = external address
+          # verbatim, contentPath = internal target's content path (mapped
+          # into the frontend URL space by getUrl in the view).
+          ...on no_rodekors_docs_BlockCards {
+            __typename
+            title
+            columns
+            imagePlacement
+            items {
+              title
+              kicker
+              # Aliased: GraphQL requires same-named fields across union
+              # members to have merging types, and accordion items already
+              # claim "text" as RichText while a card's text is a plain
+              # string.
+              cardText: text
+              imageUrl(scale: "width(384)")
+              theme
+              url
+              contentPath
+            }
+          }
         }
       }
     }`);
