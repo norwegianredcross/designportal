@@ -13,6 +13,9 @@ const OBJECT_TYPE_BLOCK_TEXT = "no_rodekors_docs_BlockText";
 const OBJECT_TYPE_BLOCK_ACCORDION = "no_rodekors_docs_BlockAccordion";
 const OBJECT_TYPE_BLOCK_QUOTE = "no_rodekors_docs_BlockQuote";
 const OBJECT_TYPE_BLOCK_FACTBOX = "no_rodekors_docs_BlockFactbox";
+const OBJECT_TYPE_BLOCK_IMAGES = "no_rodekors_docs_BlockImages";
+// Not a union member: the nested item type inside BlockImages.
+const OBJECT_TYPE_BLOCK_IMAGE = "no_rodekors_docs_BlockImage";
 const FIELD_BLOCKS = "blocks";
 
 export function extensions(graphQL: GraphQL): Extensions {
@@ -92,6 +95,35 @@ export function extensions(graphQL: GraphQL): Extensions {
           },
         },
       },
+      // A single gallery entry. Lives outside the Block union — it only
+      // appears nested under BlockImages.items.
+      [OBJECT_TYPE_BLOCK_IMAGE]: {
+        description: "One image in an images block",
+        fields: {
+          // Same contract as the quote block: the editor stores a media id,
+          // the API hands the frontend a finished URL at the requested scale.
+          imageUrl: {
+            type: graphQL.GraphQLString,
+            args: {
+              scale: graphQL.nonNull(graphQL.GraphQLString),
+            },
+          },
+          altText: {
+            type: graphQL.GraphQLString,
+          },
+          caption: {
+            type: graphQL.GraphQLString,
+          },
+        },
+      },
+      [OBJECT_TYPE_BLOCK_IMAGES]: {
+        description: "An image gallery or an image that can be expanded",
+        fields: {
+          items: {
+            type: graphQL.list(graphQL.reference(OBJECT_TYPE_BLOCK_IMAGE)),
+          },
+        },
+      },
     },
     unions: {
       [OBJECT_TYPE_BLOCK]: {
@@ -101,6 +133,7 @@ export function extensions(graphQL: GraphQL): Extensions {
           graphQL.reference(OBJECT_TYPE_BLOCK_ACCORDION),
           graphQL.reference(OBJECT_TYPE_BLOCK_QUOTE),
           graphQL.reference(OBJECT_TYPE_BLOCK_FACTBOX),
+          graphQL.reference(OBJECT_TYPE_BLOCK_IMAGES),
         ],
       },
     },
@@ -147,6 +180,18 @@ export function extensions(graphQL: GraphQL): Extensions {
         text: (env: DataFetchingEnvironment<ProcessHtmlArgs, LocalContextRecord, ResolvedFactboxBlock>) =>
           buildRichText(env.source.text, env.args),
       },
+      [OBJECT_TYPE_BLOCK_IMAGE]: {
+        imageUrl: (env: DataFetchingEnvironment<{ scale?: string }, LocalContextRecord, ResolvedImageItem>) =>
+          env.source.imageId
+            ? imageUrl({
+                id: env.source.imageId,
+                // Non-null in the schema, so always present at runtime; the
+                // cast bridges to the portal lib's template-literal type.
+                scale: env.args.scale as ImageUrlParams["scale"],
+                type: "absolute",
+              })
+            : null,
+      },
       HeadlessCms: {
         [FIELD_BLOCKS]: (env): unknown[] => {
           const content = getOne<Content<Blocks>>({
@@ -183,6 +228,19 @@ type ResolvedFactboxBlock = {
   theme?: string;
 };
 
+type ResolvedImageItem = {
+  // Raw media id from the ImageSelector; turned into a URL by the field
+  // resolver above so the frontend never touches media content.
+  imageId?: string;
+  altText?: string;
+  caption?: string;
+};
+
+type ResolvedImagesBlock = {
+  __typename: typeof OBJECT_TYPE_BLOCK_IMAGES;
+  items: ResolvedImageItem[];
+};
+
 type ResolvedAccordionBlock = {
   __typename: typeof OBJECT_TYPE_BLOCK_ACCORDION;
   title?: string;
@@ -192,7 +250,7 @@ type ResolvedAccordionBlock = {
 
 function resolveBlocks(
   block: BlockRaw,
-): ResolvedTextBlock | ResolvedAccordionBlock | ResolvedQuoteBlock | ResolvedFactboxBlock | null {
+): ResolvedTextBlock | ResolvedAccordionBlock | ResolvedQuoteBlock | ResolvedFactboxBlock | ResolvedImagesBlock | null {
   switch (block._selected) {
     case "blocks-text":
       return {
@@ -228,6 +286,16 @@ function resolveBlocks(
         // The theme comes from the composed blocks-theme mixin and lands on
         // the same option object as the factbox's own fields.
         theme: block["blocks-factbox"].theme,
+      };
+    case "blocks-images":
+      return {
+        __typename: OBJECT_TYPE_BLOCK_IMAGES,
+        // forceArray: XP stores a single repeatable entry as a bare object.
+        items: forceArray(block["blocks-images"].items).map((item) => ({
+          imageId: item.imageId,
+          altText: item.altText,
+          caption: item.caption,
+        })),
       };
   }
 

@@ -60,6 +60,16 @@ export default () =>
             }
             theme
           }
+          # No richTextFragment here: image fields are plain strings, and the
+          # imageUrl arrives pre-scaled from the XP side (article width).
+          ...on no_rodekors_docs_BlockImages {
+            __typename
+            items {
+              imageUrl(scale: "width(768)")
+              altText
+              caption
+            }
+          }
         }
       }
     }`);

@@ -2,6 +2,7 @@ import type { MetaData } from "@enonic/nextjs-adapter/types/componentProps";
 import type { FunctionComponent } from "react";
 import { AccordionBlock } from "./AccordionBlock";
 import { FactboxBlock } from "./FactboxBlock";
+import { ImagesBlock } from "./ImagesBlock";
 import { QuoteBlock } from "./QuoteBlock";
 import { TextBlock } from "./TextBlock";
 
@@ -17,4 +18,6 @@ export const blockComponents: Record<string, FunctionComponent<{ data: any; meta
   no_rodekors_docs_BlockAccordion: AccordionBlock,
   no_rodekors_docs_BlockQuote: QuoteBlock,
   no_rodekors_docs_BlockFactbox: FactboxBlock,
+  // Gallery of figures; images arrive pre-scaled from XP (see ImagesBlock).
+  no_rodekors_docs_BlockImages: ImagesBlock,
 };

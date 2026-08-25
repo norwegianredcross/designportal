@@ -649,6 +649,7 @@ type Part_no_rodekors_docs_blocks_view_Blocks {
   blocks_accordion: Part_no_rodekors_docs_blocks_view_BlocksAccordion
   blocks_quote: Part_no_rodekors_docs_blocks_view_BlocksQuote
   blocks_factbox: Part_no_rodekors_docs_blocks_view_BlocksFactbox
+  blocks_images: Part_no_rodekors_docs_blocks_view_BlocksImages
 }
 
 """Accordion"""
@@ -663,6 +664,11 @@ type Part_no_rodekors_docs_blocks_view_BlocksFactbox {
   title: String
   text(processHtml: ProcessHtmlInput): RichText
   theme: String
+}
+
+"""Images"""
+type Part_no_rodekors_docs_blocks_view_BlocksImages {
+  items(offset: Int, first: Int): [Part_no_rodekors_docs_blocks_view_Items_2]
 }
 
 """Quote"""
@@ -686,12 +692,20 @@ enum Part_no_rodekors_docs_blocks_view_Blocks_OptionEnum {
   blocks_accordion
   blocks_quote
   blocks_factbox
+  blocks_images
 }
 
 """Accordion element"""
 type Part_no_rodekors_docs_blocks_view_Items {
   title: String
   text(processHtml: ProcessHtmlInput): RichText
+}
+
+"""Image"""
+type Part_no_rodekors_docs_blocks_view_Items_2 {
+  imageId: Content
+  altText: String
+  caption: String
 }
 
 """PathMatchDSLExpressionInput type"""
@@ -982,6 +996,7 @@ type XData_no_rodekors_docs_site_content_DataConfig_Blocks {
   blocks_accordion: XData_no_rodekors_docs_site_content_DataConfig_BlocksAccordion
   blocks_quote: XData_no_rodekors_docs_site_content_DataConfig_BlocksQuote
   blocks_factbox: XData_no_rodekors_docs_site_content_DataConfig_BlocksFactbox
+  blocks_images: XData_no_rodekors_docs_site_content_DataConfig_BlocksImages
 }
 
 """Accordion"""
@@ -996,6 +1011,11 @@ type XData_no_rodekors_docs_site_content_DataConfig_BlocksFactbox {
   title: String
   text(processHtml: ProcessHtmlInput): RichText
   theme: String
+}
+
+"""Images"""
+type XData_no_rodekors_docs_site_content_DataConfig_BlocksImages {
+  items(offset: Int, first: Int): [XData_no_rodekors_docs_site_content_DataConfig_Items_2]
 }
 
 """Quote"""
@@ -1019,12 +1039,20 @@ enum XData_no_rodekors_docs_site_content_DataConfig_Blocks_OptionEnum {
   blocks_accordion
   blocks_quote
   blocks_factbox
+  blocks_images
 }
 
 """Accordion element"""
 type XData_no_rodekors_docs_site_content_DataConfig_Items {
   title: String
   text(processHtml: ProcessHtmlInput): RichText
+}
+
+"""Image"""
+type XData_no_rodekors_docs_site_content_DataConfig_Items_2 {
+  imageId: Content
+  altText: String
+  caption: String
 }
 
 """Folder - base:folder"""
@@ -1766,7 +1794,7 @@ type media_Video_Data {
 }
 
 """Your page content is build by a sequence of blocks."""
-union no_rodekors_docs_Block = no_rodekors_docs_BlockText | no_rodekors_docs_BlockAccordion | no_rodekors_docs_BlockQuote | no_rodekors_docs_BlockFactbox
+union no_rodekors_docs_Block = no_rodekors_docs_BlockText | no_rodekors_docs_BlockAccordion | no_rodekors_docs_BlockQuote | no_rodekors_docs_BlockFactbox | no_rodekors_docs_BlockImages
 
 """A list of expandable sections"""
 type no_rodekors_docs_BlockAccordion {
@@ -1780,6 +1808,18 @@ type no_rodekors_docs_BlockFactbox {
   title: String
   text(processHtml: ProcessHtmlInput): RichText
   theme: String
+}
+
+"""One image in an images block"""
+type no_rodekors_docs_BlockImage {
+  imageUrl(scale: String!): String
+  altText: String
+  caption: String
+}
+
+"""An image gallery or an image that can be expanded"""
+type no_rodekors_docs_BlockImages {
+  items: [no_rodekors_docs_BlockImage]
 }
 
 """A stylized quote with the image of the author"""
@@ -1839,6 +1879,7 @@ type no_rodekors_docs_Page_Blocks {
   blocks_accordion: no_rodekors_docs_Page_BlocksAccordion
   blocks_quote: no_rodekors_docs_Page_BlocksQuote
   blocks_factbox: no_rodekors_docs_Page_BlocksFactbox
+  blocks_images: no_rodekors_docs_Page_BlocksImages
 }
 
 """Accordion"""
@@ -1853,6 +1894,11 @@ type no_rodekors_docs_Page_BlocksFactbox {
   title: String
   text(processHtml: ProcessHtmlInput): RichText
   theme: String
+}
+
+"""Images"""
+type no_rodekors_docs_Page_BlocksImages {
+  items(offset: Int, first: Int): [no_rodekors_docs_Page_Items_2]
 }
 
 """Quote"""
@@ -1876,6 +1922,7 @@ enum no_rodekors_docs_Page_Blocks_OptionEnum {
   blocks_accordion
   blocks_quote
   blocks_factbox
+  blocks_images
 }
 
 """Page - no.rodekors.docs:page data"""
@@ -1889,6 +1936,13 @@ type no_rodekors_docs_Page_Data {
 type no_rodekors_docs_Page_Items {
   title: String
   text(processHtml: ProcessHtmlInput): RichText
+}
+
+"""Image"""
+type no_rodekors_docs_Page_Items_2 {
+  imageId: Content
+  altText: String
+  caption: String
 }
 
 """Fragment - portal:fragment"""

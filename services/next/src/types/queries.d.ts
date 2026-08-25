@@ -70,6 +70,9 @@ export type GetBlocksQuery = {
             } | null> | null;
           } | null;
         } & { __typename: "no_rodekors_docs_BlockFactbox" })
+      | ({ items: Array<{ imageUrl: string | null; altText: string | null; caption: string | null } | null> | null } & {
+          __typename: "no_rodekors_docs_BlockImages";
+        })
       | ({
           author: string | null;
           imageUrl: string | null;
@@ -215,6 +218,9 @@ export type GetSidePageQuery = {
             } | null> | null;
           } | null;
         } & { __typename: "no_rodekors_docs_BlockFactbox" })
+      | ({ items: Array<{ imageUrl: string | null; altText: string | null; caption: string | null } | null> | null } & {
+          __typename: "no_rodekors_docs_BlockImages";
+        })
       | ({
           author: string | null;
           imageUrl: string | null;

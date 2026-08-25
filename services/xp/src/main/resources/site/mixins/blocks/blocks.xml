@@ -50,6 +50,18 @@
             <mixin name="blocks-theme"/>
           </items>
         </option>
+
+        <!-- Repeatable image gallery from the lib: each entry is an
+             ImageSelector plus REQUIRED alt text (enforced in the form, so
+             editors cannot publish inaccessible images) and an optional
+             caption. -->
+        <option name="blocks-images">
+          <label i18n="mixin.blocks-images.displayName">Images</label>
+          <help-text i18n="mixin.blocks-images.description">An image gallery or an image that can be expanded</help-text>
+          <items>
+            <mixin name="blocks-images"/>
+          </items>
+        </option>
       </options>
     </option-set>
   </form>
