@@ -10,12 +10,6 @@ query Common($path:ID!){
       displayName
       type
     }
-    menu  {
-      items {
-        title
-        path
-      }
-    }
   }
 }`);
 

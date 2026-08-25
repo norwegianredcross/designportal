@@ -25,15 +25,7 @@ export default async function Page({ params }: { params: Promise<PageProps> }) {
 
   return (
     <>
-      <Header showUser={false} showSearch={false} showThemeToggle={true}>
-        <nav>
-          {data.common?.menu.items.map((item: any) => (
-            <a key={item.path} href={item.path}>
-              {item.title}
-            </a>
-          ))}
-        </nav>
-      </Header>
+      <Header showUser={false} showSearch={false} showThemeToggle={true} />
       <main>
         <MainView {...data} />
       </main>

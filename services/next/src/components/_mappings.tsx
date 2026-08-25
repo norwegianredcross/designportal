@@ -8,6 +8,8 @@ import ContentHeader, {
 } from "@/components/parts/ContentHeader";
 import getContentHeader from "@/components/queries/getContentHeader";
 import getBlocks from "./queries/getBlocks";
+import getSidePage from "./queries/getSidePage";
+import SidePage from "@/components/pages/SidePage";
 
 // You can set common query for all views here
 ComponentRegistry.setCommonQuery([commonQuery, commonVariables]);
@@ -33,4 +35,11 @@ ComponentRegistry.addPart(`${APP_NAME}:content-header`, {
   query: getContentHeader,
   processor: contentHeaderProcessor as any,
   view: ContentHeader,
+});
+
+// Content type mappings: a Side renders straight from its data when no page
+// or template is set — see SidePage for why.
+ComponentRegistry.addContentType(`${APP_NAME}:page`, {
+  query: getSidePage,
+  view: SidePage as any,
 });
