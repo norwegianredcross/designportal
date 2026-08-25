@@ -6,8 +6,14 @@ import { Button } from "rk-designsystem";
 /**
  * The one interactive piece of the code block, isolated in its own client
  * component so the block itself stays a server component: only this button
- * ships JavaScript to the browser. navigator.clipboard requires a secure
- * context (https or localhost), which every deployment target satisfies.
+ * ships JavaScript to the browser.
+ *
+ * Why 'use client' here when rk-designsystem is RSC-ready: the library's
+ * banners let server components RENDER its components — but this file
+ * defines its own state and event handler, and a server component cannot
+ * pass a function across the boundary (props must be serializable). The
+ * rule: render design system components -> server component; wire your own
+ * behavior into them -> smallest possible client island, like this one.
  */
 // TODO(i18n): "Kopier"/"Kopiert" are hardcoded Norwegian — the frontend has
 // no UI-string i18n layer yet. When the EN content layer arrives, these

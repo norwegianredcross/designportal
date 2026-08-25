@@ -11,6 +11,11 @@ Two services, one repo: `services/xp` (Enonic XP, headless CMS) and `services/ne
   `site/mixins/blocks/blocks.xml`. Do not fork the block forms.
 - The Next side renders with `rk-designsystem` components. No hand-rolled UI where a design
   system component exists, and no new design system components from this repo.
+- `"use client"` discipline: rendering design system components needs no directive (the
+  package ships its own banners). A directive is only for files defining their own state,
+  event handlers or browser APIs — keep those as the smallest possible islands, and give
+  every such file a comment naming the mechanism that forces it (see
+  `components/blocks/CopyButton.tsx` and `components/partials/Details.tsx`).
 - When the XP schema changes, re-introspect and regenerate types on the Next side
   (`npm run introspect && npm run generate`) in the same PR.
 
