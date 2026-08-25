@@ -6,7 +6,7 @@ plugins {
 
 app {
   name = "${appName}"
-  displayName = "Røde kors"
+  displayName = "RK Designsystem Docs"
   vendorName = "${vendorName}"
   vendorUrl = "${vendorUrl}"
   systemVersion = "${xpVersion}"
