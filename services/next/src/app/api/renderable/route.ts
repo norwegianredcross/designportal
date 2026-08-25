@@ -44,11 +44,9 @@ async function processRequest(req: NextRequest) {
 
   // catch-all rendering is ignored for isRenderableRequest in edit mode
   // to allow selecting descriptors in page editor
-  const catchAllInEditOrCantRender =
-    !meta.canRender || (meta.catchAll && isRenderableRequestEditMode(req));
+  const catchAllInEditOrCantRender = !meta.canRender || (meta.catchAll && isRenderableRequestEditMode(req));
 
-  const catchAllInNextProdMode =
-    meta.renderMode === RENDER_MODE.NEXT && !IS_DEV_MODE && meta.catchAll;
+  const catchAllInNextProdMode = meta.renderMode === RENDER_MODE.NEXT && !IS_DEV_MODE && meta.catchAll;
 
   const notFound = catchAllInEditOrCantRender || catchAllInNextProdMode;
 

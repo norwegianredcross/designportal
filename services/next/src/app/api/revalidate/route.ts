@@ -29,9 +29,5 @@ export async function GET(req: NextRequest) {
 }
 
 function normalizePath(path: string[] | string): string {
-  return typeof path === "string"
-    ? path.charAt(0) !== "/"
-      ? "/" + path
-      : path
-    : "/" + path.join("/");
+  return typeof path === "string" ? (path.charAt(0) !== "/" ? "/" + path : path) : "/" + path.join("/");
 }

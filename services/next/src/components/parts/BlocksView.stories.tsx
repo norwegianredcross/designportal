@@ -48,8 +48,7 @@ export const Mixed: Story = {
         __typename: "no_rodekors_docs_BlockText",
         title: "Om Røde Kors",
         text: {
-          processedHtml:
-            "<p>Røde Kors er en humanitær organisasjon som arbeider for å beskytte liv og helse.</p>",
+          processedHtml: "<p>Røde Kors er en humanitær organisasjon som arbeider for å beskytte liv og helse.</p>",
           links: [],
           images: [],
         },
@@ -73,14 +72,8 @@ export const Mixed: Story = {
   },
   play: async ({ canvas }) => {
     // Proves the typename → component registry routed both block types.
-    await expect(
-      canvas.getByRole("heading", { level: 2, name: /om røde kors/i }),
-    ).toBeVisible();
-    await expect(
-      canvas.getByRole("heading", { level: 2, name: /spørsmål og svar/i }),
-    ).toBeVisible();
-    await expect(
-      canvas.getByText(/hvordan blir jeg frivillig\?/i),
-    ).toBeVisible();
+    await expect(canvas.getByRole("heading", { level: 2, name: /om røde kors/i })).toBeVisible();
+    await expect(canvas.getByRole("heading", { level: 2, name: /spørsmål og svar/i })).toBeVisible();
+    await expect(canvas.getByText(/hvordan blir jeg frivillig\?/i)).toBeVisible();
   },
 };

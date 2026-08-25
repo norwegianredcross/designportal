@@ -3,7 +3,7 @@ export type SiteContent = import("./site-content").SiteContent;
 
 declare global {
   interface XpXData {
-    "no-rodekors-www"?: {
+    "no-rodekors-docs"?: {
       "site-content"?: SiteContent;
     };
   }

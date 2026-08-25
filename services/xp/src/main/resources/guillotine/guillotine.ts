@@ -1,4 +1,5 @@
 import { type Content, get as getOne } from "/lib/xp/content";
+import { imageUrl, type ImageUrlParams } from "/lib/xp/portal";
 import { forceArray } from "/lib/rodekors/arrays";
 import { buildRichText, type ProcessHtmlArgs } from "/lib/rodekors/rich-text";
 import { type DataFetchingEnvironment, type Extensions, type GraphQL, ObjectTypeName } from "@enonic-types/guillotine";
@@ -10,6 +11,7 @@ type BlockRaw = NonNullable<Blocks["blocks"]>[number];
 const OBJECT_TYPE_BLOCK = "no_rodekors_docs_Block";
 const OBJECT_TYPE_BLOCK_TEXT = "no_rodekors_docs_BlockText";
 const OBJECT_TYPE_BLOCK_ACCORDION = "no_rodekors_docs_BlockAccordion";
+const OBJECT_TYPE_BLOCK_QUOTE = "no_rodekors_docs_BlockQuote";
 const FIELD_BLOCKS = "blocks";
 
 export function extensions(graphQL: GraphQL): Extensions {
@@ -43,11 +45,44 @@ export function extensions(graphQL: GraphQL): Extensions {
           },
         },
       },
+      [OBJECT_TYPE_BLOCK_QUOTE]: {
+        description: "A stylized quote with the image of the author",
+        fields: {
+          text: {
+            type: graphQL.reference(ObjectTypeName.RichText),
+            args: {
+              processHtml: graphQL.reference("ProcessHtmlInput"),
+            },
+          },
+          author: {
+            type: graphQL.GraphQLString,
+          },
+          // The editor stores a media content id (ImageSelector); the API
+          // exposes a ready-to-use URL instead so the frontend never needs
+          // to resolve media content itself.
+          imageUrl: {
+            type: graphQL.GraphQLString,
+            args: {
+              scale: graphQL.nonNull(graphQL.GraphQLString),
+            },
+          },
+          publicationTitle: {
+            type: graphQL.GraphQLString,
+          },
+          publicationUrl: {
+            type: graphQL.GraphQLString,
+          },
+        },
+      },
     },
     unions: {
       [OBJECT_TYPE_BLOCK]: {
         description: "Your page content is build by a sequence of blocks.",
-        types: [graphQL.reference(OBJECT_TYPE_BLOCK_TEXT), graphQL.reference(OBJECT_TYPE_BLOCK_ACCORDION)],
+        types: [
+          graphQL.reference(OBJECT_TYPE_BLOCK_TEXT),
+          graphQL.reference(OBJECT_TYPE_BLOCK_ACCORDION),
+          graphQL.reference(OBJECT_TYPE_BLOCK_QUOTE),
+        ],
       },
     },
     typeResolvers: {
@@ -73,6 +108,22 @@ export function extensions(graphQL: GraphQL): Extensions {
         text: (env: DataFetchingEnvironment<ProcessHtmlArgs, LocalContextRecord, ResolvedTextBlock>) =>
           buildRichText(env.source.text, env.args),
       },
+      [OBJECT_TYPE_BLOCK_QUOTE]: {
+        text: (env: DataFetchingEnvironment<ProcessHtmlArgs, LocalContextRecord, ResolvedQuoteBlock>) =>
+          buildRichText(env.source.text, env.args),
+        imageUrl: (env: DataFetchingEnvironment<{ scale?: string }, LocalContextRecord, ResolvedQuoteBlock>) =>
+          env.source.imageId
+            ? imageUrl({
+                id: env.source.imageId,
+                // The schema declares scale as non-null, so it is always set at
+                // runtime; the arg is typed optional only because Guillotine's
+                // resolver interface requires it, and the cast bridges to the
+                // portal lib's template-literal scale type ("square(96)" etc.).
+                scale: env.args.scale as ImageUrlParams["scale"],
+                type: "absolute",
+              })
+            : null,
+      },
       HeadlessCms: {
         [FIELD_BLOCKS]: (env): unknown[] => {
           const content = getOne<Content<Blocks>>({
@@ -92,6 +143,16 @@ type ResolvedTextBlock = {
   text?: string;
 };
 
+type ResolvedQuoteBlock = {
+  __typename: typeof OBJECT_TYPE_BLOCK_QUOTE;
+  text?: string;
+  author?: string;
+  // Kept as the raw media id; the imageUrl field resolver turns it into a URL.
+  imageId?: string;
+  publicationTitle?: string;
+  publicationUrl?: string;
+};
+
 type ResolvedAccordionBlock = {
   __typename: typeof OBJECT_TYPE_BLOCK_ACCORDION;
   title?: string;
@@ -99,7 +160,7 @@ type ResolvedAccordionBlock = {
   items: ResolvedTextBlock[];
 };
 
-function resolveBlocks(block: BlockRaw): ResolvedTextBlock | ResolvedAccordionBlock | null {
+function resolveBlocks(block: BlockRaw): ResolvedTextBlock | ResolvedAccordionBlock | ResolvedQuoteBlock | null {
   switch (block._selected) {
     case "blocks-text":
       return {
@@ -117,6 +178,15 @@ function resolveBlocks(block: BlockRaw): ResolvedTextBlock | ResolvedAccordionBl
           title: item.title,
           text: item.text,
         })),
+      };
+    case "blocks-quote":
+      return {
+        __typename: OBJECT_TYPE_BLOCK_QUOTE,
+        text: block["blocks-quote"].text,
+        author: block["blocks-quote"].author,
+        imageId: block["blocks-quote"].imageId,
+        publicationTitle: block["blocks-quote"].publicationTitle,
+        publicationUrl: block["blocks-quote"].publicationUrl,
       };
   }
 

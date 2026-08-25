@@ -26,6 +26,16 @@ export default () =>
               }
             }
           }
+          ...on no_rodekors_docs_BlockQuote {
+            __typename
+            text(processHtml: {type: absolute}) {
+              ...richTextFragment
+            }
+            author
+            imageUrl(scale: "square(96)")
+            publicationTitle
+            publicationUrl
+          }
         }
       }
     }`);

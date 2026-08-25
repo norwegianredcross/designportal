@@ -99,7 +99,6 @@ interface Content {
   children(offset: Int, first: Int, sort: String): [Content]
   childrenConnection(after: String, first: Int, sort: String): ContentConnection
   permissions: Permissions
-  metaFields: MetaFields
 }
 
 """ContentConnection."""
@@ -229,10 +228,8 @@ input ExistsFilterInput {
 
 """Extra data."""
 type ExtraData {
-  media: XData_media_ApplicationConfig
   no_rodekors_docs: XData_no_rodekors_docs_ApplicationConfig
-  com_enonic_app_metafields: XData_com_enonic_app_metafields_ApplicationConfig
-  com_enonic_app_menu: XData_com_enonic_app_menu_ApplicationConfig
+  media: XData_media_ApplicationConfig
   base: XData_base_ApplicationConfig
 }
 
@@ -367,16 +364,15 @@ input HasValueFilterInput {
 """Headless CMS"""
 type HeadlessCms {
   queryDsl(query: QueryDSLInput, offset: Int, first: Int, sort: [SortDslInput]): [Content]
-  blocks(key: ID!): [no_rodekors_docs_Block]
-  getPermissions(key: ID): Permissions
-  query(query: String, offset: Int, first: Int, sort: String, contentTypes: [String], filters: [FilterInput]): [Content]
-  getChildrenConnection(key: ID, after: String, first: Int, sort: String): ContentConnection
-  menu: Menu
   getChildren(key: ID, offset: Int, first: Int, sort: String): [Content]
   queryConnection(query: String!, after: String, first: Int, sort: String, contentTypes: [String], aggregations: [AggregationInput], filters: [FilterInput]): QueryContentConnection
   getType(name: String!): ContentType
+  blocks(key: ID!): [no_rodekors_docs_Block]
   get(key: ID): Content
+  getPermissions(key: ID): Permissions
+  query(query: String, offset: Int, first: Int, sort: String, contentTypes: [String], filters: [FilterInput]): [Content]
   getSite: portal_Site
+  getChildrenConnection(key: ID, after: String, first: Int, sort: String): ContentConnection
   queryDslConnection(query: QueryDSLInput!, after: String, first: Int, aggregations: [AggregationInput], highlight: HighlightInputType, sort: [SortDslInput]): QueryDSLContentConnection
   getTypes: [ContentType]
 }
@@ -576,60 +572,6 @@ type MediaUploader {
   focalPoint: MediaFocalPoint
 }
 
-"""Menu"""
-type Menu {
-  items: [MenuItem]
-}
-
-"""Menu Item"""
-type MenuItem {
-  title: String
-  path: String
-  name: String
-  items: [MenuItem]
-  content: Content
-}
-
-"""Meta fields for a content"""
-type MetaFields {
-  baseUrl: String
-  canonical: Content
-  description: String
-  fullTitle: String!
-  locale: String
-  image: media_Image
-  openGraph: MetaFields_OpenGraph
-  robots: MetaFields_Robots
-  siteName: String
-  title: String!
-  twitter: MetaFields_Twitter
-  verification: MetaFields_Verification
-}
-
-"""Meta fields for Open Graph"""
-type MetaFields_OpenGraph {
-  hideImages: Boolean
-  hideUrl: Boolean
-  type: String
-}
-
-"""Meta fields for Robots"""
-type MetaFields_Robots {
-  follow: Boolean
-  index: Boolean
-}
-
-"""Meta fields for Twitter"""
-type MetaFields_Twitter {
-  hideImages: Boolean
-  site: String
-}
-
-"""Meta fields for Verification"""
-type MetaFields_Verification {
-  google: String
-}
-
 """MinAggregation input type"""
 input MinAggregationInput {
   field: String!
@@ -705,6 +647,7 @@ type Part_no_rodekors_docs_blocks_view_Blocks {
   _selected: Part_no_rodekors_docs_blocks_view_Blocks_OptionEnum
   blocks_text: Part_no_rodekors_docs_blocks_view_BlocksText
   blocks_accordion: Part_no_rodekors_docs_blocks_view_BlocksAccordion
+  blocks_quote: Part_no_rodekors_docs_blocks_view_BlocksQuote
 }
 
 """Accordion"""
@@ -712,6 +655,15 @@ type Part_no_rodekors_docs_blocks_view_BlocksAccordion {
   title: String
   items(offset: Int, first: Int): [Part_no_rodekors_docs_blocks_view_Items]
   theme: String
+}
+
+"""Quote"""
+type Part_no_rodekors_docs_blocks_view_BlocksQuote {
+  text(processHtml: ProcessHtmlInput): RichText
+  author: String
+  imageId: Content
+  publicationTitle: String
+  publicationUrl: String
 }
 
 """Text"""
@@ -724,6 +676,7 @@ type Part_no_rodekors_docs_blocks_view_BlocksText {
 enum Part_no_rodekors_docs_blocks_view_Blocks_OptionEnum {
   blocks_text
   blocks_accordion
+  blocks_quote
 }
 
 """Accordion element"""
@@ -899,37 +852,36 @@ type TextComponentData {
 
 """UntypedContent"""
 type UntypedContent implements Content {
-  modifiedTime: DateTime
-  dataAsJson: JSON
-  parent: Content
-  components(resolveTemplate: Boolean, resolveFragment: Boolean): [Component]
-  attachments: [Attachment]
-  childrenConnection(after: String, first: Int, sort: String): ContentConnection
+  _id: ID!
   _name: String!
-  displayName: String
-  hasChildren: Boolean
-  modifier: PrincipalKey
-  pageAsJson(resolveTemplate: Boolean, resolveFragment: Boolean): JSON
-  language: String
+  _path(type: ContentPathType): String!
   _references: [Content]
   _score: Float
-  type: String
-  valid: Boolean
-  children(offset: Int, first: Int, sort: String): [Content]
-  permissions: Permissions
-  createdTime: DateTime
-  xAsJson: JSON
-  contentType: ContentType
-  owner: PrincipalKey
   creator: PrincipalKey
-  pageTemplate: Content
-  metaFields: MetaFields
-  _path(type: ContentPathType): String!
-  site: portal_Site
-  publish: PublishInfo
+  modifier: PrincipalKey
+  createdTime: DateTime
+  modifiedTime: DateTime
+  owner: PrincipalKey
+  type: String
+  contentType: ContentType
+  displayName: String
+  hasChildren: Boolean
+  language: String
+  valid: Boolean
+  dataAsJson: JSON
   x: ExtraData
+  xAsJson: JSON
+  pageAsJson(resolveTemplate: Boolean, resolveFragment: Boolean): JSON
+  pageTemplate: Content
+  components(resolveTemplate: Boolean, resolveFragment: Boolean): [Component]
+  attachments: [Attachment]
+  publish: PublishInfo
   pageUrl(type: UrlType, params: JSON): String
-  _id: ID!
+  site: portal_Site
+  parent: Content
+  children(offset: Int, first: Int, sort: String): [Content]
+  childrenConnection(after: String, first: Int, sort: String): ContentConnection
+  permissions: Permissions
 }
 
 """URL type."""
@@ -953,35 +905,6 @@ type XData_base_gpsInfo_DataConfig {
   geoPoint: GeoPoint
   altitude: String
   direction: String
-}
-
-"""XDataApplicationConfig for application ['com.enonic.app.menu']"""
-type XData_com_enonic_app_menu_ApplicationConfig {
-  menu_item: XData_com_enonic_app_menu_menu_item_DataConfig
-}
-
-"""
-Extra data config for application ['com.enonic.app.menu}'] and descriptor ['menu-item']
-"""
-type XData_com_enonic_app_menu_menu_item_DataConfig {
-  menuItem: Boolean
-  menuName: String
-}
-
-"""XDataApplicationConfig for application ['com.enonic.app.metafields']"""
-type XData_com_enonic_app_metafields_ApplicationConfig {
-  meta_data: XData_com_enonic_app_metafields_meta_data_DataConfig
-}
-
-"""
-Extra data config for application ['com.enonic.app.metafields}'] and descriptor ['meta-data']
-"""
-type XData_com_enonic_app_metafields_meta_data_DataConfig {
-  seoTitle: String
-  seoDescription: String
-  seoImage: Content
-  seoContentForCanonicalUrl: Content
-  blockRobots: Boolean
 }
 
 """XDataApplicationConfig for application ['media']"""
@@ -1048,6 +971,7 @@ type XData_no_rodekors_docs_site_content_DataConfig_Blocks {
   _selected: XData_no_rodekors_docs_site_content_DataConfig_Blocks_OptionEnum
   blocks_text: XData_no_rodekors_docs_site_content_DataConfig_BlocksText
   blocks_accordion: XData_no_rodekors_docs_site_content_DataConfig_BlocksAccordion
+  blocks_quote: XData_no_rodekors_docs_site_content_DataConfig_BlocksQuote
 }
 
 """Accordion"""
@@ -1055,6 +979,15 @@ type XData_no_rodekors_docs_site_content_DataConfig_BlocksAccordion {
   title: String
   items(offset: Int, first: Int): [XData_no_rodekors_docs_site_content_DataConfig_Items]
   theme: String
+}
+
+"""Quote"""
+type XData_no_rodekors_docs_site_content_DataConfig_BlocksQuote {
+  text(processHtml: ProcessHtmlInput): RichText
+  author: String
+  imageId: Content
+  publicationTitle: String
+  publicationUrl: String
 }
 
 """Text"""
@@ -1067,6 +1000,7 @@ type XData_no_rodekors_docs_site_content_DataConfig_BlocksText {
 enum XData_no_rodekors_docs_site_content_DataConfig_Blocks_OptionEnum {
   blocks_text
   blocks_accordion
+  blocks_quote
 }
 
 """Accordion element"""
@@ -1077,108 +1011,105 @@ type XData_no_rodekors_docs_site_content_DataConfig_Items {
 
 """Folder - base:folder"""
 type base_Folder implements Content {
-  modifiedTime: DateTime
-  dataAsJson: JSON
-  parent: Content
-  components(resolveTemplate: Boolean, resolveFragment: Boolean): [Component]
-  attachments: [Attachment]
-  childrenConnection(after: String, first: Int, sort: String): ContentConnection
+  _id: ID!
   _name: String!
-  displayName: String
-  hasChildren: Boolean
-  modifier: PrincipalKey
-  pageAsJson(resolveTemplate: Boolean, resolveFragment: Boolean): JSON
-  language: String
+  _path(type: ContentPathType): String!
   _references: [Content]
   _score: Float
-  type: String
-  valid: Boolean
-  children(offset: Int, first: Int, sort: String): [Content]
-  permissions: Permissions
-  createdTime: DateTime
-  xAsJson: JSON
-  contentType: ContentType
-  owner: PrincipalKey
   creator: PrincipalKey
-  pageTemplate: Content
-  metaFields: MetaFields
-  _path(type: ContentPathType): String!
-  site: portal_Site
-  publish: PublishInfo
+  modifier: PrincipalKey
+  createdTime: DateTime
+  modifiedTime: DateTime
+  owner: PrincipalKey
+  type: String
+  contentType: ContentType
+  displayName: String
+  hasChildren: Boolean
+  language: String
+  valid: Boolean
+  dataAsJson: JSON
   x: ExtraData
+  xAsJson: JSON
+  pageAsJson(resolveTemplate: Boolean, resolveFragment: Boolean): JSON
+  pageTemplate: Content
+  components(resolveTemplate: Boolean, resolveFragment: Boolean): [Component]
+  attachments: [Attachment]
+  publish: PublishInfo
   pageUrl(type: UrlType, params: JSON): String
-  _id: ID!
+  site: portal_Site
+  parent: Content
+  children(offset: Int, first: Int, sort: String): [Content]
+  childrenConnection(after: String, first: Int, sort: String): ContentConnection
+  permissions: Permissions
 }
 
 """Media - base:media"""
 type base_Media implements Content {
-  modifiedTime: DateTime
-  dataAsJson: JSON
-  parent: Content
-  components(resolveTemplate: Boolean, resolveFragment: Boolean): [Component]
-  attachments: [Attachment]
-  childrenConnection(after: String, first: Int, sort: String): ContentConnection
+  _id: ID!
   _name: String!
-  displayName: String
-  hasChildren: Boolean
-  modifier: PrincipalKey
-  pageAsJson(resolveTemplate: Boolean, resolveFragment: Boolean): JSON
-  language: String
+  _path(type: ContentPathType): String!
   _references: [Content]
   _score: Float
-  type: String
-  valid: Boolean
-  children(offset: Int, first: Int, sort: String): [Content]
-  permissions: Permissions
-  createdTime: DateTime
-  xAsJson: JSON
-  contentType: ContentType
-  owner: PrincipalKey
   creator: PrincipalKey
-  pageTemplate: Content
-  metaFields: MetaFields
-  _path(type: ContentPathType): String!
-  site: portal_Site
-  publish: PublishInfo
+  modifier: PrincipalKey
+  createdTime: DateTime
+  modifiedTime: DateTime
+  owner: PrincipalKey
+  type: String
+  contentType: ContentType
+  displayName: String
+  hasChildren: Boolean
+  language: String
+  valid: Boolean
+  dataAsJson: JSON
   x: ExtraData
+  xAsJson: JSON
+  pageAsJson(resolveTemplate: Boolean, resolveFragment: Boolean): JSON
+  pageTemplate: Content
+  components(resolveTemplate: Boolean, resolveFragment: Boolean): [Component]
+  attachments: [Attachment]
+  publish: PublishInfo
   pageUrl(type: UrlType, params: JSON): String
-  _id: ID!
+  site: portal_Site
+  parent: Content
+  children(offset: Int, first: Int, sort: String): [Content]
+  childrenConnection(after: String, first: Int, sort: String): ContentConnection
+  permissions: Permissions
 }
 
 """Shortcut - base:shortcut"""
 type base_Shortcut implements Content {
-  modifiedTime: DateTime
-  dataAsJson: JSON
-  parent: Content
-  components(resolveTemplate: Boolean, resolveFragment: Boolean): [Component]
-  attachments: [Attachment]
-  childrenConnection(after: String, first: Int, sort: String): ContentConnection
+  _id: ID!
   _name: String!
-  data: base_Shortcut_Data
-  displayName: String
-  hasChildren: Boolean
-  modifier: PrincipalKey
-  pageAsJson(resolveTemplate: Boolean, resolveFragment: Boolean): JSON
-  language: String
+  _path(type: ContentPathType): String!
   _references: [Content]
   _score: Float
-  type: String
-  valid: Boolean
-  children(offset: Int, first: Int, sort: String): [Content]
-  permissions: Permissions
-  createdTime: DateTime
-  xAsJson: JSON
-  contentType: ContentType
-  owner: PrincipalKey
   creator: PrincipalKey
-  pageTemplate: Content
-  metaFields: MetaFields
-  _path(type: ContentPathType): String!
-  site: portal_Site
-  publish: PublishInfo
+  modifier: PrincipalKey
+  createdTime: DateTime
+  modifiedTime: DateTime
+  owner: PrincipalKey
+  type: String
+  contentType: ContentType
+  displayName: String
+  hasChildren: Boolean
+  language: String
+  valid: Boolean
+  dataAsJson: JSON
   x: ExtraData
+  xAsJson: JSON
+  pageAsJson(resolveTemplate: Boolean, resolveFragment: Boolean): JSON
+  pageTemplate: Content
+  components(resolveTemplate: Boolean, resolveFragment: Boolean): [Component]
+  attachments: [Attachment]
+  publish: PublishInfo
   pageUrl(type: UrlType, params: JSON): String
-  _id: ID!
+  site: portal_Site
+  parent: Content
+  children(offset: Int, first: Int, sort: String): [Content]
+  childrenConnection(after: String, first: Int, sort: String): ContentConnection
+  permissions: Permissions
+  data: base_Shortcut_Data
 }
 
 """Shortcut - base:shortcut data"""
@@ -1195,109 +1126,106 @@ type base_Shortcut_Parameters {
 
 """Structured - base:structured"""
 type base_Structured implements Content {
-  modifiedTime: DateTime
-  dataAsJson: JSON
-  parent: Content
-  components(resolveTemplate: Boolean, resolveFragment: Boolean): [Component]
-  attachments: [Attachment]
-  childrenConnection(after: String, first: Int, sort: String): ContentConnection
+  _id: ID!
   _name: String!
-  displayName: String
-  hasChildren: Boolean
-  modifier: PrincipalKey
-  pageAsJson(resolveTemplate: Boolean, resolveFragment: Boolean): JSON
-  language: String
+  _path(type: ContentPathType): String!
   _references: [Content]
   _score: Float
-  type: String
-  valid: Boolean
-  children(offset: Int, first: Int, sort: String): [Content]
-  permissions: Permissions
-  createdTime: DateTime
-  xAsJson: JSON
-  contentType: ContentType
-  owner: PrincipalKey
   creator: PrincipalKey
-  pageTemplate: Content
-  metaFields: MetaFields
-  _path(type: ContentPathType): String!
-  site: portal_Site
-  publish: PublishInfo
+  modifier: PrincipalKey
+  createdTime: DateTime
+  modifiedTime: DateTime
+  owner: PrincipalKey
+  type: String
+  contentType: ContentType
+  displayName: String
+  hasChildren: Boolean
+  language: String
+  valid: Boolean
+  dataAsJson: JSON
   x: ExtraData
+  xAsJson: JSON
+  pageAsJson(resolveTemplate: Boolean, resolveFragment: Boolean): JSON
+  pageTemplate: Content
+  components(resolveTemplate: Boolean, resolveFragment: Boolean): [Component]
+  attachments: [Attachment]
+  publish: PublishInfo
   pageUrl(type: UrlType, params: JSON): String
-  _id: ID!
+  site: portal_Site
+  parent: Content
+  children(offset: Int, first: Int, sort: String): [Content]
+  childrenConnection(after: String, first: Int, sort: String): ContentConnection
+  permissions: Permissions
 }
 
 """Unstructured - base:unstructured"""
 type base_Unstructured implements Content {
-  modifiedTime: DateTime
-  dataAsJson: JSON
-  parent: Content
-  components(resolveTemplate: Boolean, resolveFragment: Boolean): [Component]
-  attachments: [Attachment]
-  childrenConnection(after: String, first: Int, sort: String): ContentConnection
+  _id: ID!
   _name: String!
-  displayName: String
-  hasChildren: Boolean
-  modifier: PrincipalKey
-  pageAsJson(resolveTemplate: Boolean, resolveFragment: Boolean): JSON
-  language: String
+  _path(type: ContentPathType): String!
   _references: [Content]
   _score: Float
-  type: String
-  valid: Boolean
-  children(offset: Int, first: Int, sort: String): [Content]
-  permissions: Permissions
-  createdTime: DateTime
-  xAsJson: JSON
-  contentType: ContentType
-  owner: PrincipalKey
   creator: PrincipalKey
-  pageTemplate: Content
-  metaFields: MetaFields
-  _path(type: ContentPathType): String!
-  site: portal_Site
-  publish: PublishInfo
+  modifier: PrincipalKey
+  createdTime: DateTime
+  modifiedTime: DateTime
+  owner: PrincipalKey
+  type: String
+  contentType: ContentType
+  displayName: String
+  hasChildren: Boolean
+  language: String
+  valid: Boolean
+  dataAsJson: JSON
   x: ExtraData
+  xAsJson: JSON
+  pageAsJson(resolveTemplate: Boolean, resolveFragment: Boolean): JSON
+  pageTemplate: Content
+  components(resolveTemplate: Boolean, resolveFragment: Boolean): [Component]
+  attachments: [Attachment]
+  publish: PublishInfo
   pageUrl(type: UrlType, params: JSON): String
-  _id: ID!
+  site: portal_Site
+  parent: Content
+  children(offset: Int, first: Int, sort: String): [Content]
+  childrenConnection(after: String, first: Int, sort: String): ContentConnection
+  permissions: Permissions
 }
 
 """Archive - media:archive"""
 type media_Archive implements Content {
-  modifiedTime: DateTime
-  dataAsJson: JSON
-  parent: Content
-  components(resolveTemplate: Boolean, resolveFragment: Boolean): [Component]
-  attachments: [Attachment]
-  childrenConnection(after: String, first: Int, sort: String): ContentConnection
+  _id: ID!
   _name: String!
-  data: media_Archive_Data
-  displayName: String
-  hasChildren: Boolean
-  modifier: PrincipalKey
-  pageAsJson(resolveTemplate: Boolean, resolveFragment: Boolean): JSON
-  language: String
+  _path(type: ContentPathType): String!
   _references: [Content]
   _score: Float
-  type: String
-  valid: Boolean
-  children(offset: Int, first: Int, sort: String): [Content]
-  permissions: Permissions
-  createdTime: DateTime
-  xAsJson: JSON
-  contentType: ContentType
-  owner: PrincipalKey
   creator: PrincipalKey
-  mediaUrl(download: Boolean, type: UrlType, params: JSON): String
-  pageTemplate: Content
-  metaFields: MetaFields
-  _path(type: ContentPathType): String!
-  site: portal_Site
-  publish: PublishInfo
+  modifier: PrincipalKey
+  createdTime: DateTime
+  modifiedTime: DateTime
+  owner: PrincipalKey
+  type: String
+  contentType: ContentType
+  displayName: String
+  hasChildren: Boolean
+  language: String
+  valid: Boolean
+  dataAsJson: JSON
   x: ExtraData
+  xAsJson: JSON
+  pageAsJson(resolveTemplate: Boolean, resolveFragment: Boolean): JSON
+  pageTemplate: Content
+  components(resolveTemplate: Boolean, resolveFragment: Boolean): [Component]
+  attachments: [Attachment]
+  publish: PublishInfo
   pageUrl(type: UrlType, params: JSON): String
-  _id: ID!
+  site: portal_Site
+  parent: Content
+  children(offset: Int, first: Int, sort: String): [Content]
+  childrenConnection(after: String, first: Int, sort: String): ContentConnection
+  permissions: Permissions
+  mediaUrl(download: Boolean, type: UrlType, params: JSON): String
+  data: media_Archive_Data
 }
 
 """Archive - media:archive data"""
@@ -1308,39 +1236,38 @@ type media_Archive_Data {
 
 """Audio - media:audio"""
 type media_Audio implements Content {
-  modifiedTime: DateTime
-  dataAsJson: JSON
-  parent: Content
-  components(resolveTemplate: Boolean, resolveFragment: Boolean): [Component]
-  attachments: [Attachment]
-  childrenConnection(after: String, first: Int, sort: String): ContentConnection
+  _id: ID!
   _name: String!
-  data: media_Audio_Data
-  displayName: String
-  hasChildren: Boolean
-  modifier: PrincipalKey
-  pageAsJson(resolveTemplate: Boolean, resolveFragment: Boolean): JSON
-  language: String
+  _path(type: ContentPathType): String!
   _references: [Content]
   _score: Float
-  type: String
-  valid: Boolean
-  children(offset: Int, first: Int, sort: String): [Content]
-  permissions: Permissions
-  createdTime: DateTime
-  xAsJson: JSON
-  contentType: ContentType
-  owner: PrincipalKey
   creator: PrincipalKey
-  mediaUrl(download: Boolean, type: UrlType, params: JSON): String
-  pageTemplate: Content
-  metaFields: MetaFields
-  _path(type: ContentPathType): String!
-  site: portal_Site
-  publish: PublishInfo
+  modifier: PrincipalKey
+  createdTime: DateTime
+  modifiedTime: DateTime
+  owner: PrincipalKey
+  type: String
+  contentType: ContentType
+  displayName: String
+  hasChildren: Boolean
+  language: String
+  valid: Boolean
+  dataAsJson: JSON
   x: ExtraData
+  xAsJson: JSON
+  pageAsJson(resolveTemplate: Boolean, resolveFragment: Boolean): JSON
+  pageTemplate: Content
+  components(resolveTemplate: Boolean, resolveFragment: Boolean): [Component]
+  attachments: [Attachment]
+  publish: PublishInfo
   pageUrl(type: UrlType, params: JSON): String
-  _id: ID!
+  site: portal_Site
+  parent: Content
+  children(offset: Int, first: Int, sort: String): [Content]
+  childrenConnection(after: String, first: Int, sort: String): ContentConnection
+  permissions: Permissions
+  mediaUrl(download: Boolean, type: UrlType, params: JSON): String
+  data: media_Audio_Data
 }
 
 """Audio - media:audio data"""
@@ -1351,39 +1278,38 @@ type media_Audio_Data {
 
 """Code - media:code"""
 type media_Code implements Content {
-  modifiedTime: DateTime
-  dataAsJson: JSON
-  parent: Content
-  components(resolveTemplate: Boolean, resolveFragment: Boolean): [Component]
-  attachments: [Attachment]
-  childrenConnection(after: String, first: Int, sort: String): ContentConnection
+  _id: ID!
   _name: String!
-  data: media_Code_Data
-  displayName: String
-  hasChildren: Boolean
-  modifier: PrincipalKey
-  pageAsJson(resolveTemplate: Boolean, resolveFragment: Boolean): JSON
-  language: String
+  _path(type: ContentPathType): String!
   _references: [Content]
   _score: Float
-  type: String
-  valid: Boolean
-  children(offset: Int, first: Int, sort: String): [Content]
-  permissions: Permissions
-  createdTime: DateTime
-  xAsJson: JSON
-  contentType: ContentType
-  owner: PrincipalKey
   creator: PrincipalKey
-  mediaUrl(download: Boolean, type: UrlType, params: JSON): String
-  pageTemplate: Content
-  metaFields: MetaFields
-  _path(type: ContentPathType): String!
-  site: portal_Site
-  publish: PublishInfo
+  modifier: PrincipalKey
+  createdTime: DateTime
+  modifiedTime: DateTime
+  owner: PrincipalKey
+  type: String
+  contentType: ContentType
+  displayName: String
+  hasChildren: Boolean
+  language: String
+  valid: Boolean
+  dataAsJson: JSON
   x: ExtraData
+  xAsJson: JSON
+  pageAsJson(resolveTemplate: Boolean, resolveFragment: Boolean): JSON
+  pageTemplate: Content
+  components(resolveTemplate: Boolean, resolveFragment: Boolean): [Component]
+  attachments: [Attachment]
+  publish: PublishInfo
   pageUrl(type: UrlType, params: JSON): String
-  _id: ID!
+  site: portal_Site
+  parent: Content
+  children(offset: Int, first: Int, sort: String): [Content]
+  childrenConnection(after: String, first: Int, sort: String): ContentConnection
+  permissions: Permissions
+  mediaUrl(download: Boolean, type: UrlType, params: JSON): String
+  data: media_Code_Data
 }
 
 """Code - media:code data"""
@@ -1394,39 +1320,38 @@ type media_Code_Data {
 
 """Data - media:data"""
 type media_Data implements Content {
-  modifiedTime: DateTime
-  dataAsJson: JSON
-  parent: Content
-  components(resolveTemplate: Boolean, resolveFragment: Boolean): [Component]
-  attachments: [Attachment]
-  childrenConnection(after: String, first: Int, sort: String): ContentConnection
+  _id: ID!
   _name: String!
-  data: media_Data_Data
-  displayName: String
-  hasChildren: Boolean
-  modifier: PrincipalKey
-  pageAsJson(resolveTemplate: Boolean, resolveFragment: Boolean): JSON
-  language: String
+  _path(type: ContentPathType): String!
   _references: [Content]
   _score: Float
-  type: String
-  valid: Boolean
-  children(offset: Int, first: Int, sort: String): [Content]
-  permissions: Permissions
-  createdTime: DateTime
-  xAsJson: JSON
-  contentType: ContentType
-  owner: PrincipalKey
   creator: PrincipalKey
-  mediaUrl(download: Boolean, type: UrlType, params: JSON): String
-  pageTemplate: Content
-  metaFields: MetaFields
-  _path(type: ContentPathType): String!
-  site: portal_Site
-  publish: PublishInfo
+  modifier: PrincipalKey
+  createdTime: DateTime
+  modifiedTime: DateTime
+  owner: PrincipalKey
+  type: String
+  contentType: ContentType
+  displayName: String
+  hasChildren: Boolean
+  language: String
+  valid: Boolean
+  dataAsJson: JSON
   x: ExtraData
+  xAsJson: JSON
+  pageAsJson(resolveTemplate: Boolean, resolveFragment: Boolean): JSON
+  pageTemplate: Content
+  components(resolveTemplate: Boolean, resolveFragment: Boolean): [Component]
+  attachments: [Attachment]
+  publish: PublishInfo
   pageUrl(type: UrlType, params: JSON): String
-  _id: ID!
+  site: portal_Site
+  parent: Content
+  children(offset: Int, first: Int, sort: String): [Content]
+  childrenConnection(after: String, first: Int, sort: String): ContentConnection
+  permissions: Permissions
+  mediaUrl(download: Boolean, type: UrlType, params: JSON): String
+  data: media_Data_Data
 }
 
 """Data - media:data data"""
@@ -1437,39 +1362,38 @@ type media_Data_Data {
 
 """Document - media:document"""
 type media_Document implements Content {
-  modifiedTime: DateTime
-  dataAsJson: JSON
-  parent: Content
-  components(resolveTemplate: Boolean, resolveFragment: Boolean): [Component]
-  attachments: [Attachment]
-  childrenConnection(after: String, first: Int, sort: String): ContentConnection
+  _id: ID!
   _name: String!
-  data: media_Document_Data
-  displayName: String
-  hasChildren: Boolean
-  modifier: PrincipalKey
-  pageAsJson(resolveTemplate: Boolean, resolveFragment: Boolean): JSON
-  language: String
+  _path(type: ContentPathType): String!
   _references: [Content]
   _score: Float
-  type: String
-  valid: Boolean
-  children(offset: Int, first: Int, sort: String): [Content]
-  permissions: Permissions
-  createdTime: DateTime
-  xAsJson: JSON
-  contentType: ContentType
-  owner: PrincipalKey
   creator: PrincipalKey
-  mediaUrl(download: Boolean, type: UrlType, params: JSON): String
-  pageTemplate: Content
-  metaFields: MetaFields
-  _path(type: ContentPathType): String!
-  site: portal_Site
-  publish: PublishInfo
+  modifier: PrincipalKey
+  createdTime: DateTime
+  modifiedTime: DateTime
+  owner: PrincipalKey
+  type: String
+  contentType: ContentType
+  displayName: String
+  hasChildren: Boolean
+  language: String
+  valid: Boolean
+  dataAsJson: JSON
   x: ExtraData
+  xAsJson: JSON
+  pageAsJson(resolveTemplate: Boolean, resolveFragment: Boolean): JSON
+  pageTemplate: Content
+  components(resolveTemplate: Boolean, resolveFragment: Boolean): [Component]
+  attachments: [Attachment]
+  publish: PublishInfo
   pageUrl(type: UrlType, params: JSON): String
-  _id: ID!
+  site: portal_Site
+  parent: Content
+  children(offset: Int, first: Int, sort: String): [Content]
+  childrenConnection(after: String, first: Int, sort: String): ContentConnection
+  permissions: Permissions
+  mediaUrl(download: Boolean, type: UrlType, params: JSON): String
+  data: media_Document_Data
 }
 
 """Document - media:document data"""
@@ -1481,39 +1405,38 @@ type media_Document_Data {
 
 """Executable - media:executable"""
 type media_Executable implements Content {
-  modifiedTime: DateTime
-  dataAsJson: JSON
-  parent: Content
-  components(resolveTemplate: Boolean, resolveFragment: Boolean): [Component]
-  attachments: [Attachment]
-  childrenConnection(after: String, first: Int, sort: String): ContentConnection
+  _id: ID!
   _name: String!
-  data: media_Executable_Data
-  displayName: String
-  hasChildren: Boolean
-  modifier: PrincipalKey
-  pageAsJson(resolveTemplate: Boolean, resolveFragment: Boolean): JSON
-  language: String
+  _path(type: ContentPathType): String!
   _references: [Content]
   _score: Float
-  type: String
-  valid: Boolean
-  children(offset: Int, first: Int, sort: String): [Content]
-  permissions: Permissions
-  createdTime: DateTime
-  xAsJson: JSON
-  contentType: ContentType
-  owner: PrincipalKey
   creator: PrincipalKey
-  mediaUrl(download: Boolean, type: UrlType, params: JSON): String
-  pageTemplate: Content
-  metaFields: MetaFields
-  _path(type: ContentPathType): String!
-  site: portal_Site
-  publish: PublishInfo
+  modifier: PrincipalKey
+  createdTime: DateTime
+  modifiedTime: DateTime
+  owner: PrincipalKey
+  type: String
+  contentType: ContentType
+  displayName: String
+  hasChildren: Boolean
+  language: String
+  valid: Boolean
+  dataAsJson: JSON
   x: ExtraData
+  xAsJson: JSON
+  pageAsJson(resolveTemplate: Boolean, resolveFragment: Boolean): JSON
+  pageTemplate: Content
+  components(resolveTemplate: Boolean, resolveFragment: Boolean): [Component]
+  attachments: [Attachment]
+  publish: PublishInfo
   pageUrl(type: UrlType, params: JSON): String
-  _id: ID!
+  site: portal_Site
+  parent: Content
+  children(offset: Int, first: Int, sort: String): [Content]
+  childrenConnection(after: String, first: Int, sort: String): ContentConnection
+  permissions: Permissions
+  mediaUrl(download: Boolean, type: UrlType, params: JSON): String
+  data: media_Executable_Data
 }
 
 """Executable - media:executable data"""
@@ -1524,40 +1447,39 @@ type media_Executable_Data {
 
 """Image - media:image"""
 type media_Image implements Content {
-  modifiedTime: DateTime
-  dataAsJson: JSON
-  parent: Content
-  components(resolveTemplate: Boolean, resolveFragment: Boolean): [Component]
-  attachments: [Attachment]
-  childrenConnection(after: String, first: Int, sort: String): ContentConnection
+  _id: ID!
   _name: String!
-  data: media_Image_Data
-  displayName: String
-  hasChildren: Boolean
-  modifier: PrincipalKey
-  pageAsJson(resolveTemplate: Boolean, resolveFragment: Boolean): JSON
-  language: String
+  _path(type: ContentPathType): String!
   _references: [Content]
   _score: Float
-  type: String
-  valid: Boolean
-  children(offset: Int, first: Int, sort: String): [Content]
-  permissions: Permissions
-  imageUrl(scale: String!, quality: Int, type: UrlType, background: String, format: String, filter: String, params: JSON): String
-  createdTime: DateTime
-  xAsJson: JSON
-  contentType: ContentType
-  owner: PrincipalKey
   creator: PrincipalKey
-  mediaUrl(download: Boolean, type: UrlType, params: JSON): String
-  pageTemplate: Content
-  metaFields: MetaFields
-  _path(type: ContentPathType): String!
-  site: portal_Site
-  publish: PublishInfo
+  modifier: PrincipalKey
+  createdTime: DateTime
+  modifiedTime: DateTime
+  owner: PrincipalKey
+  type: String
+  contentType: ContentType
+  displayName: String
+  hasChildren: Boolean
+  language: String
+  valid: Boolean
+  dataAsJson: JSON
   x: ExtraData
+  xAsJson: JSON
+  pageAsJson(resolveTemplate: Boolean, resolveFragment: Boolean): JSON
+  pageTemplate: Content
+  components(resolveTemplate: Boolean, resolveFragment: Boolean): [Component]
+  attachments: [Attachment]
+  publish: PublishInfo
   pageUrl(type: UrlType, params: JSON): String
-  _id: ID!
+  site: portal_Site
+  parent: Content
+  children(offset: Int, first: Int, sort: String): [Content]
+  childrenConnection(after: String, first: Int, sort: String): ContentConnection
+  permissions: Permissions
+  mediaUrl(download: Boolean, type: UrlType, params: JSON): String
+  imageUrl(scale: String!, quality: Int, type: UrlType, background: String, format: String, filter: String, params: JSON): String
+  data: media_Image_Data
 }
 
 """Image - media:image data"""
@@ -1572,39 +1494,38 @@ type media_Image_Data {
 
 """Presentation - media:presentation"""
 type media_Presentation implements Content {
-  modifiedTime: DateTime
-  dataAsJson: JSON
-  parent: Content
-  components(resolveTemplate: Boolean, resolveFragment: Boolean): [Component]
-  attachments: [Attachment]
-  childrenConnection(after: String, first: Int, sort: String): ContentConnection
+  _id: ID!
   _name: String!
-  data: media_Presentation_Data
-  displayName: String
-  hasChildren: Boolean
-  modifier: PrincipalKey
-  pageAsJson(resolveTemplate: Boolean, resolveFragment: Boolean): JSON
-  language: String
+  _path(type: ContentPathType): String!
   _references: [Content]
   _score: Float
-  type: String
-  valid: Boolean
-  children(offset: Int, first: Int, sort: String): [Content]
-  permissions: Permissions
-  createdTime: DateTime
-  xAsJson: JSON
-  contentType: ContentType
-  owner: PrincipalKey
   creator: PrincipalKey
-  mediaUrl(download: Boolean, type: UrlType, params: JSON): String
-  pageTemplate: Content
-  metaFields: MetaFields
-  _path(type: ContentPathType): String!
-  site: portal_Site
-  publish: PublishInfo
+  modifier: PrincipalKey
+  createdTime: DateTime
+  modifiedTime: DateTime
+  owner: PrincipalKey
+  type: String
+  contentType: ContentType
+  displayName: String
+  hasChildren: Boolean
+  language: String
+  valid: Boolean
+  dataAsJson: JSON
   x: ExtraData
+  xAsJson: JSON
+  pageAsJson(resolveTemplate: Boolean, resolveFragment: Boolean): JSON
+  pageTemplate: Content
+  components(resolveTemplate: Boolean, resolveFragment: Boolean): [Component]
+  attachments: [Attachment]
+  publish: PublishInfo
   pageUrl(type: UrlType, params: JSON): String
-  _id: ID!
+  site: portal_Site
+  parent: Content
+  children(offset: Int, first: Int, sort: String): [Content]
+  childrenConnection(after: String, first: Int, sort: String): ContentConnection
+  permissions: Permissions
+  mediaUrl(download: Boolean, type: UrlType, params: JSON): String
+  data: media_Presentation_Data
 }
 
 """Presentation - media:presentation data"""
@@ -1615,39 +1536,38 @@ type media_Presentation_Data {
 
 """Spreadsheet - media:spreadsheet"""
 type media_Spreadsheet implements Content {
-  modifiedTime: DateTime
-  dataAsJson: JSON
-  parent: Content
-  components(resolveTemplate: Boolean, resolveFragment: Boolean): [Component]
-  attachments: [Attachment]
-  childrenConnection(after: String, first: Int, sort: String): ContentConnection
+  _id: ID!
   _name: String!
-  data: media_Spreadsheet_Data
-  displayName: String
-  hasChildren: Boolean
-  modifier: PrincipalKey
-  pageAsJson(resolveTemplate: Boolean, resolveFragment: Boolean): JSON
-  language: String
+  _path(type: ContentPathType): String!
   _references: [Content]
   _score: Float
-  type: String
-  valid: Boolean
-  children(offset: Int, first: Int, sort: String): [Content]
-  permissions: Permissions
-  createdTime: DateTime
-  xAsJson: JSON
-  contentType: ContentType
-  owner: PrincipalKey
   creator: PrincipalKey
-  mediaUrl(download: Boolean, type: UrlType, params: JSON): String
-  pageTemplate: Content
-  metaFields: MetaFields
-  _path(type: ContentPathType): String!
-  site: portal_Site
-  publish: PublishInfo
+  modifier: PrincipalKey
+  createdTime: DateTime
+  modifiedTime: DateTime
+  owner: PrincipalKey
+  type: String
+  contentType: ContentType
+  displayName: String
+  hasChildren: Boolean
+  language: String
+  valid: Boolean
+  dataAsJson: JSON
   x: ExtraData
+  xAsJson: JSON
+  pageAsJson(resolveTemplate: Boolean, resolveFragment: Boolean): JSON
+  pageTemplate: Content
+  components(resolveTemplate: Boolean, resolveFragment: Boolean): [Component]
+  attachments: [Attachment]
+  publish: PublishInfo
   pageUrl(type: UrlType, params: JSON): String
-  _id: ID!
+  site: portal_Site
+  parent: Content
+  children(offset: Int, first: Int, sort: String): [Content]
+  childrenConnection(after: String, first: Int, sort: String): ContentConnection
+  permissions: Permissions
+  mediaUrl(download: Boolean, type: UrlType, params: JSON): String
+  data: media_Spreadsheet_Data
 }
 
 """Spreadsheet - media:spreadsheet data"""
@@ -1658,39 +1578,38 @@ type media_Spreadsheet_Data {
 
 """Text - media:text"""
 type media_Text implements Content {
-  modifiedTime: DateTime
-  dataAsJson: JSON
-  parent: Content
-  components(resolveTemplate: Boolean, resolveFragment: Boolean): [Component]
-  attachments: [Attachment]
-  childrenConnection(after: String, first: Int, sort: String): ContentConnection
+  _id: ID!
   _name: String!
-  data: media_Text_Data
-  displayName: String
-  hasChildren: Boolean
-  modifier: PrincipalKey
-  pageAsJson(resolveTemplate: Boolean, resolveFragment: Boolean): JSON
-  language: String
+  _path(type: ContentPathType): String!
   _references: [Content]
   _score: Float
-  type: String
-  valid: Boolean
-  children(offset: Int, first: Int, sort: String): [Content]
-  permissions: Permissions
-  createdTime: DateTime
-  xAsJson: JSON
-  contentType: ContentType
-  owner: PrincipalKey
   creator: PrincipalKey
-  mediaUrl(download: Boolean, type: UrlType, params: JSON): String
-  pageTemplate: Content
-  metaFields: MetaFields
-  _path(type: ContentPathType): String!
-  site: portal_Site
-  publish: PublishInfo
+  modifier: PrincipalKey
+  createdTime: DateTime
+  modifiedTime: DateTime
+  owner: PrincipalKey
+  type: String
+  contentType: ContentType
+  displayName: String
+  hasChildren: Boolean
+  language: String
+  valid: Boolean
+  dataAsJson: JSON
   x: ExtraData
+  xAsJson: JSON
+  pageAsJson(resolveTemplate: Boolean, resolveFragment: Boolean): JSON
+  pageTemplate: Content
+  components(resolveTemplate: Boolean, resolveFragment: Boolean): [Component]
+  attachments: [Attachment]
+  publish: PublishInfo
   pageUrl(type: UrlType, params: JSON): String
-  _id: ID!
+  site: portal_Site
+  parent: Content
+  children(offset: Int, first: Int, sort: String): [Content]
+  childrenConnection(after: String, first: Int, sort: String): ContentConnection
+  permissions: Permissions
+  mediaUrl(download: Boolean, type: UrlType, params: JSON): String
+  data: media_Text_Data
 }
 
 """Text - media:text data"""
@@ -1701,39 +1620,38 @@ type media_Text_Data {
 
 """Unknown - media:unknown"""
 type media_Unknown implements Content {
-  modifiedTime: DateTime
-  dataAsJson: JSON
-  parent: Content
-  components(resolveTemplate: Boolean, resolveFragment: Boolean): [Component]
-  attachments: [Attachment]
-  childrenConnection(after: String, first: Int, sort: String): ContentConnection
+  _id: ID!
   _name: String!
-  data: media_Unknown_Data
-  displayName: String
-  hasChildren: Boolean
-  modifier: PrincipalKey
-  pageAsJson(resolveTemplate: Boolean, resolveFragment: Boolean): JSON
-  language: String
+  _path(type: ContentPathType): String!
   _references: [Content]
   _score: Float
-  type: String
-  valid: Boolean
-  children(offset: Int, first: Int, sort: String): [Content]
-  permissions: Permissions
-  createdTime: DateTime
-  xAsJson: JSON
-  contentType: ContentType
-  owner: PrincipalKey
   creator: PrincipalKey
-  mediaUrl(download: Boolean, type: UrlType, params: JSON): String
-  pageTemplate: Content
-  metaFields: MetaFields
-  _path(type: ContentPathType): String!
-  site: portal_Site
-  publish: PublishInfo
+  modifier: PrincipalKey
+  createdTime: DateTime
+  modifiedTime: DateTime
+  owner: PrincipalKey
+  type: String
+  contentType: ContentType
+  displayName: String
+  hasChildren: Boolean
+  language: String
+  valid: Boolean
+  dataAsJson: JSON
   x: ExtraData
+  xAsJson: JSON
+  pageAsJson(resolveTemplate: Boolean, resolveFragment: Boolean): JSON
+  pageTemplate: Content
+  components(resolveTemplate: Boolean, resolveFragment: Boolean): [Component]
+  attachments: [Attachment]
+  publish: PublishInfo
   pageUrl(type: UrlType, params: JSON): String
-  _id: ID!
+  site: portal_Site
+  parent: Content
+  children(offset: Int, first: Int, sort: String): [Content]
+  childrenConnection(after: String, first: Int, sort: String): ContentConnection
+  permissions: Permissions
+  mediaUrl(download: Boolean, type: UrlType, params: JSON): String
+  data: media_Unknown_Data
 }
 
 """Unknown - media:unknown data"""
@@ -1744,39 +1662,38 @@ type media_Unknown_Data {
 
 """Vector - media:vector"""
 type media_Vector implements Content {
-  modifiedTime: DateTime
-  dataAsJson: JSON
-  parent: Content
-  components(resolveTemplate: Boolean, resolveFragment: Boolean): [Component]
-  attachments: [Attachment]
-  childrenConnection(after: String, first: Int, sort: String): ContentConnection
+  _id: ID!
   _name: String!
-  data: media_Vector_Data
-  displayName: String
-  hasChildren: Boolean
-  modifier: PrincipalKey
-  pageAsJson(resolveTemplate: Boolean, resolveFragment: Boolean): JSON
-  language: String
+  _path(type: ContentPathType): String!
   _references: [Content]
   _score: Float
-  type: String
-  valid: Boolean
-  children(offset: Int, first: Int, sort: String): [Content]
-  permissions: Permissions
-  createdTime: DateTime
-  xAsJson: JSON
-  contentType: ContentType
-  owner: PrincipalKey
   creator: PrincipalKey
-  mediaUrl(download: Boolean, type: UrlType, params: JSON): String
-  pageTemplate: Content
-  metaFields: MetaFields
-  _path(type: ContentPathType): String!
-  site: portal_Site
-  publish: PublishInfo
+  modifier: PrincipalKey
+  createdTime: DateTime
+  modifiedTime: DateTime
+  owner: PrincipalKey
+  type: String
+  contentType: ContentType
+  displayName: String
+  hasChildren: Boolean
+  language: String
+  valid: Boolean
+  dataAsJson: JSON
   x: ExtraData
+  xAsJson: JSON
+  pageAsJson(resolveTemplate: Boolean, resolveFragment: Boolean): JSON
+  pageTemplate: Content
+  components(resolveTemplate: Boolean, resolveFragment: Boolean): [Component]
+  attachments: [Attachment]
+  publish: PublishInfo
   pageUrl(type: UrlType, params: JSON): String
-  _id: ID!
+  site: portal_Site
+  parent: Content
+  children(offset: Int, first: Int, sort: String): [Content]
+  childrenConnection(after: String, first: Int, sort: String): ContentConnection
+  permissions: Permissions
+  mediaUrl(download: Boolean, type: UrlType, params: JSON): String
+  data: media_Vector_Data
 }
 
 """Vector - media:vector data"""
@@ -1790,39 +1707,38 @@ type media_Vector_Data {
 
 """Video - media:video"""
 type media_Video implements Content {
-  modifiedTime: DateTime
-  dataAsJson: JSON
-  parent: Content
-  components(resolveTemplate: Boolean, resolveFragment: Boolean): [Component]
-  attachments: [Attachment]
-  childrenConnection(after: String, first: Int, sort: String): ContentConnection
+  _id: ID!
   _name: String!
-  data: media_Video_Data
-  displayName: String
-  hasChildren: Boolean
-  modifier: PrincipalKey
-  pageAsJson(resolveTemplate: Boolean, resolveFragment: Boolean): JSON
-  language: String
+  _path(type: ContentPathType): String!
   _references: [Content]
   _score: Float
-  type: String
-  valid: Boolean
-  children(offset: Int, first: Int, sort: String): [Content]
-  permissions: Permissions
-  createdTime: DateTime
-  xAsJson: JSON
-  contentType: ContentType
-  owner: PrincipalKey
   creator: PrincipalKey
-  mediaUrl(download: Boolean, type: UrlType, params: JSON): String
-  pageTemplate: Content
-  metaFields: MetaFields
-  _path(type: ContentPathType): String!
-  site: portal_Site
-  publish: PublishInfo
+  modifier: PrincipalKey
+  createdTime: DateTime
+  modifiedTime: DateTime
+  owner: PrincipalKey
+  type: String
+  contentType: ContentType
+  displayName: String
+  hasChildren: Boolean
+  language: String
+  valid: Boolean
+  dataAsJson: JSON
   x: ExtraData
+  xAsJson: JSON
+  pageAsJson(resolveTemplate: Boolean, resolveFragment: Boolean): JSON
+  pageTemplate: Content
+  components(resolveTemplate: Boolean, resolveFragment: Boolean): [Component]
+  attachments: [Attachment]
+  publish: PublishInfo
   pageUrl(type: UrlType, params: JSON): String
-  _id: ID!
+  site: portal_Site
+  parent: Content
+  children(offset: Int, first: Int, sort: String): [Content]
+  childrenConnection(after: String, first: Int, sort: String): ContentConnection
+  permissions: Permissions
+  mediaUrl(download: Boolean, type: UrlType, params: JSON): String
+  data: media_Video_Data
 }
 
 """Video - media:video data"""
@@ -1832,13 +1748,22 @@ type media_Video_Data {
 }
 
 """Your page content is build by a sequence of blocks."""
-union no_rodekors_docs_Block = no_rodekors_docs_BlockText | no_rodekors_docs_BlockAccordion
+union no_rodekors_docs_Block = no_rodekors_docs_BlockText | no_rodekors_docs_BlockAccordion | no_rodekors_docs_BlockQuote
 
 """A list of expandable sections"""
 type no_rodekors_docs_BlockAccordion {
   title: String
   items: [no_rodekors_docs_BlockText]
   theme: String
+}
+
+"""A stylized quote with the image of the author"""
+type no_rodekors_docs_BlockQuote {
+  text(processHtml: ProcessHtmlInput): RichText
+  author: String
+  imageUrl(scale: String!): String
+  publicationTitle: String
+  publicationUrl: String
 }
 
 """Rich text field that can contain lists and tables"""
@@ -1849,38 +1774,37 @@ type no_rodekors_docs_BlockText {
 
 """Page - no.rodekors.docs:page"""
 type no_rodekors_docs_Page implements Content {
-  modifiedTime: DateTime
-  dataAsJson: JSON
-  parent: Content
-  components(resolveTemplate: Boolean, resolveFragment: Boolean): [Component]
-  attachments: [Attachment]
-  childrenConnection(after: String, first: Int, sort: String): ContentConnection
+  _id: ID!
   _name: String!
-  data: no_rodekors_docs_Page_Data
-  displayName: String
-  hasChildren: Boolean
-  modifier: PrincipalKey
-  pageAsJson(resolveTemplate: Boolean, resolveFragment: Boolean): JSON
-  language: String
+  _path(type: ContentPathType): String!
   _references: [Content]
   _score: Float
-  type: String
-  valid: Boolean
-  children(offset: Int, first: Int, sort: String): [Content]
-  permissions: Permissions
-  createdTime: DateTime
-  xAsJson: JSON
-  contentType: ContentType
-  owner: PrincipalKey
   creator: PrincipalKey
-  pageTemplate: Content
-  metaFields: MetaFields
-  _path(type: ContentPathType): String!
-  site: portal_Site
-  publish: PublishInfo
+  modifier: PrincipalKey
+  createdTime: DateTime
+  modifiedTime: DateTime
+  owner: PrincipalKey
+  type: String
+  contentType: ContentType
+  displayName: String
+  hasChildren: Boolean
+  language: String
+  valid: Boolean
+  dataAsJson: JSON
   x: ExtraData
+  xAsJson: JSON
+  pageAsJson(resolveTemplate: Boolean, resolveFragment: Boolean): JSON
+  pageTemplate: Content
+  components(resolveTemplate: Boolean, resolveFragment: Boolean): [Component]
+  attachments: [Attachment]
+  publish: PublishInfo
   pageUrl(type: UrlType, params: JSON): String
-  _id: ID!
+  site: portal_Site
+  parent: Content
+  children(offset: Int, first: Int, sort: String): [Content]
+  childrenConnection(after: String, first: Int, sort: String): ContentConnection
+  permissions: Permissions
+  data: no_rodekors_docs_Page_Data
 }
 
 """Content blocks"""
@@ -1888,6 +1812,7 @@ type no_rodekors_docs_Page_Blocks {
   _selected: no_rodekors_docs_Page_Blocks_OptionEnum
   blocks_text: no_rodekors_docs_Page_BlocksText
   blocks_accordion: no_rodekors_docs_Page_BlocksAccordion
+  blocks_quote: no_rodekors_docs_Page_BlocksQuote
 }
 
 """Accordion"""
@@ -1895,6 +1820,15 @@ type no_rodekors_docs_Page_BlocksAccordion {
   title: String
   items(offset: Int, first: Int): [no_rodekors_docs_Page_Items]
   theme: String
+}
+
+"""Quote"""
+type no_rodekors_docs_Page_BlocksQuote {
+  text(processHtml: ProcessHtmlInput): RichText
+  author: String
+  imageId: Content
+  publicationTitle: String
+  publicationUrl: String
 }
 
 """Text"""
@@ -1907,6 +1841,7 @@ type no_rodekors_docs_Page_BlocksText {
 enum no_rodekors_docs_Page_Blocks_OptionEnum {
   blocks_text
   blocks_accordion
+  blocks_quote
 }
 
 """Page - no.rodekors.docs:page data"""
@@ -1924,73 +1859,71 @@ type no_rodekors_docs_Page_Items {
 
 """Fragment - portal:fragment"""
 type portal_Fragment implements Content {
-  modifiedTime: DateTime
-  dataAsJson: JSON
-  parent: Content
-  components(resolveTemplate: Boolean, resolveFragment: Boolean): [Component]
-  attachments: [Attachment]
-  childrenConnection(after: String, first: Int, sort: String): ContentConnection
+  _id: ID!
   _name: String!
-  displayName: String
-  hasChildren: Boolean
-  modifier: PrincipalKey
-  pageAsJson(resolveTemplate: Boolean, resolveFragment: Boolean): JSON
-  language: String
+  _path(type: ContentPathType): String!
   _references: [Content]
   _score: Float
-  type: String
-  valid: Boolean
-  children(offset: Int, first: Int, sort: String): [Content]
-  permissions: Permissions
-  createdTime: DateTime
-  xAsJson: JSON
-  contentType: ContentType
-  owner: PrincipalKey
   creator: PrincipalKey
-  pageTemplate: Content
-  metaFields: MetaFields
-  _path(type: ContentPathType): String!
-  site: portal_Site
-  publish: PublishInfo
+  modifier: PrincipalKey
+  createdTime: DateTime
+  modifiedTime: DateTime
+  owner: PrincipalKey
+  type: String
+  contentType: ContentType
+  displayName: String
+  hasChildren: Boolean
+  language: String
+  valid: Boolean
+  dataAsJson: JSON
   x: ExtraData
+  xAsJson: JSON
+  pageAsJson(resolveTemplate: Boolean, resolveFragment: Boolean): JSON
+  pageTemplate: Content
+  components(resolveTemplate: Boolean, resolveFragment: Boolean): [Component]
+  attachments: [Attachment]
+  publish: PublishInfo
   pageUrl(type: UrlType, params: JSON): String
-  _id: ID!
+  site: portal_Site
+  parent: Content
+  children(offset: Int, first: Int, sort: String): [Content]
+  childrenConnection(after: String, first: Int, sort: String): ContentConnection
+  permissions: Permissions
 }
 
 """Page-template - portal:page-template"""
 type portal_PageTemplate implements Content {
-  modifiedTime: DateTime
-  dataAsJson: JSON
-  parent: Content
-  components(resolveTemplate: Boolean, resolveFragment: Boolean): [Component]
-  attachments: [Attachment]
-  childrenConnection(after: String, first: Int, sort: String): ContentConnection
+  _id: ID!
   _name: String!
-  data: portal_PageTemplate_Data
-  displayName: String
-  hasChildren: Boolean
-  modifier: PrincipalKey
-  pageAsJson(resolveTemplate: Boolean, resolveFragment: Boolean): JSON
-  language: String
+  _path(type: ContentPathType): String!
   _references: [Content]
   _score: Float
-  type: String
-  valid: Boolean
-  children(offset: Int, first: Int, sort: String): [Content]
-  permissions: Permissions
-  createdTime: DateTime
-  xAsJson: JSON
-  contentType: ContentType
-  owner: PrincipalKey
   creator: PrincipalKey
-  pageTemplate: Content
-  metaFields: MetaFields
-  _path(type: ContentPathType): String!
-  site: portal_Site
-  publish: PublishInfo
+  modifier: PrincipalKey
+  createdTime: DateTime
+  modifiedTime: DateTime
+  owner: PrincipalKey
+  type: String
+  contentType: ContentType
+  displayName: String
+  hasChildren: Boolean
+  language: String
+  valid: Boolean
+  dataAsJson: JSON
   x: ExtraData
+  xAsJson: JSON
+  pageAsJson(resolveTemplate: Boolean, resolveFragment: Boolean): JSON
+  pageTemplate: Content
+  components(resolveTemplate: Boolean, resolveFragment: Boolean): [Component]
+  attachments: [Attachment]
+  publish: PublishInfo
   pageUrl(type: UrlType, params: JSON): String
-  _id: ID!
+  site: portal_Site
+  parent: Content
+  children(offset: Int, first: Int, sort: String): [Content]
+  childrenConnection(after: String, first: Int, sort: String): ContentConnection
+  permissions: Permissions
+  data: portal_PageTemplate_Data
 }
 
 """Page-template - portal:page-template data"""
@@ -2000,38 +1933,37 @@ type portal_PageTemplate_Data {
 
 """Site - portal:site"""
 type portal_Site implements Content {
-  modifiedTime: DateTime
-  dataAsJson: JSON
-  parent: Content
-  components(resolveTemplate: Boolean, resolveFragment: Boolean): [Component]
-  attachments: [Attachment]
-  childrenConnection(after: String, first: Int, sort: String): ContentConnection
+  _id: ID!
   _name: String!
-  data: portal_Site_Data
-  displayName: String
-  hasChildren: Boolean
-  modifier: PrincipalKey
-  pageAsJson(resolveTemplate: Boolean, resolveFragment: Boolean): JSON
-  language: String
+  _path(type: ContentPathType): String!
   _references: [Content]
   _score: Float
-  type: String
-  valid: Boolean
-  children(offset: Int, first: Int, sort: String): [Content]
-  permissions: Permissions
-  createdTime: DateTime
-  xAsJson: JSON
-  contentType: ContentType
-  owner: PrincipalKey
   creator: PrincipalKey
-  pageTemplate: Content
-  metaFields: MetaFields
-  _path(type: ContentPathType): String!
-  site: portal_Site
-  publish: PublishInfo
+  modifier: PrincipalKey
+  createdTime: DateTime
+  modifiedTime: DateTime
+  owner: PrincipalKey
+  type: String
+  contentType: ContentType
+  displayName: String
+  hasChildren: Boolean
+  language: String
+  valid: Boolean
+  dataAsJson: JSON
   x: ExtraData
+  xAsJson: JSON
+  pageAsJson(resolveTemplate: Boolean, resolveFragment: Boolean): JSON
+  pageTemplate: Content
+  components(resolveTemplate: Boolean, resolveFragment: Boolean): [Component]
+  attachments: [Attachment]
+  publish: PublishInfo
   pageUrl(type: UrlType, params: JSON): String
-  _id: ID!
+  site: portal_Site
+  parent: Content
+  children(offset: Int, first: Int, sort: String): [Content]
+  childrenConnection(after: String, first: Int, sort: String): ContentConnection
+  permissions: Permissions
+  data: portal_Site_Data
 }
 
 """Site - portal:site data"""
@@ -2041,35 +1973,34 @@ type portal_Site_Data {
 
 """Template-folder - portal:template-folder"""
 type portal_TemplateFolder implements Content {
-  modifiedTime: DateTime
-  dataAsJson: JSON
-  parent: Content
-  components(resolveTemplate: Boolean, resolveFragment: Boolean): [Component]
-  attachments: [Attachment]
-  childrenConnection(after: String, first: Int, sort: String): ContentConnection
+  _id: ID!
   _name: String!
-  displayName: String
-  hasChildren: Boolean
-  modifier: PrincipalKey
-  pageAsJson(resolveTemplate: Boolean, resolveFragment: Boolean): JSON
-  language: String
+  _path(type: ContentPathType): String!
   _references: [Content]
   _score: Float
-  type: String
-  valid: Boolean
-  children(offset: Int, first: Int, sort: String): [Content]
-  permissions: Permissions
-  createdTime: DateTime
-  xAsJson: JSON
-  contentType: ContentType
-  owner: PrincipalKey
   creator: PrincipalKey
-  pageTemplate: Content
-  metaFields: MetaFields
-  _path(type: ContentPathType): String!
-  site: portal_Site
-  publish: PublishInfo
+  modifier: PrincipalKey
+  createdTime: DateTime
+  modifiedTime: DateTime
+  owner: PrincipalKey
+  type: String
+  contentType: ContentType
+  displayName: String
+  hasChildren: Boolean
+  language: String
+  valid: Boolean
+  dataAsJson: JSON
   x: ExtraData
+  xAsJson: JSON
+  pageAsJson(resolveTemplate: Boolean, resolveFragment: Boolean): JSON
+  pageTemplate: Content
+  components(resolveTemplate: Boolean, resolveFragment: Boolean): [Component]
+  attachments: [Attachment]
+  publish: PublishInfo
   pageUrl(type: UrlType, params: JSON): String
-  _id: ID!
+  site: portal_Site
+  parent: Content
+  children(offset: Int, first: Int, sort: String): [Content]
+  childrenConnection(after: String, first: Int, sort: String): ContentConnection
+  permissions: Permissions
 }

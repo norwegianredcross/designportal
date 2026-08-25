@@ -18,13 +18,7 @@ export function TextBlock({ data, meta }: TextProps) {
   return (
     <>
       <h2>{data.title}</h2>
-      {isRichTextData(data.text) ? (
-        <RichTextView
-          data={data.text}
-          meta={meta}
-          renderMacroInEditMode={false}
-        />
-      ) : null}
+      {isRichTextData(data.text) ? <RichTextView data={data.text} meta={meta} renderMacroInEditMode={false} /> : null}
     </>
   );
 }

@@ -3,6 +3,6 @@ export type Default = import("./default").Default;
 
 declare global {
   interface XpPageMap {
-    "no.rodekors.www:default": Default;
+    "no.rodekors.docs:default": Default;
   }
 }

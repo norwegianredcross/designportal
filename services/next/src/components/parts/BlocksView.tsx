@@ -1,25 +1,10 @@
-import type { MetaData } from "@enonic/nextjs-adapter/types/componentProps";
 import { nonNullable } from "next/dist/lib/non-nullable";
-import type { FunctionComponent } from "react";
 import type { GetBlocksQuery } from "@/types/queries";
 import type { Get, PartProps } from "@/types/utils";
 import { forceArray } from "@/utils";
-import { AccordionBlock } from "../blocks/AccordionBlock";
-import { TextBlock } from "../blocks/TextBlock";
+import { blockComponents } from "../blocks/registry";
 
-type GetBlocksQueryBlock = NonNullable<
-  Get<GetBlocksQuery, "guillotine.blocks">
->;
-
-type BlockRegistry = Record<
-  string,
-  FunctionComponent<{ data: any; meta: MetaData }>
->;
-
-const blockComponents: BlockRegistry = {
-  no_rodekors_docs_BlockText: TextBlock,
-  no_rodekors_docs_BlockAccordion: AccordionBlock,
-};
+type GetBlocksQueryBlock = NonNullable<Get<GetBlocksQuery, "guillotine.blocks">>;
 
 const BlocksView = (props: PartProps<GetBlocksQueryBlock[]>) => {
   return forceArray(props.data).map((data, index) => {
@@ -34,8 +19,6 @@ const BlocksView = (props: PartProps<GetBlocksQueryBlock[]>) => {
 
 export default BlocksView;
 
-export async function blocksProcessor(
-  data: GetBlocksQuery["guillotine"],
-): Promise<GetBlocksQueryBlock[]> {
+export async function blocksProcessor(data: GetBlocksQuery["guillotine"]): Promise<GetBlocksQueryBlock[]> {
   return forceArray(data?.blocks).filter(nonNullable);
 }

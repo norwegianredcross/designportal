@@ -25,6 +25,18 @@
             <mixin name="blocks-theme"/>
           </items>
         </option>
+
+        <!-- The form fields come from the blocks-quote mixin inside
+             no.item:lib-xp-item-blocks - identical to the editor form on
+             rodekors.no. This file only decides WHICH lib blocks are enabled
+             for this app (app resources shadow the lib's own blocks.xml). -->
+        <option name="blocks-quote">
+          <label i18n="mixin.blocks-quote.displayName">Quote</label>
+          <help-text i18n="mixin.blocks-quote.description">A stylized quote with the image of the author</help-text>
+          <items>
+            <mixin name="blocks-quote"/>
+          </items>
+        </option>
       </options>
     </option-set>
   </form>

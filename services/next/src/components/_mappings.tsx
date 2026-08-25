@@ -2,14 +2,12 @@ import { APP_NAME, ComponentRegistry } from "@enonic/nextjs-adapter";
 import { commonQuery, commonVariables } from "./queries/common";
 import "@enonic/nextjs-adapter/baseMappings";
 import DefaultPage from "@/components/pages/Default";
+import SidePage from "@/components/pages/SidePage";
 import BlocksView, { blocksProcessor } from "@/components/parts/BlocksView";
-import ContentHeader, {
-  contentHeaderProcessor,
-} from "@/components/parts/ContentHeader";
+import ContentHeader, { contentHeaderProcessor } from "@/components/parts/ContentHeader";
 import getContentHeader from "@/components/queries/getContentHeader";
 import getBlocks from "./queries/getBlocks";
 import getSidePage from "./queries/getSidePage";
-import SidePage from "@/components/pages/SidePage";
 
 // You can set common query for all views here
 ComponentRegistry.setCommonQuery([commonQuery, commonVariables]);

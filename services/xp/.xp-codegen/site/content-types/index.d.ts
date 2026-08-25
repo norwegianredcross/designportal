@@ -4,7 +4,7 @@ export type Page = import("./page").Page;
 declare global {
   namespace XP {
     interface ContentTypes {
-      "no.rodekors.www:page": Page;
+      "no.rodekors.docs:page": Page;
     }
   }
 }

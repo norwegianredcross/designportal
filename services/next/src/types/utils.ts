@@ -1,9 +1,7 @@
 import type { PartData } from "@enonic/nextjs-adapter/types/component";
 import type { MetaData } from "@enonic/nextjs-adapter/types/componentProps";
 
-type Unwrap<T> = NonNullable<T> extends ReadonlyArray<infer U>
-  ? NonNullable<U>
-  : NonNullable<T>;
+type Unwrap<T> = NonNullable<T> extends ReadonlyArray<infer U> ? NonNullable<U> : NonNullable<T>;
 
 export type Get<T, P extends string> = NonNullable<
   P extends `${infer K}.${infer Rest}`

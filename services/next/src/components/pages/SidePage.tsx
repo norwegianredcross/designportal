@@ -1,17 +1,7 @@
 import type { MetaData } from "@enonic/nextjs-adapter/types/componentProps";
 import RichTextView from "@enonic/nextjs-adapter/views/RichTextView";
-import type { FunctionComponent } from "react";
-import { AccordionBlock } from "@/components/blocks/AccordionBlock";
-import { TextBlock } from "@/components/blocks/TextBlock";
+import { blockComponents } from "@/components/blocks/registry";
 import { forceArray, isRichTextData, notNullOrUndefined } from "@/utils";
-
-const blockComponents: Record<
-  string,
-  FunctionComponent<{ data: any; meta: MetaData }>
-> = {
-  no_rodekors_docs_BlockText: TextBlock,
-  no_rodekors_docs_BlockAccordion: AccordionBlock,
-};
 
 interface SidePageProps {
   data?: {
@@ -37,11 +27,7 @@ const SidePage = ({ data, meta }: SidePageProps) => {
       <header>
         <h1>{header?.title}</h1>
         {isRichTextData(header?.intro) ? (
-          <RichTextView
-            data={header.intro}
-            meta={meta}
-            renderMacroInEditMode={false}
-          />
+          <RichTextView data={header.intro} meta={meta} renderMacroInEditMode={false} />
         ) : null}
         <hr />
       </header>

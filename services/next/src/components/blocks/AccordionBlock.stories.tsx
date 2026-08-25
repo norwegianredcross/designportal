@@ -74,8 +74,7 @@ export const Default: Story = {
           },
         },
         {
-          title:
-            "Hva skjer hvis jeg ikke kan delta hver gang eller skal på ferie?",
+          title: "Hva skjer hvis jeg ikke kan delta hver gang eller skal på ferie?",
           text: {
             processedHtml: `
               <p>Det går helt fint. Du finner ut hva som passer med ditt tidsskjema sammen din lokalforening.

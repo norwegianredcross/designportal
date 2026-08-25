@@ -44,8 +44,7 @@ export const Default: Story = {
     data: {
       title: "Bli frivillig i Røde Kors",
       intro: {
-        processedHtml:
-          "<p>Som frivillig i Røde Kors blir du en del av verdens største humanitære nettverk.</p>",
+        processedHtml: "<p>Som frivillig i Røde Kors blir du en del av verdens største humanitære nettverk.</p>",
         links: [],
       },
     },

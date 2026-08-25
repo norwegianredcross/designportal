@@ -4,7 +4,7 @@ export type ContentHeader = import("./content-header").ContentHeader;
 
 declare global {
   interface XpPartMap {
-    "no.rodekors.www:blocks-view": BlocksView;
-    "no.rodekors.www:content-header": ContentHeader;
+    "no.rodekors.docs:blocks-view": BlocksView;
+    "no.rodekors.docs:content-header": ContentHeader;
   }
 }
