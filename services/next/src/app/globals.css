@@ -1,3 +1,6 @@
+/* App frame only — page scaffolding, not component styling. Component looks
+   come from rk-designsystem/styles.css (imported in layout.tsx); this file
+   may use its tokens (--ds-*) but must not restyle ds-* classes. */
 * {
   box-sizing: border-box;
 }
