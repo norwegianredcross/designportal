@@ -693,6 +693,11 @@ type Part_no_rodekors_docs_blocks_view_BlocksFactbox {
 """Images"""
 type Part_no_rodekors_docs_blocks_view_BlocksImages {
   items(offset: Int, first: Int): [Part_no_rodekors_docs_blocks_view_Items_2]
+  form: String
+  notchEdge: String
+  notchOffset: String
+  notchWidth: String
+  notchDepth: String
 }
 
 """Quote"""
@@ -1102,6 +1107,11 @@ type XData_no_rodekors_docs_site_content_DataConfig_BlocksFactbox {
 """Images"""
 type XData_no_rodekors_docs_site_content_DataConfig_BlocksImages {
   items(offset: Int, first: Int): [XData_no_rodekors_docs_site_content_DataConfig_Items_2]
+  form: String
+  notchEdge: String
+  notchOffset: String
+  notchWidth: String
+  notchDepth: String
 }
 
 """Quote"""
@@ -1976,6 +1986,11 @@ type no_rodekors_docs_BlockImage {
 """An image gallery or an image that can be expanded"""
 type no_rodekors_docs_BlockImages {
   items: [no_rodekors_docs_BlockImage]
+  form: String
+  notchEdge: String
+  notchOffset: Int
+  notchWidth: Int
+  notchDepth: Int
 }
 
 """A stylized quote with the image of the author"""
@@ -2079,6 +2094,11 @@ type no_rodekors_docs_Page_BlocksFactbox {
 """Images"""
 type no_rodekors_docs_Page_BlocksImages {
   items(offset: Int, first: Int): [no_rodekors_docs_Page_Items_2]
+  form: String
+  notchEdge: String
+  notchOffset: String
+  notchWidth: String
+  notchDepth: String
 }
 
 """Quote"""

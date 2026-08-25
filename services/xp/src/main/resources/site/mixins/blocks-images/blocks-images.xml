@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- SHADOWS the same-named mixin in lib-xp-item-blocks (app resources win
+     over included libs' resources, the same mechanism as blocks/blocks.xml):
+     the lib's item-set is kept verbatim so the editorial experience matches
+     rodekors.no, and a "Form" section is ADDED so editors can pick the
+     Design retning silhouette for single images - shape, which edge the
+     bite cuts into, where it sits, and its proportions. The frontend
+     renders these via a generated SVG mask (services/next .../notchMask.ts). -->
+<mixin xmlns="urn:enonic:xp:model:1.0">
+  <display-name i18n="mixin.blocks-images.displayName">Images</display-name>
+  <description i18n="mixin.blocks-images.description">An image gallery or an image that can be expanded</description>
+
+  <form>
+    <item-set name="items">
+      <label i18n="mixin.blocks-images.image">Image</label>
+      <occurrences minimum="1" maximum="0"/>
+
+      <items>
+        <input name="imageId" type="ImageSelector">
+          <label i18n="mixin.blocks-images.image.image">Image</label>
+          <occurrences minimum="1" maximum="1"/>
+        </input>
+
+        <input name="altText" type="TextLine">
+          <label i18n="mixin.blocks-images.image.altText">Description of the image for visually impaired users (alt text)</label>
+          <help-text i18n="mixin.blocks-images.altTextHelpText">Describe the image in context of the article</help-text>
+          <occurrences minimum="1" maximum="1"/>
+        </input>
+
+        <input name="caption" type="TextLine">
+          <label i18n="mixin.blocks-images.image.caption">Caption</label>
+          <occurrences minimum="0" maximum="1"/>
+        </input>
+      </items>
+    </item-set>
+
+    <!-- Everything below is the app's addition; only applied when the block
+         holds a single image (galleries keep uniform rounded tiles). -->
+    <input name="form" type="ComboBox">
+      <label i18n="mixin.blocks-images.form">Form</label>
+      <occurrences minimum="0" maximum="1"/>
+      <config>
+        <option value="rounded" i18n="mixin.blocks-images.form.rounded">Avrundet</option>
+        <option value="notch" i18n="mixin.blocks-images.form.notch">Notch (utsnitt)</option>
+      </config>
+      <default>rounded</default>
+    </input>
+
+    <input name="notchEdge" type="ComboBox">
+      <label i18n="mixin.blocks-images.notchEdge">Utsnittets kant</label>
+      <occurrences minimum="0" maximum="1"/>
+      <config>
+        <option value="bottom" i18n="mixin.blocks-images.notchEdge.bottom">Bunn</option>
+        <option value="top" i18n="mixin.blocks-images.notchEdge.top">Topp</option>
+        <option value="left" i18n="mixin.blocks-images.notchEdge.left">Venstre</option>
+        <option value="right" i18n="mixin.blocks-images.notchEdge.right">Høyre</option>
+      </config>
+      <default>bottom</default>
+    </input>
+
+    <!-- Long inputs rather than sliders: Content Studio has no slider
+         control, and the frontend clamps out-of-range values anyway. -->
+    <input name="notchOffset" type="Long">
+      <label i18n="mixin.blocks-images.notchOffset">Utsnittets plassering (0–100)</label>
+      <help-text i18n="mixin.blocks-images.notchOffset.helpText">0 = venstre/topp, 100 = høyre/bunn, 50 = midten</help-text>
+      <occurrences minimum="0" maximum="1"/>
+      <default>100</default>
+    </input>
+
+    <input name="notchWidth" type="Long">
+      <label i18n="mixin.blocks-images.notchWidth">Utsnittets bredde i prosent</label>
+      <occurrences minimum="0" maximum="1"/>
+      <default>35</default>
+    </input>
+
+    <input name="notchDepth" type="Long">
+      <label i18n="mixin.blocks-images.notchDepth">Utsnittets dybde i prosent</label>
+      <occurrences minimum="0" maximum="1"/>
+      <default>28</default>
+    </input>
+  </form>
+</mixin>

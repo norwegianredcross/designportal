@@ -61,11 +61,21 @@ export default () =>
             theme
           }
           # No richTextFragment here: image fields are plain strings, and the
-          # imageUrl arrives pre-scaled from the XP side (article width).
+          # imageUrl arrives pre-scaled from the XP side: 2x the 1090px
+          # article column (globals.css), so full-width images stay sharp on
+          # retina displays. XP never upscales past the original, so small
+          # sources are unaffected.
           ...on no_rodekors_docs_BlockImages {
             __typename
+            # Editor-chosen silhouette (shadowed mixin): the frontend turns
+            # these into the generated SVG mask, with defaults and clamping.
+            form
+            notchEdge
+            notchOffset
+            notchWidth
+            notchDepth
             items {
-              imageUrl(scale: "width(768)")
+              imageUrl(scale: "width(2180)")
               altText
               caption
             }

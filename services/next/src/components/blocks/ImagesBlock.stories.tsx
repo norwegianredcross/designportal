@@ -26,9 +26,26 @@ const storyMeta = {
     meta: {
       table: { disable: true },
     },
+    // View-level props (the CMS data carries neither): single-image width
+    // and the Design retning silhouettes, exposed for live comparison.
+    size: {
+      control: "select",
+      options: ["full", "medium", "small"],
+    },
+    shape: {
+      control: "select",
+      options: ["rounded", "notch"],
+    },
+    // Bite geometry for the notched shapes: width/depth in percent of the
+    // image box, plus the box's aspect ratio.
+    notch: {
+      control: "object",
+    },
   },
   args: {
     meta,
+    size: "medium",
+    shape: "rounded",
   },
 } satisfies Meta<typeof ImagesBlock>;
 
@@ -39,9 +56,16 @@ export const Default: Story = {
   args: {
     data: {
       __typename: "no_rodekors_docs_BlockImages",
+      // The CMS silhouette fields are null in stories so the component
+      // props (the Storybook controls) drive the shape.
+      form: null,
+      notchEdge: null,
+      notchOffset: null,
+      notchWidth: null,
+      notchDepth: null,
       items: [
         {
-          imageUrl: "https://placehold.co/768x432/D52B1E/fff?text=Bilde",
+          imageUrl: "https://placehold.co/600x800/D52B1E/fff?text=Bilde",
           altText: "Frivillige fra Røde Kors deler ut mat",
           caption: "Frivillige i aksjon under vinterberedskapen.",
         },
@@ -50,11 +74,18 @@ export const Default: Story = {
   },
 };
 
-/** Several entries render as a stacked gallery; captions are optional. */
+/** Several entries render as the two-column bildegalleri grid; captions are optional. */
 export const Gallery: Story = {
   args: {
     data: {
       __typename: "no_rodekors_docs_BlockImages",
+      // The CMS silhouette fields are null in stories so the component
+      // props (the Storybook controls) drive the shape.
+      form: null,
+      notchEdge: null,
+      notchOffset: null,
+      notchWidth: null,
+      notchDepth: null,
       items: [
         {
           imageUrl: "https://placehold.co/768x432/D52B1E/fff?text=1",
@@ -64,6 +95,68 @@ export const Gallery: Story = {
         {
           imageUrl: "https://placehold.co/768x432/1E1E1E/fff?text=2",
           altText: "Andre bilde",
+          caption: null,
+        },
+        {
+          // Odd count: the third tile wraps to its own row at column width
+          // (auto-fill keeps the empty track) instead of stretching. Its
+          // portrait source also pins the uniform 2:1 crop.
+          imageUrl: "https://placehold.co/600x800/78909C/fff?text=3",
+          altText: "Tredje bilde",
+          caption: "Oddetall wrapper pent.",
+        },
+      ],
+    },
+  },
+};
+
+/** The Design retning notched step form: a shallow bite clipped from one
+ * bottom corner, built as the union of two rounded image regions. */
+export const Notch: Story = {
+  args: {
+    size: "medium",
+    shape: "notch",
+    notch: { edge: "bottom", offset: 100 },
+    data: {
+      __typename: "no_rodekors_docs_BlockImages",
+      // The CMS silhouette fields are null in stories so the component
+      // props (the Storybook controls) drive the shape.
+      form: null,
+      notchEdge: null,
+      notchOffset: null,
+      notchWidth: null,
+      notchDepth: null,
+      items: [
+        {
+          imageUrl: "https://placehold.co/800x600/2E7D32/fff?text=Bilde",
+          altText: "Telt i skogen",
+          caption: null,
+        },
+      ],
+    },
+  },
+};
+
+/** Same silhouette, different geometry: a wide shallow bite on a broad
+ * hero — showing how the notch prop composes new variants. */
+export const NotchWide: Story = {
+  args: {
+    size: "full",
+    shape: "notch",
+    notch: { edge: "bottom", offset: 0, width: 55, depth: 18, aspect: "21 / 9" },
+    data: {
+      __typename: "no_rodekors_docs_BlockImages",
+      // The CMS silhouette fields are null in stories so the component
+      // props (the Storybook controls) drive the shape.
+      form: null,
+      notchEdge: null,
+      notchOffset: null,
+      notchWidth: null,
+      notchDepth: null,
+      items: [
+        {
+          imageUrl: "https://placehold.co/1600x686/D52B1E/fff?text=Bred",
+          altText: "Bredt heltebilde",
           caption: null,
         },
       ],

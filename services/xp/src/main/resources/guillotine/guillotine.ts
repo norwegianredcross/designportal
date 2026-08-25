@@ -148,6 +148,24 @@ export function extensions(graphQL: GraphQL): Extensions {
           items: {
             type: graphQL.list(graphQL.reference(OBJECT_TYPE_BLOCK_IMAGE)),
           },
+          // Editor-chosen silhouette from the app's shadowed mixin (see
+          // site/mixins/blocks-images): the notch geometry the frontend
+          // turns into an SVG mask. Plain strings/ints resolve on their own.
+          form: {
+            type: graphQL.GraphQLString,
+          },
+          notchEdge: {
+            type: graphQL.GraphQLString,
+          },
+          notchOffset: {
+            type: graphQL.GraphQLInt,
+          },
+          notchWidth: {
+            type: graphQL.GraphQLInt,
+          },
+          notchDepth: {
+            type: graphQL.GraphQLInt,
+          },
         },
       },
       // One card in a cards block. Lives outside the Block union — it only
@@ -364,6 +382,11 @@ type ResolvedImageItem = {
 type ResolvedImagesBlock = {
   __typename: typeof OBJECT_TYPE_BLOCK_IMAGES;
   items: ResolvedImageItem[];
+  form?: string;
+  notchEdge?: string;
+  notchOffset?: number;
+  notchWidth?: number;
+  notchDepth?: number;
 };
 
 type ResolvedCardItem = {
@@ -461,6 +484,13 @@ function resolveBlocks(
           altText: item.altText,
           caption: item.caption,
         })),
+        // The silhouette fields from the app's shadowed mixin, passed
+        // through verbatim — the frontend owns clamping and defaults.
+        form: block["blocks-images"].form,
+        notchEdge: block["blocks-images"].notchEdge,
+        notchOffset: block["blocks-images"].notchOffset,
+        notchWidth: block["blocks-images"].notchWidth,
+        notchDepth: block["blocks-images"].notchDepth,
       };
     case "blocks-cards": {
       const cards = block["blocks-cards"];

@@ -157,6 +157,31 @@ export type BlocksView = {
              */
             caption?: string;
           }>;
+
+          /**
+           * Form
+           */
+          form?: "rounded" | "notch";
+
+          /**
+           * Utsnittets kant
+           */
+          notchEdge?: "bottom" | "top" | "left" | "right";
+
+          /**
+           * Utsnittets plassering (0–100)
+           */
+          notchOffset?: number;
+
+          /**
+           * Utsnittets bredde i prosent
+           */
+          notchWidth?: number;
+
+          /**
+           * Utsnittets dybde i prosent
+           */
+          notchDepth?: number;
         };
       }
     | {
