@@ -37,6 +37,19 @@
             <mixin name="blocks-quote"/>
           </items>
         </option>
+
+        <option name="blocks-factbox">
+          <label i18n="mixin.blocks-factbox.displayName">Factbox</label>
+          <help-text i18n="mixin.blocks-factbox.description">A box containing text that can have different background colors</help-text>
+          <items>
+            <mixin name="blocks-factbox"/>
+            <!-- blocks-theme adds the color dropdown; the choices come from
+                 the XP app config (no.rodekors.docs.cfg: themes=...), so the
+                 same block offers RK brand scopes here and rk.no's palette
+                 there without any code difference. -->
+            <mixin name="blocks-theme"/>
+          </items>
+        </option>
       </options>
     </option-set>
   </form>

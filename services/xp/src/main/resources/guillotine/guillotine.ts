@@ -12,6 +12,7 @@ const OBJECT_TYPE_BLOCK = "no_rodekors_docs_Block";
 const OBJECT_TYPE_BLOCK_TEXT = "no_rodekors_docs_BlockText";
 const OBJECT_TYPE_BLOCK_ACCORDION = "no_rodekors_docs_BlockAccordion";
 const OBJECT_TYPE_BLOCK_QUOTE = "no_rodekors_docs_BlockQuote";
+const OBJECT_TYPE_BLOCK_FACTBOX = "no_rodekors_docs_BlockFactbox";
 const FIELD_BLOCKS = "blocks";
 
 export function extensions(graphQL: GraphQL): Extensions {
@@ -74,6 +75,23 @@ export function extensions(graphQL: GraphQL): Extensions {
           },
         },
       },
+      [OBJECT_TYPE_BLOCK_FACTBOX]: {
+        description: "A box containing text that can have different background colors",
+        fields: {
+          title: {
+            type: graphQL.GraphQLString,
+          },
+          text: {
+            type: graphQL.reference(ObjectTypeName.RichText),
+            args: {
+              processHtml: graphQL.reference("ProcessHtmlInput"),
+            },
+          },
+          theme: {
+            type: graphQL.GraphQLString,
+          },
+        },
+      },
     },
     unions: {
       [OBJECT_TYPE_BLOCK]: {
@@ -82,6 +100,7 @@ export function extensions(graphQL: GraphQL): Extensions {
           graphQL.reference(OBJECT_TYPE_BLOCK_TEXT),
           graphQL.reference(OBJECT_TYPE_BLOCK_ACCORDION),
           graphQL.reference(OBJECT_TYPE_BLOCK_QUOTE),
+          graphQL.reference(OBJECT_TYPE_BLOCK_FACTBOX),
         ],
       },
     },
@@ -124,6 +143,10 @@ export function extensions(graphQL: GraphQL): Extensions {
               })
             : null,
       },
+      [OBJECT_TYPE_BLOCK_FACTBOX]: {
+        text: (env: DataFetchingEnvironment<ProcessHtmlArgs, LocalContextRecord, ResolvedFactboxBlock>) =>
+          buildRichText(env.source.text, env.args),
+      },
       HeadlessCms: {
         [FIELD_BLOCKS]: (env): unknown[] => {
           const content = getOne<Content<Blocks>>({
@@ -153,6 +176,13 @@ type ResolvedQuoteBlock = {
   publicationUrl?: string;
 };
 
+type ResolvedFactboxBlock = {
+  __typename: typeof OBJECT_TYPE_BLOCK_FACTBOX;
+  title?: string;
+  text?: string;
+  theme?: string;
+};
+
 type ResolvedAccordionBlock = {
   __typename: typeof OBJECT_TYPE_BLOCK_ACCORDION;
   title?: string;
@@ -160,7 +190,9 @@ type ResolvedAccordionBlock = {
   items: ResolvedTextBlock[];
 };
 
-function resolveBlocks(block: BlockRaw): ResolvedTextBlock | ResolvedAccordionBlock | ResolvedQuoteBlock | null {
+function resolveBlocks(
+  block: BlockRaw,
+): ResolvedTextBlock | ResolvedAccordionBlock | ResolvedQuoteBlock | ResolvedFactboxBlock | null {
   switch (block._selected) {
     case "blocks-text":
       return {
@@ -187,6 +219,15 @@ function resolveBlocks(block: BlockRaw): ResolvedTextBlock | ResolvedAccordionBl
         imageId: block["blocks-quote"].imageId,
         publicationTitle: block["blocks-quote"].publicationTitle,
         publicationUrl: block["blocks-quote"].publicationUrl,
+      };
+    case "blocks-factbox":
+      return {
+        __typename: OBJECT_TYPE_BLOCK_FACTBOX,
+        title: block["blocks-factbox"].title,
+        text: block["blocks-factbox"].text,
+        // The theme comes from the composed blocks-theme mixin and lands on
+        // the same option object as the factbox's own fields.
+        theme: block["blocks-factbox"].theme,
       };
   }
 

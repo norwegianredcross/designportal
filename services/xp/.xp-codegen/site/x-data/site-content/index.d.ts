@@ -107,5 +107,31 @@ export type SiteContent = {
           publicationUrl?: string;
         };
       }
+    | {
+        /**
+         * Selected
+         */
+        _selected: "blocks-factbox";
+
+        /**
+         * Factbox
+         */
+        "blocks-factbox": {
+          /**
+           * Title
+           */
+          title?: string;
+
+          /**
+           * Text
+           */
+          text: string;
+
+          /**
+           * Theme
+           */
+          theme?: string;
+        };
+      }
   >;
 };

@@ -36,6 +36,14 @@ export default () =>
             publicationTitle
             publicationUrl
           }
+          ...on no_rodekors_docs_BlockFactbox {
+            __typename
+            title
+            text(processHtml: {type: absolute}) {
+              ...richTextFragment
+            }
+            theme
+          }
         }
       }
     }`);

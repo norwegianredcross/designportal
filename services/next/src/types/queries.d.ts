@@ -50,6 +50,27 @@ export type GetBlocksQuery = {
           } | null> | null;
         } & { __typename: "no_rodekors_docs_BlockAccordion" })
       | ({
+          title: string | null;
+          theme: string | null;
+          text: {
+            processedHtml: string | null;
+            links: Array<{
+              ref: string | null;
+              uri: string | null;
+              content: { _id: string } | { _id: string } | null;
+              media: {
+                intent: MediaIntentType | null;
+                content: { _id: string } | { _id: string } | { mediaUrl: string | null; _id: string } | null;
+              } | null;
+            } | null> | null;
+            images: Array<{
+              ref: string | null;
+              image: { _id: string } | { _id: string } | { imageUrl: string | null; _id: string } | null;
+              style: { name: string | null; aspectRatio: string | null; filter: string | null } | null;
+            } | null> | null;
+          } | null;
+        } & { __typename: "no_rodekors_docs_BlockFactbox" })
+      | ({
           author: string | null;
           imageUrl: string | null;
           publicationTitle: string | null;
@@ -173,6 +194,27 @@ export type GetSidePageQuery = {
             } | null;
           } | null> | null;
         } & { __typename: "no_rodekors_docs_BlockAccordion" })
+      | ({
+          title: string | null;
+          theme: string | null;
+          text: {
+            processedHtml: string | null;
+            links: Array<{
+              ref: string | null;
+              uri: string | null;
+              content: { _id: string } | { _id: string } | null;
+              media: {
+                intent: MediaIntentType | null;
+                content: { _id: string } | { _id: string } | { mediaUrl: string | null; _id: string } | null;
+              } | null;
+            } | null> | null;
+            images: Array<{
+              ref: string | null;
+              image: { _id: string } | { _id: string } | { imageUrl: string | null; _id: string } | null;
+              style: { name: string | null; aspectRatio: string | null; filter: string | null } | null;
+            } | null> | null;
+          } | null;
+        } & { __typename: "no_rodekors_docs_BlockFactbox" })
       | ({
           author: string | null;
           imageUrl: string | null;
