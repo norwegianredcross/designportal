@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- LOCAL mixin, not from lib-xp-item-blocks: the docs platform needs
+     copyable code blocks and the lib has no such block. Same authoring
+     pattern as the lib mixins so it composes into blocks.xml identically. -->
+<mixin xmlns="urn:enonic:xp:model:1.0">
+  <display-name i18n="mixin.blocks-code.displayName">Code</display-name>
+  <description i18n="mixin.blocks-code.description">A copyable block of code with a language label</description>
+
+  <form>
+    <input name="code" type="TextArea">
+      <label i18n="mixin.blocks-code.code">Code</label>
+      <occurrences minimum="1" maximum="1"/>
+    </input>
+
+    <!-- ComboBox: curated list, optional — the value only feeds the small
+         language tag on the rendered block (no syntax highlighting yet; a
+         future highlighter can consume these values as-is). -->
+    <input name="language" type="ComboBox">
+      <label i18n="mixin.blocks-code.language">Language</label>
+      <occurrences minimum="0" maximum="1"/>
+      <config>
+        <option value="tsx">TSX / React</option>
+        <option value="ts">TypeScript</option>
+        <option value="js">JavaScript</option>
+        <option value="css">CSS</option>
+        <option value="html">HTML</option>
+        <option value="bash">Shell / Bash</option>
+        <option value="json">JSON</option>
+        <option value="graphql">GraphQL</option>
+        <option value="xml">XML</option>
+      </config>
+    </input>
+
+    <input name="label" type="TextLine">
+      <label i18n="mixin.blocks-code.label">Label</label>
+      <help-text i18n="mixin.blocks-code.label.helpText">Short description used by the copy button ("Copy npm command")</help-text>
+      <occurrences minimum="0" maximum="1"/>
+    </input>
+  </form>
+</mixin>

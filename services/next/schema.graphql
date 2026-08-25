@@ -651,6 +651,7 @@ type Part_no_rodekors_docs_blocks_view_Blocks {
   blocks_factbox: Part_no_rodekors_docs_blocks_view_BlocksFactbox
   blocks_images: Part_no_rodekors_docs_blocks_view_BlocksImages
   blocks_cards: Part_no_rodekors_docs_blocks_view_BlocksCards
+  blocks_code: Part_no_rodekors_docs_blocks_view_BlocksCode
 }
 
 """Accordion"""
@@ -666,6 +667,13 @@ type Part_no_rodekors_docs_blocks_view_BlocksCards {
   imageClass: String
   columnsClass: String
   items(offset: Int, first: Int): [Part_no_rodekors_docs_blocks_view_Items_3]
+}
+
+"""Code"""
+type Part_no_rodekors_docs_blocks_view_BlocksCode {
+  code: String
+  language: String
+  label: String
 }
 
 """Factbox"""
@@ -703,6 +711,7 @@ enum Part_no_rodekors_docs_blocks_view_Blocks_OptionEnum {
   blocks_factbox
   blocks_images
   blocks_cards
+  blocks_code
 }
 
 """External"""
@@ -1043,6 +1052,7 @@ type XData_no_rodekors_docs_site_content_DataConfig_Blocks {
   blocks_factbox: XData_no_rodekors_docs_site_content_DataConfig_BlocksFactbox
   blocks_images: XData_no_rodekors_docs_site_content_DataConfig_BlocksImages
   blocks_cards: XData_no_rodekors_docs_site_content_DataConfig_BlocksCards
+  blocks_code: XData_no_rodekors_docs_site_content_DataConfig_BlocksCode
 }
 
 """Accordion"""
@@ -1058,6 +1068,13 @@ type XData_no_rodekors_docs_site_content_DataConfig_BlocksCards {
   imageClass: String
   columnsClass: String
   items(offset: Int, first: Int): [XData_no_rodekors_docs_site_content_DataConfig_Items_3]
+}
+
+"""Code"""
+type XData_no_rodekors_docs_site_content_DataConfig_BlocksCode {
+  code: String
+  language: String
+  label: String
 }
 
 """Factbox"""
@@ -1095,6 +1112,7 @@ enum XData_no_rodekors_docs_site_content_DataConfig_Blocks_OptionEnum {
   blocks_factbox
   blocks_images
   blocks_cards
+  blocks_code
 }
 
 """External"""
@@ -1884,7 +1902,7 @@ type media_Video_Data {
 }
 
 """Your page content is build by a sequence of blocks."""
-union no_rodekors_docs_Block = no_rodekors_docs_BlockText | no_rodekors_docs_BlockAccordion | no_rodekors_docs_BlockQuote | no_rodekors_docs_BlockFactbox | no_rodekors_docs_BlockImages | no_rodekors_docs_BlockCards
+union no_rodekors_docs_Block = no_rodekors_docs_BlockText | no_rodekors_docs_BlockAccordion | no_rodekors_docs_BlockQuote | no_rodekors_docs_BlockFactbox | no_rodekors_docs_BlockImages | no_rodekors_docs_BlockCards | no_rodekors_docs_BlockCode
 
 """A list of expandable sections"""
 type no_rodekors_docs_BlockAccordion {
@@ -1910,6 +1928,13 @@ type no_rodekors_docs_BlockCards {
   columns: Int
   imagePlacement: String
   items: [no_rodekors_docs_BlockCard]
+}
+
+"""A copyable block of code with a language label"""
+type no_rodekors_docs_BlockCode {
+  code: String
+  language: String
+  label: String
 }
 
 """A box containing text that can have different background colors"""
@@ -1990,6 +2015,7 @@ type no_rodekors_docs_Page_Blocks {
   blocks_factbox: no_rodekors_docs_Page_BlocksFactbox
   blocks_images: no_rodekors_docs_Page_BlocksImages
   blocks_cards: no_rodekors_docs_Page_BlocksCards
+  blocks_code: no_rodekors_docs_Page_BlocksCode
 }
 
 """Accordion"""
@@ -2005,6 +2031,13 @@ type no_rodekors_docs_Page_BlocksCards {
   imageClass: String
   columnsClass: String
   items(offset: Int, first: Int): [no_rodekors_docs_Page_Items_3]
+}
+
+"""Code"""
+type no_rodekors_docs_Page_BlocksCode {
+  code: String
+  language: String
+  label: String
 }
 
 """Factbox"""
@@ -2042,6 +2075,7 @@ enum no_rodekors_docs_Page_Blocks_OptionEnum {
   blocks_factbox
   blocks_images
   blocks_cards
+  blocks_code
 }
 
 """Page - no.rodekors.docs:page data"""

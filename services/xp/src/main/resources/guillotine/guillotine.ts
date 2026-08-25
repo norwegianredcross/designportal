@@ -34,6 +34,7 @@ const OBJECT_TYPE_BLOCK_IMAGES = "no_rodekors_docs_BlockImages";
 // Not a union member: the nested item type inside BlockImages.
 const OBJECT_TYPE_BLOCK_IMAGE = "no_rodekors_docs_BlockImage";
 const OBJECT_TYPE_BLOCK_CARDS = "no_rodekors_docs_BlockCards";
+const OBJECT_TYPE_BLOCK_CODE = "no_rodekors_docs_BlockCode";
 // Not a union member: the nested item type inside BlockCards.
 const OBJECT_TYPE_BLOCK_CARD = "no_rodekors_docs_BlockCard";
 const FIELD_BLOCKS = "blocks";
@@ -205,6 +206,22 @@ export function extensions(graphQL: GraphQL): Extensions {
           },
         },
       },
+      // All plain strings — no field resolvers needed; the code text is
+      // rendered verbatim (never processed as HTML).
+      [OBJECT_TYPE_BLOCK_CODE]: {
+        description: "A copyable block of code with a language label",
+        fields: {
+          code: {
+            type: graphQL.GraphQLString,
+          },
+          language: {
+            type: graphQL.GraphQLString,
+          },
+          label: {
+            type: graphQL.GraphQLString,
+          },
+        },
+      },
     },
     unions: {
       [OBJECT_TYPE_BLOCK]: {
@@ -216,6 +233,7 @@ export function extensions(graphQL: GraphQL): Extensions {
           graphQL.reference(OBJECT_TYPE_BLOCK_FACTBOX),
           graphQL.reference(OBJECT_TYPE_BLOCK_IMAGES),
           graphQL.reference(OBJECT_TYPE_BLOCK_CARDS),
+          graphQL.reference(OBJECT_TYPE_BLOCK_CODE),
         ],
       },
     },
@@ -351,6 +369,13 @@ type ResolvedCardsBlock = {
   items: ResolvedCardItem[];
 };
 
+type ResolvedCodeBlock = {
+  __typename: typeof OBJECT_TYPE_BLOCK_CODE;
+  code?: string;
+  language?: string;
+  label?: string;
+};
+
 type ResolvedAccordionBlock = {
   __typename: typeof OBJECT_TYPE_BLOCK_ACCORDION;
   title?: string;
@@ -367,6 +392,7 @@ function resolveBlocks(
   | ResolvedFactboxBlock
   | ResolvedImagesBlock
   | ResolvedCardsBlock
+  | ResolvedCodeBlock
   | null {
   switch (block._selected) {
     case "blocks-text":
@@ -443,6 +469,13 @@ function resolveBlocks(
         }),
       };
     }
+    case "blocks-code":
+      return {
+        __typename: OBJECT_TYPE_BLOCK_CODE,
+        code: block["blocks-code"].code,
+        language: block["blocks-code"].language,
+        label: block["blocks-code"].label,
+      };
   }
 
   return null;

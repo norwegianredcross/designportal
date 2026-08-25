@@ -2,6 +2,7 @@ import type { MetaData } from "@enonic/nextjs-adapter/types/componentProps";
 import type { FunctionComponent } from "react";
 import { AccordionBlock } from "./AccordionBlock";
 import { CardsBlock } from "./CardsBlock";
+import { CodeBlock } from "./CodeBlock";
 import { FactboxBlock } from "./FactboxBlock";
 import { ImagesBlock } from "./ImagesBlock";
 import { QuoteBlock } from "./QuoteBlock";
@@ -19,6 +20,8 @@ export const blockComponents: Record<string, FunctionComponent<{ data: any; meta
   no_rodekors_docs_BlockAccordion: AccordionBlock,
   no_rodekors_docs_BlockQuote: QuoteBlock,
   no_rodekors_docs_BlockFactbox: FactboxBlock,
+  // Copyable code snippet — the first LOCAL block (docs-specific mixin).
+  no_rodekors_docs_BlockCode: CodeBlock,
   // Link-card grid; links pre-resolved by XP (see CardsBlock).
   no_rodekors_docs_BlockCards: CardsBlock,
   // Gallery of figures; images arrive pre-scaled from XP (see ImagesBlock).

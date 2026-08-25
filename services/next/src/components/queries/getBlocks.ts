@@ -80,6 +80,13 @@ export default () =>
               contentPath
             }
           }
+          # Plain strings only — code is rendered verbatim, never as HTML.
+          ...on no_rodekors_docs_BlockCode {
+            __typename
+            code
+            language
+            label
+          }
         }
       }
     }`);

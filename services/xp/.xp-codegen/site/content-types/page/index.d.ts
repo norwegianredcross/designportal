@@ -268,5 +268,31 @@ export type Page = {
           }>;
         };
       }
+    | {
+        /**
+         * Selected
+         */
+        _selected: "blocks-code";
+
+        /**
+         * Code
+         */
+        "blocks-code": {
+          /**
+           * Code
+           */
+          code: string;
+
+          /**
+           * Language
+           */
+          language?: "tsx" | "ts" | "js" | "css" | "html" | "bash" | "json" | "graphql" | "xml";
+
+          /**
+           * Label
+           */
+          label?: string;
+        };
+      }
   >;
 };

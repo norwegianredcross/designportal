@@ -74,6 +74,17 @@
             <mixin name="blocks-cards"/>
           </items>
         </option>
+
+        <!-- LOCAL block (site/mixins/blocks-code) — the only option so far
+             whose form does NOT come from lib-xp-item-blocks. Docs-specific:
+             copyable code snippets for the developer documentation. -->
+        <option name="blocks-code">
+          <label i18n="mixin.blocks-code.displayName">Code</label>
+          <help-text i18n="mixin.blocks-code.description">A copyable block of code with a language label</help-text>
+          <items>
+            <mixin name="blocks-code"/>
+          </items>
+        </option>
       </options>
     </option-set>
   </form>
