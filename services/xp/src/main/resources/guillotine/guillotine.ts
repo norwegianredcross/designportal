@@ -35,6 +35,7 @@ const OBJECT_TYPE_BLOCK_IMAGES = "no_rodekors_docs_BlockImages";
 const OBJECT_TYPE_BLOCK_IMAGE = "no_rodekors_docs_BlockImage";
 const OBJECT_TYPE_BLOCK_CARDS = "no_rodekors_docs_BlockCards";
 const OBJECT_TYPE_BLOCK_CODE = "no_rodekors_docs_BlockCode";
+const OBJECT_TYPE_BLOCK_DEMO = "no_rodekors_docs_BlockDemo";
 // Not a union member: the nested item type inside BlockCards.
 const OBJECT_TYPE_BLOCK_CARD = "no_rodekors_docs_BlockCard";
 const FIELD_BLOCKS = "blocks";
@@ -222,6 +223,19 @@ export function extensions(graphQL: GraphQL): Extensions {
           },
         },
       },
+      // Plain strings; the demo id is only meaningful to the frontend's
+      // curated demo registry.
+      [OBJECT_TYPE_BLOCK_DEMO]: {
+        description: "A live example of a design system component",
+        fields: {
+          demo: {
+            type: graphQL.GraphQLString,
+          },
+          title: {
+            type: graphQL.GraphQLString,
+          },
+        },
+      },
     },
     unions: {
       [OBJECT_TYPE_BLOCK]: {
@@ -234,6 +248,7 @@ export function extensions(graphQL: GraphQL): Extensions {
           graphQL.reference(OBJECT_TYPE_BLOCK_IMAGES),
           graphQL.reference(OBJECT_TYPE_BLOCK_CARDS),
           graphQL.reference(OBJECT_TYPE_BLOCK_CODE),
+          graphQL.reference(OBJECT_TYPE_BLOCK_DEMO),
         ],
       },
     },
@@ -376,6 +391,12 @@ type ResolvedCodeBlock = {
   label?: string;
 };
 
+type ResolvedDemoBlock = {
+  __typename: typeof OBJECT_TYPE_BLOCK_DEMO;
+  demo?: string;
+  title?: string;
+};
+
 type ResolvedAccordionBlock = {
   __typename: typeof OBJECT_TYPE_BLOCK_ACCORDION;
   title?: string;
@@ -393,6 +414,7 @@ function resolveBlocks(
   | ResolvedImagesBlock
   | ResolvedCardsBlock
   | ResolvedCodeBlock
+  | ResolvedDemoBlock
   | null {
   switch (block._selected) {
     case "blocks-text":
@@ -475,6 +497,12 @@ function resolveBlocks(
         code: block["blocks-code"].code,
         language: block["blocks-code"].language,
         label: block["blocks-code"].label,
+      };
+    case "blocks-demo":
+      return {
+        __typename: OBJECT_TYPE_BLOCK_DEMO,
+        demo: block["blocks-demo"].demo,
+        title: block["blocks-demo"].title,
       };
   }
 

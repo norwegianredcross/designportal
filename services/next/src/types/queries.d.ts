@@ -66,6 +66,7 @@ export type GetBlocksQuery = {
       | ({ code: string | null; language: string | null; label: string | null } & {
           __typename: "no_rodekors_docs_BlockCode";
         })
+      | ({ demo: string | null; title: string | null } & { __typename: "no_rodekors_docs_BlockDemo" })
       | ({
           title: string | null;
           theme: string | null;
@@ -231,6 +232,7 @@ export type GetSidePageQuery = {
       | ({ code: string | null; language: string | null; label: string | null } & {
           __typename: "no_rodekors_docs_BlockCode";
         })
+      | ({ demo: string | null; title: string | null } & { __typename: "no_rodekors_docs_BlockDemo" })
       | ({
           title: string | null;
           theme: string | null;

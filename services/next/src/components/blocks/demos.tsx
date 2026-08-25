@@ -1,0 +1,61 @@
+import type { ReactNode } from "react";
+import { Alert, Badge, Button, Card, CardBlock, Details, Paragraph, Tag } from "rk-designsystem";
+import { DetailsContent, DetailsSummary } from "@/components/partials/Details";
+
+/**
+ * The curated demo registry: every demo an editor can choose in the
+ * Komponentdemo block. Keys MUST match the ComboBox option values in the
+ * XP mixin (site/mixins/blocks-demo/blocks-demo.xml) — adding a demo means
+ * one option there and one entry here. All demos are server-rendered
+ * design system components; any interactivity they have (like Details
+ * opening) is the library's own and hydrates by itself.
+ */
+export const demos: Record<string, ReactNode> = {
+  "button-variants": (
+    <div style={{ display: "flex", gap: "var(--ds-size-3)", flexWrap: "wrap" }}>
+      <Button variant="primary">Primær</Button>
+      <Button variant="secondary">Sekundær</Button>
+      <Button variant="tertiary">Tertiær</Button>
+    </div>
+  ),
+  "alert-severities": (
+    <div style={{ display: "grid", gap: "var(--ds-size-3)" }}>
+      <Alert data-color="info">Informasjon til leseren.</Alert>
+      <Alert data-color="warning">Noe krever oppmerksomhet.</Alert>
+      <Alert data-color="danger">Noe gikk galt.</Alert>
+    </div>
+  ),
+  "card-scopes": (
+    <div style={{ display: "flex", gap: "var(--ds-size-3)", flexWrap: "wrap" }}>
+      <Card variant="tinted" data-color="primary-color-red">
+        <CardBlock>
+          <Paragraph data-size="sm">primary-color-red</Paragraph>
+        </CardBlock>
+      </Card>
+      <Card variant="tinted" data-color="additional-color-ocean">
+        <CardBlock>
+          <Paragraph data-size="sm">additional-color-ocean</Paragraph>
+        </CardBlock>
+      </Card>
+      <Card variant="tinted" data-color="neutral">
+        <CardBlock>
+          <Paragraph data-size="sm">neutral</Paragraph>
+        </CardBlock>
+      </Card>
+    </div>
+  ),
+  "details-basic": (
+    <Details>
+      <DetailsSummary>Hva er design tokens?</DetailsSummary>
+      <DetailsContent>
+        <Paragraph data-size="sm">Felles variabler for farger, typografi og avstander.</Paragraph>
+      </DetailsContent>
+    </Details>
+  ),
+  "tag-badge": (
+    <div style={{ display: "flex", gap: "var(--ds-size-3)", alignItems: "center" }}>
+      <Tag>Emneknagg</Tag>
+      <Badge count={4} />
+    </div>
+  ),
+};

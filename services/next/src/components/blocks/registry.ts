@@ -3,6 +3,7 @@ import type { FunctionComponent } from "react";
 import { AccordionBlock } from "./AccordionBlock";
 import { CardsBlock } from "./CardsBlock";
 import { CodeBlock } from "./CodeBlock";
+import { DemoBlock } from "./DemoBlock";
 import { FactboxBlock } from "./FactboxBlock";
 import { ImagesBlock } from "./ImagesBlock";
 import { QuoteBlock } from "./QuoteBlock";
@@ -20,6 +21,8 @@ export const blockComponents: Record<string, FunctionComponent<{ data: any; meta
   no_rodekors_docs_BlockAccordion: AccordionBlock,
   no_rodekors_docs_BlockQuote: QuoteBlock,
   no_rodekors_docs_BlockFactbox: FactboxBlock,
+  // Live design system example from the curated registry (local block).
+  no_rodekors_docs_BlockDemo: DemoBlock,
   // Copyable code snippet — the first LOCAL block (docs-specific mixin).
   no_rodekors_docs_BlockCode: CodeBlock,
   // Link-card grid; links pre-resolved by XP (see CardsBlock).

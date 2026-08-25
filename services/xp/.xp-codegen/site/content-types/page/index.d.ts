@@ -294,5 +294,26 @@ export type Page = {
           label?: string;
         };
       }
+    | {
+        /**
+         * Selected
+         */
+        _selected: "blocks-demo";
+
+        /**
+         * Component demo
+         */
+        "blocks-demo": {
+          /**
+           * Demo
+           */
+          demo: "button-variants" | "alert-severities" | "card-scopes" | "details-basic" | "tag-badge";
+
+          /**
+           * Title
+           */
+          title?: string;
+        };
+      }
   >;
 };

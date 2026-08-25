@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- LOCAL mixin (docs-specific, like blocks-code): a live component demo.
+     Editors choose from a curated list — they never write JSX or props, so
+     every demo is code-reviewed frontend code that cannot break a page.
+     The option values MUST match the demo registry on the Next side
+     (components/blocks/demos.tsx); adding a demo touches both files. -->
+<mixin xmlns="urn:enonic:xp:model:1.0">
+  <display-name i18n="mixin.blocks-demo.displayName">Component demo</display-name>
+  <description i18n="mixin.blocks-demo.description">A live example of a design system component</description>
+
+  <form>
+    <input name="demo" type="ComboBox">
+      <label i18n="mixin.blocks-demo.demo">Demo</label>
+      <occurrences minimum="1" maximum="1"/>
+      <config>
+        <option value="button-variants">Button: varianter</option>
+        <option value="alert-severities">Alert: alvorlighetsgrader</option>
+        <option value="card-scopes">Card: fargescope</option>
+        <option value="details-basic">Details: ekspanderbar seksjon</option>
+        <option value="tag-badge">Tag og Badge</option>
+      </config>
+    </input>
+
+    <input name="title" type="TextLine">
+      <label i18n="mixin.blocks-demo.title">Title</label>
+      <occurrences minimum="0" maximum="1"/>
+    </input>
+  </form>
+</mixin>

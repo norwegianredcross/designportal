@@ -4,10 +4,7 @@ import { storybookTest } from "@storybook/addon-vitest/vitest-plugin";
 import { playwright } from "@vitest/browser-playwright";
 import { defineConfig } from "vitest/config";
 
-const dirname =
-  typeof __dirname !== "undefined"
-    ? __dirname
-    : path.dirname(fileURLToPath(import.meta.url));
+const dirname = typeof __dirname !== "undefined" ? __dirname : path.dirname(fileURLToPath(import.meta.url));
 
 // More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
 export default defineConfig({
@@ -28,6 +25,20 @@ export default defineConfig({
             provider: playwright({}),
             instances: [{ browser: "chromium" }],
           },
+        },
+      },
+      {
+        // Plain node-env unit tests (no browser): used for contract tests
+        // like the demo-registry drift guard. The storybook project inherits
+        // the `@/` path alias from Next's tooling; this bare project does not,
+        // so the alias from tsconfig.json is repeated here.
+        resolve: {
+          alias: { "@": path.join(dirname, "src") },
+        },
+        test: {
+          name: "unit",
+          include: ["src/**/*.test.{ts,tsx}"],
+          environment: "node",
         },
       },
     ],

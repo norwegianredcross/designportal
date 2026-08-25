@@ -99,6 +99,13 @@ export default () =>
             language
             label
           }
+          # The demo id maps into the frontend's curated registry
+          # (components/blocks/demos.tsx); unknown ids render nothing.
+          ...on no_rodekors_docs_BlockDemo {
+            __typename
+            demo
+            title
+          }
         }
       }
     }`);

@@ -85,6 +85,17 @@
             <mixin name="blocks-code"/>
           </items>
         </option>
+
+        <!-- LOCAL block (site/mixins/blocks-demo): live design system
+             examples, picked from a curated registry — see the mixin file
+             for why editors never write component code themselves. -->
+        <option name="blocks-demo">
+          <label i18n="mixin.blocks-demo.displayName">Component demo</label>
+          <help-text i18n="mixin.blocks-demo.description">A live example of a design system component</help-text>
+          <items>
+            <mixin name="blocks-demo"/>
+          </items>
+        </option>
       </options>
     </option-set>
   </form>

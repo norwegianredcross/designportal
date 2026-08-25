@@ -5,6 +5,7 @@ export type BlocksCard = import("./blocks-card").BlocksCard;
 export type BlocksCards = import("./blocks-cards").BlocksCards;
 export type BlocksCode = import("./blocks-code").BlocksCode;
 export type BlocksConfig = import("./blocks-config").BlocksConfig;
+export type BlocksDemo = import("./blocks-demo").BlocksDemo;
 export type BlocksFactbox = import("./blocks-factbox").BlocksFactbox;
 export type BlocksImagePlacement = import("./blocks-image-placement").BlocksImagePlacement;
 export type BlocksImages = import("./blocks-images").BlocksImages;
