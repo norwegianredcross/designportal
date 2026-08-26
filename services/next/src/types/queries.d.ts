@@ -90,9 +90,10 @@ export type GetBlocksQuery = {
           } | null;
         } & { __typename: "no_rodekors_docs_BlockFactbox" })
       | ({
+          size: string | null;
+          alignment: string | null;
           form: string | null;
-          notchEdge: string | null;
-          notchOffset: number | null;
+          notchCorner: string | null;
           notchWidth: number | null;
           notchDepth: number | null;
           items: Array<{
@@ -300,9 +301,10 @@ export type GetSidePageQuery = {
           } | null;
         } & { __typename: "no_rodekors_docs_BlockFactbox" })
       | ({
+          size: string | null;
+          alignment: string | null;
           form: string | null;
-          notchEdge: string | null;
-          notchOffset: number | null;
+          notchCorner: string | null;
           notchWidth: number | null;
           notchDepth: number | null;
           items: Array<{

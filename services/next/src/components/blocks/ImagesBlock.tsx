@@ -3,7 +3,7 @@ import type { CSSProperties } from "react";
 import type { GetBlocksQuery } from "@/types/queries";
 import type { Get } from "@/types/utils";
 import { forceArray, notNullOrUndefined } from "@/utils";
-import { type NotchEdge, notchMaskDataUri } from "./notchMask";
+import { CORNER_TO_NOTCH, type NotchEdge, notchMaskDataUri } from "./notchMask";
 
 type ImagesData = Extract<
   NonNullable<Get<GetBlocksQuery, "guillotine.blocks">>,
@@ -21,6 +21,9 @@ interface ImagesProps {
    * explicit hero choice. Galleries always fill the column.
    */
   size?: "full" | "medium" | "small";
+  /** Which side of the column a below-full-width single image parks on.
+   * Neighboring blocks do NOT wrap around it — blocks stack. */
+  alignment?: "left" | "right";
   /**
    * Image silhouette for single images: plain rounded corners, or the
    * Design retning's notched step form. Galleries keep plain rounded
@@ -55,19 +58,24 @@ interface ImagesProps {
  */
 const SIZE_WIDTH = { full: "100%", medium: "60%", small: "40%" } as const;
 
-export function ImagesBlock({ data, size = "medium", shape = "rounded", notch }: ImagesProps) {
+export function ImagesBlock({ data, size = "medium", alignment = "left", shape = "rounded", notch }: ImagesProps) {
   const items = forceArray(data.items)
     .filter(notNullOrUndefined)
     .filter((item) => item.imageUrl);
   if (items.length === 0) return null;
   const gallery = items.length > 1;
-  // Content Studio wins over code: the shadowed mixin's fields (form,
-  // notchEdge/Offset/Width/Depth) override the component props, which act
-  // as defaults for Storybook and any hardcoded usage.
+  // Content Studio wins over code: the shadowed mixin's fields (size,
+  // alignment, form, notchCorner/Width/Depth) override the component
+  // props, which act as defaults for Storybook and any hardcoded usage.
   const effectiveShape = (data.form as "rounded" | "notch" | null | undefined) ?? shape;
+  const effectiveSize = (data.size as "full" | "medium" | "small" | null | undefined) ?? size;
+  const effectiveAlignment = (data.alignment as "left" | "right" | null | undefined) ?? alignment;
+  // The editor picks a corner; code props may still use the generator's
+  // raw edge/offset. A corner from the CMS wins over both.
+  const cornerNotch = data.notchCorner ? CORNER_TO_NOTCH[data.notchCorner] : undefined;
   const effectiveNotch = {
-    edge: (data.notchEdge as NotchEdge | null | undefined) ?? notch?.edge ?? "bottom",
-    offset: data.notchOffset ?? notch?.offset ?? 100,
+    edge: cornerNotch?.edge ?? notch?.edge ?? "bottom",
+    offset: cornerNotch?.offset ?? notch?.offset ?? 100,
     width: data.notchWidth ?? notch?.width ?? 35,
     depth: data.notchDepth ?? notch?.depth ?? 28,
     aspect: notch?.aspect ?? "4 / 3",
@@ -122,7 +130,18 @@ export function ImagesBlock({ data, size = "medium", shape = "rounded", notch }:
         );
         return (
           // biome-ignore lint/suspicious/noArrayIndexKey: gallery order is stable
-          <figure key={`image-${index}`} style={{ margin: 0, width: gallery ? undefined : SIZE_WIDTH[size] }}>
+          <figure
+            key={`image-${index}`}
+            style={{
+              margin: 0,
+              // Unknown CMS values fall back to medium, same graceful
+              // posture as the theme/corner lookups.
+              width: gallery ? undefined : (SIZE_WIDTH[effectiveSize] ?? SIZE_WIDTH.medium),
+              // Right-parked images push against the column's right edge;
+              // stacking blocks means nothing wraps into the open space.
+              marginLeft: !gallery && effectiveAlignment === "right" ? "auto" : undefined,
+            }}
+          >
             {notched ? (
               // The notched silhouette: one image masked by a generated
               // SVG path (see notchMask.ts). The mask's viewBox matches

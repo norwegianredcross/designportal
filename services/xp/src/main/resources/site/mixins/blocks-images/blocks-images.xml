@@ -2,10 +2,10 @@
 <!-- SHADOWS the same-named mixin in lib-xp-item-blocks (app resources win
      over included libs' resources, the same mechanism as blocks/blocks.xml):
      the lib's item-set is kept verbatim so the editorial experience matches
-     rodekors.no, and a "Form" section is ADDED so editors can pick the
-     Design retning silhouette for single images - shape, which edge the
-     bite cuts into, where it sits, and its proportions. The frontend
-     renders these via a generated SVG mask (services/next .../notchMask.ts). -->
+     rodekors.no, with app additions for single images: size, alignment and
+     the Design retning silhouette (rounded, or a notch cut into a chosen
+     corner). The frontend renders the notch via a generated SVG mask
+     (services/next .../notchMask.ts). -->
 <mixin xmlns="urn:enonic:xp:model:1.0">
   <display-name i18n="mixin.blocks-images.displayName">Images</display-name>
   <description i18n="mixin.blocks-images.description">An image gallery or an image that can be expanded</description>
@@ -36,47 +36,70 @@
 
     <!-- Everything below is the app's addition; only applied when the block
          holds a single image (galleries keep uniform rounded tiles). -->
-    <input name="form" type="ComboBox">
-      <label i18n="mixin.blocks-images.form">Form</label>
+    <input name="size" type="ComboBox">
+      <label i18n="mixin.blocks-images.size">Size</label>
       <occurrences minimum="0" maximum="1"/>
       <config>
-        <option value="rounded" i18n="mixin.blocks-images.form.rounded">Avrundet</option>
-        <option value="notch" i18n="mixin.blocks-images.form.notch">Notch (utsnitt)</option>
+        <option value="full" i18n="mixin.blocks-images.size.full">Full width</option>
+        <option value="medium" i18n="mixin.blocks-images.size.medium">Medium</option>
+        <option value="small" i18n="mixin.blocks-images.size.small">Small</option>
       </config>
-      <default>rounded</default>
+      <default>medium</default>
     </input>
 
-    <input name="notchEdge" type="ComboBox">
-      <label i18n="mixin.blocks-images.notchEdge">Utsnittets kant</label>
+    <input name="alignment" type="ComboBox">
+      <label i18n="mixin.blocks-images.alignment">Alignment</label>
+      <help-text i18n="mixin.blocks-images.alignment.helpText">Only applies below full width</help-text>
       <occurrences minimum="0" maximum="1"/>
       <config>
-        <option value="bottom" i18n="mixin.blocks-images.notchEdge.bottom">Bunn</option>
-        <option value="top" i18n="mixin.blocks-images.notchEdge.top">Topp</option>
-        <option value="left" i18n="mixin.blocks-images.notchEdge.left">Venstre</option>
-        <option value="right" i18n="mixin.blocks-images.notchEdge.right">Høyre</option>
+        <option value="left" i18n="mixin.blocks-images.alignment.left">Left</option>
+        <option value="right" i18n="mixin.blocks-images.alignment.right">Right</option>
       </config>
-      <default>bottom</default>
+      <default>left</default>
     </input>
 
-    <!-- Long inputs rather than sliders: Content Studio has no slider
-         control, and the frontend clamps out-of-range values anyway. -->
-    <input name="notchOffset" type="Long">
-      <label i18n="mixin.blocks-images.notchOffset">Utsnittets plassering (0–100)</label>
-      <help-text i18n="mixin.blocks-images.notchOffset.helpText">0 = venstre/topp, 100 = høyre/bunn, 50 = midten</help-text>
+    <!-- Silhouette as an option-set, the same editor model as the
+         tekst-og-bilde block: the notch geometry only appears when the
+         editor actually chooses the notched form — fields that always show
+         but only sometimes apply invite mistakes (they did). The corner
+         dropdown replaces the earlier edge+offset numbers; the frontend
+         maps a corner onto the mask generator's more general model. -->
+    <option-set name="form">
+      <label i18n="mixin.blocks-images.form">Shape</label>
       <occurrences minimum="0" maximum="1"/>
-      <default>100</default>
-    </input>
+      <options minimum="1" maximum="1">
+        <option name="rounded">
+          <label i18n="mixin.blocks-images.form.rounded">Rounded</label>
+          <default>true</default>
+        </option>
+        <option name="notch">
+          <label i18n="mixin.blocks-images.form.notch">Notch (cutout)</label>
+          <items>
+            <input name="corner" type="ComboBox">
+              <label i18n="mixin.blocks-images.form.notch.corner">Corner</label>
+              <occurrences minimum="0" maximum="1"/>
+              <config>
+                <option value="bottom-right" i18n="mixin.blocks-images.form.notch.corner.bottomRight">Bottom right</option>
+                <option value="bottom-left" i18n="mixin.blocks-images.form.notch.corner.bottomLeft">Bottom left</option>
+                <option value="top-right" i18n="mixin.blocks-images.form.notch.corner.topRight">Top right</option>
+                <option value="top-left" i18n="mixin.blocks-images.form.notch.corner.topLeft">Top left</option>
+              </config>
+              <default>bottom-right</default>
+            </input>
+            <input name="width" type="Long">
+              <label i18n="mixin.blocks-images.form.notch.width">Cutout width in percent</label>
+              <occurrences minimum="0" maximum="1"/>
+              <default>35</default>
+            </input>
+            <input name="depth" type="Long">
+              <label i18n="mixin.blocks-images.form.notch.depth">Cutout depth in percent</label>
+              <occurrences minimum="0" maximum="1"/>
+              <default>28</default>
+            </input>
+          </items>
+        </option>
+      </options>
+    </option-set>
 
-    <input name="notchWidth" type="Long">
-      <label i18n="mixin.blocks-images.notchWidth">Utsnittets bredde i prosent</label>
-      <occurrences minimum="0" maximum="1"/>
-      <default>35</default>
-    </input>
-
-    <input name="notchDepth" type="Long">
-      <label i18n="mixin.blocks-images.notchDepth">Utsnittets dybde i prosent</label>
-      <occurrences minimum="0" maximum="1"/>
-      <default>28</default>
-    </input>
   </form>
 </mixin>

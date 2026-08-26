@@ -6,7 +6,7 @@ import { Button, Heading, Paragraph } from "rk-designsystem";
 import type { GetBlocksQuery } from "@/types/queries";
 import type { Get } from "@/types/utils";
 import { isRichTextData } from "@/utils";
-import { type NotchEdge, notchMaskDataUri } from "./notchMask";
+import { CORNER_TO_NOTCH, notchMaskDataUri } from "./notchMask";
 import styles from "./TextImageBlock.module.css";
 
 type TextImageData = Extract<
@@ -18,19 +18,6 @@ interface TextImageProps {
   data: TextImageData;
   meta: MetaData;
 }
-
-/**
- * Maps the editor's corner choice onto the mask generator's edge+offset
- * model: a corner is just a bite flush against one end of a horizontal
- * edge. The generator's full generality (any edge, any offset) stays
- * available to code; the editor sees only the four corners.
- */
-const CORNER_TO_NOTCH: Record<string, { edge: NotchEdge; offset: number }> = {
-  "bottom-right": { edge: "bottom", offset: 100 },
-  "bottom-left": { edge: "bottom", offset: 0 },
-  "top-right": { edge: "top", offset: 100 },
-  "top-left": { edge: "top", offset: 0 },
-};
 
 /**
  * The hero/split composition from the Design retning Figma: kicker, title,

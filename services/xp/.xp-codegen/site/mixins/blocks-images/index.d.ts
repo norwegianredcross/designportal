@@ -21,27 +21,54 @@ export type BlocksImages = {
   }>;
 
   /**
-   * Form
+   * Size
    */
-  form?: "rounded" | "notch";
+  size?: "full" | "medium" | "small";
 
   /**
-   * Utsnittets kant
+   * Alignment
    */
-  notchEdge?: "bottom" | "top" | "left" | "right";
+  alignment?: "left" | "right";
 
   /**
-   * Utsnittets plassering (0–100)
+   * Shape
    */
-  notchOffset?: number;
+  form?:
+    | {
+        /**
+         * Selected
+         */
+        _selected: "rounded";
 
-  /**
-   * Utsnittets bredde i prosent
-   */
-  notchWidth?: number;
+        /**
+         * Rounded
+         */
+        rounded: Record<string, unknown>;
+      }
+    | {
+        /**
+         * Selected
+         */
+        _selected: "notch";
 
-  /**
-   * Utsnittets dybde i prosent
-   */
-  notchDepth?: number;
+        /**
+         * Notch (cutout)
+         */
+        notch: {
+          /**
+           * Corner
+           */
+          corner?: "bottom-right" | "bottom-left" | "top-right" | "top-left";
+
+          /**
+           * Cutout width in percent
+           */
+          width?: number;
+
+          /**
+           * Cutout depth in percent
+           */
+          depth?: number;
+        };
+      };
 };

@@ -694,11 +694,9 @@ type Part_no_rodekors_docs_blocks_view_BlocksFactbox {
 """Images"""
 type Part_no_rodekors_docs_blocks_view_BlocksImages {
   items(offset: Int, first: Int): [Part_no_rodekors_docs_blocks_view_Items_2]
-  form: String
-  notchEdge: String
-  notchOffset: String
-  notchWidth: String
-  notchDepth: String
+  size: String
+  alignment: String
+  form: Part_no_rodekors_docs_blocks_view_Form
 }
 
 """Quote"""
@@ -716,7 +714,7 @@ type Part_no_rodekors_docs_blocks_view_BlocksText {
   text(processHtml: ProcessHtmlInput): RichText
 }
 
-"""Tekst og bilde"""
+"""Text and image"""
 type Part_no_rodekors_docs_blocks_view_BlocksTextImage {
   kicker: String
   title: String
@@ -726,7 +724,7 @@ type Part_no_rodekors_docs_blocks_view_BlocksTextImage {
   imageId: Content
   altText: String
   imagePlacement: String
-  form: Part_no_rodekors_docs_blocks_view_Form
+  form: Part_no_rodekors_docs_blocks_view_Form_2
   theme: String
 }
 
@@ -753,15 +751,28 @@ type Part_no_rodekors_docs_blocks_view_External_2 {
   externalLink: String
 }
 
-"""Form"""
+"""Shape"""
 type Part_no_rodekors_docs_blocks_view_Form {
   _selected: Part_no_rodekors_docs_blocks_view_Form_OptionEnum
   rounded: String
   notch: Part_no_rodekors_docs_blocks_view_Notch
 }
 
-"""Form option enum."""
+"""Shape"""
+type Part_no_rodekors_docs_blocks_view_Form_2 {
+  _selected: Part_no_rodekors_docs_blocks_view_Form_OptionEnum_2
+  rounded: String
+  notch: Part_no_rodekors_docs_blocks_view_Notch_2
+}
+
+"""Shape option enum."""
 enum Part_no_rodekors_docs_blocks_view_Form_OptionEnum {
+  rounded
+  notch
+}
+
+"""Shape option enum."""
+enum Part_no_rodekors_docs_blocks_view_Form_OptionEnum_2 {
   rounded
   notch
 }
@@ -829,8 +840,15 @@ enum Part_no_rodekors_docs_blocks_view_Link_OptionEnum_2 {
   none
 }
 
-"""Notch (utsnitt)"""
+"""Notch (cutout)"""
 type Part_no_rodekors_docs_blocks_view_Notch {
+  corner: String
+  width: String
+  depth: String
+}
+
+"""Notch (cutout)"""
+type Part_no_rodekors_docs_blocks_view_Notch_2 {
   corner: String
   width: String
   depth: String
@@ -1169,11 +1187,9 @@ type XData_no_rodekors_docs_site_content_DataConfig_BlocksFactbox {
 """Images"""
 type XData_no_rodekors_docs_site_content_DataConfig_BlocksImages {
   items(offset: Int, first: Int): [XData_no_rodekors_docs_site_content_DataConfig_Items_2]
-  form: String
-  notchEdge: String
-  notchOffset: String
-  notchWidth: String
-  notchDepth: String
+  size: String
+  alignment: String
+  form: XData_no_rodekors_docs_site_content_DataConfig_Form
 }
 
 """Quote"""
@@ -1191,7 +1207,7 @@ type XData_no_rodekors_docs_site_content_DataConfig_BlocksText {
   text(processHtml: ProcessHtmlInput): RichText
 }
 
-"""Tekst og bilde"""
+"""Text and image"""
 type XData_no_rodekors_docs_site_content_DataConfig_BlocksTextImage {
   kicker: String
   title: String
@@ -1201,7 +1217,7 @@ type XData_no_rodekors_docs_site_content_DataConfig_BlocksTextImage {
   imageId: Content
   altText: String
   imagePlacement: String
-  form: XData_no_rodekors_docs_site_content_DataConfig_Form
+  form: XData_no_rodekors_docs_site_content_DataConfig_Form_2
   theme: String
 }
 
@@ -1228,15 +1244,28 @@ type XData_no_rodekors_docs_site_content_DataConfig_External_2 {
   externalLink: String
 }
 
-"""Form"""
+"""Shape"""
 type XData_no_rodekors_docs_site_content_DataConfig_Form {
   _selected: XData_no_rodekors_docs_site_content_DataConfig_Form_OptionEnum
   rounded: String
   notch: XData_no_rodekors_docs_site_content_DataConfig_Notch
 }
 
-"""Form option enum."""
+"""Shape"""
+type XData_no_rodekors_docs_site_content_DataConfig_Form_2 {
+  _selected: XData_no_rodekors_docs_site_content_DataConfig_Form_OptionEnum_2
+  rounded: String
+  notch: XData_no_rodekors_docs_site_content_DataConfig_Notch_2
+}
+
+"""Shape option enum."""
 enum XData_no_rodekors_docs_site_content_DataConfig_Form_OptionEnum {
+  rounded
+  notch
+}
+
+"""Shape option enum."""
+enum XData_no_rodekors_docs_site_content_DataConfig_Form_OptionEnum_2 {
   rounded
   notch
 }
@@ -1304,8 +1333,15 @@ enum XData_no_rodekors_docs_site_content_DataConfig_Link_OptionEnum_2 {
   none
 }
 
-"""Notch (utsnitt)"""
+"""Notch (cutout)"""
 type XData_no_rodekors_docs_site_content_DataConfig_Notch {
+  corner: String
+  width: String
+  depth: String
+}
+
+"""Notch (cutout)"""
+type XData_no_rodekors_docs_site_content_DataConfig_Notch_2 {
   corner: String
   width: String
   depth: String
@@ -2111,9 +2147,10 @@ type no_rodekors_docs_BlockImage {
 """An image gallery or an image that can be expanded"""
 type no_rodekors_docs_BlockImages {
   items: [no_rodekors_docs_BlockImage]
+  size: String
+  alignment: String
   form: String
-  notchEdge: String
-  notchOffset: Int
+  notchCorner: String
   notchWidth: Int
   notchDepth: Int
 }
@@ -2238,11 +2275,9 @@ type no_rodekors_docs_Page_BlocksFactbox {
 """Images"""
 type no_rodekors_docs_Page_BlocksImages {
   items(offset: Int, first: Int): [no_rodekors_docs_Page_Items_2]
-  form: String
-  notchEdge: String
-  notchOffset: String
-  notchWidth: String
-  notchDepth: String
+  size: String
+  alignment: String
+  form: no_rodekors_docs_Page_Form
 }
 
 """Quote"""
@@ -2260,7 +2295,7 @@ type no_rodekors_docs_Page_BlocksText {
   text(processHtml: ProcessHtmlInput): RichText
 }
 
-"""Tekst og bilde"""
+"""Text and image"""
 type no_rodekors_docs_Page_BlocksTextImage {
   kicker: String
   title: String
@@ -2270,7 +2305,7 @@ type no_rodekors_docs_Page_BlocksTextImage {
   imageId: Content
   altText: String
   imagePlacement: String
-  form: no_rodekors_docs_Page_Form
+  form: no_rodekors_docs_Page_Form_2
   theme: String
 }
 
@@ -2304,15 +2339,28 @@ type no_rodekors_docs_Page_External_2 {
   externalLink: String
 }
 
-"""Form"""
+"""Shape"""
 type no_rodekors_docs_Page_Form {
   _selected: no_rodekors_docs_Page_Form_OptionEnum
   rounded: String
   notch: no_rodekors_docs_Page_Notch
 }
 
-"""Form option enum."""
+"""Shape"""
+type no_rodekors_docs_Page_Form_2 {
+  _selected: no_rodekors_docs_Page_Form_OptionEnum_2
+  rounded: String
+  notch: no_rodekors_docs_Page_Notch_2
+}
+
+"""Shape option enum."""
 enum no_rodekors_docs_Page_Form_OptionEnum {
+  rounded
+  notch
+}
+
+"""Shape option enum."""
+enum no_rodekors_docs_Page_Form_OptionEnum_2 {
   rounded
   notch
 }
@@ -2380,8 +2428,15 @@ enum no_rodekors_docs_Page_Link_OptionEnum_2 {
   none
 }
 
-"""Notch (utsnitt)"""
+"""Notch (cutout)"""
 type no_rodekors_docs_Page_Notch {
+  corner: String
+  width: String
+  depth: String
+}
+
+"""Notch (cutout)"""
+type no_rodekors_docs_Page_Notch_2 {
   corner: String
   width: String
   depth: String

@@ -154,29 +154,56 @@ export type Blocks = {
           }>;
 
           /**
-           * Form
+           * Size
            */
-          form?: "rounded" | "notch";
+          size?: "full" | "medium" | "small";
 
           /**
-           * Utsnittets kant
+           * Alignment
            */
-          notchEdge?: "bottom" | "top" | "left" | "right";
+          alignment?: "left" | "right";
 
           /**
-           * Utsnittets plassering (0–100)
+           * Shape
            */
-          notchOffset?: number;
+          form?:
+            | {
+                /**
+                 * Selected
+                 */
+                _selected: "rounded";
 
-          /**
-           * Utsnittets bredde i prosent
-           */
-          notchWidth?: number;
+                /**
+                 * Rounded
+                 */
+                rounded: Record<string, unknown>;
+              }
+            | {
+                /**
+                 * Selected
+                 */
+                _selected: "notch";
 
-          /**
-           * Utsnittets dybde i prosent
-           */
-          notchDepth?: number;
+                /**
+                 * Notch (cutout)
+                 */
+                notch: {
+                  /**
+                   * Corner
+                   */
+                  corner?: "bottom-right" | "bottom-left" | "top-right" | "top-left";
+
+                  /**
+                   * Cutout width in percent
+                   */
+                  width?: number;
+
+                  /**
+                   * Cutout depth in percent
+                   */
+                  depth?: number;
+                };
+              };
         };
       }
     | {
@@ -337,26 +364,26 @@ export type Blocks = {
         _selected: "blocks-text-image";
 
         /**
-         * Tekst og bilde
+         * Text and image
          */
         "blocks-text-image": {
           /**
-           * Stikktittel
+           * Kicker
            */
           kicker?: string;
 
           /**
-           * Tittel
+           * Title
            */
           title: string;
 
           /**
-           * Tekst
+           * Text
            */
           text?: string;
 
           /**
-           * Knappetekst
+           * Button text
            */
           buttonText?: string;
 
@@ -409,22 +436,22 @@ export type Blocks = {
               };
 
           /**
-           * Bilde
+           * Image
            */
           imageId: string;
 
           /**
-           * Alternativ tekst for bildet
+           * Alternative text for the image
            */
           altText: string;
 
           /**
-           * Bildeplassering
+           * Image placement
            */
           imagePlacement?: "right" | "left";
 
           /**
-           * Form
+           * Shape
            */
           form?:
             | {
@@ -434,7 +461,7 @@ export type Blocks = {
                 _selected: "rounded";
 
                 /**
-                 * Avrundet
+                 * Rounded
                  */
                 rounded: Record<string, unknown>;
               }
@@ -445,21 +472,21 @@ export type Blocks = {
                 _selected: "notch";
 
                 /**
-                 * Notch (utsnitt)
+                 * Notch (cutout)
                  */
                 notch: {
                   /**
-                   * Hjørne
+                   * Corner
                    */
                   corner?: "bottom-right" | "bottom-left" | "top-right" | "top-left";
 
                   /**
-                   * Utsnittets bredde i prosent
+                   * Cutout width in percent
                    */
                   width?: number;
 
                   /**
-                   * Utsnittets dybde i prosent
+                   * Cutout depth in percent
                    */
                   depth?: number;
                 };

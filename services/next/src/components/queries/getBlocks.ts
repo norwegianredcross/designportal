@@ -55,11 +55,13 @@ export default () =>
           # sources are unaffected.
           ...on no_rodekors_docs_BlockImages {
             __typename
-            # Editor-chosen silhouette (shadowed mixin): the frontend turns
-            # these into the generated SVG mask, with defaults and clamping.
+            # Editor choices (shadowed mixin): single-image size/alignment
+            # and the corner-based notch, which the frontend turns into the
+            # generated SVG mask with defaults and clamping.
+            size
+            alignment
             form
-            notchEdge
-            notchOffset
+            notchCorner
             notchWidth
             notchDepth
             items {

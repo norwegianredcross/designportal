@@ -158,17 +158,21 @@ export function extensions(graphQL: GraphQL): Extensions {
           items: {
             type: graphQL.list(graphQL.reference(OBJECT_TYPE_BLOCK_IMAGE)),
           },
-          // Editor-chosen silhouette from the app's shadowed mixin (see
-          // site/mixins/blocks-images): the notch geometry the frontend
-          // turns into an SVG mask. Plain strings/ints resolve on their own.
+          // Editor choices from the app's shadowed mixin (see
+          // site/mixins/blocks-images): single-image size/alignment plus
+          // the corner-based notch silhouette, flattened out of the form
+          // option-set like the tekst-og-bilde block's.
+          size: {
+            type: graphQL.GraphQLString,
+          },
+          alignment: {
+            type: graphQL.GraphQLString,
+          },
           form: {
             type: graphQL.GraphQLString,
           },
-          notchEdge: {
+          notchCorner: {
             type: graphQL.GraphQLString,
-          },
-          notchOffset: {
-            type: graphQL.GraphQLInt,
           },
           notchWidth: {
             type: graphQL.GraphQLInt,
@@ -472,9 +476,10 @@ type ResolvedImageItem = {
 type ResolvedImagesBlock = {
   __typename: typeof OBJECT_TYPE_BLOCK_IMAGES;
   items: ResolvedImageItem[];
+  size?: string;
+  alignment?: string;
   form?: string;
-  notchEdge?: string;
-  notchOffset?: number;
+  notchCorner?: string;
   notchWidth?: number;
   notchDepth?: number;
 };
@@ -616,7 +621,9 @@ function resolveBlocks(
         // the same option object as the factbox's own fields.
         theme: block["blocks-factbox"].theme,
       };
-    case "blocks-images":
+    case "blocks-images": {
+      const imagesForm = block["blocks-images"].form;
+      const imagesNotch = imagesForm?._selected === "notch" ? imagesForm.notch : undefined;
       return {
         __typename: OBJECT_TYPE_BLOCK_IMAGES,
         // forceArray: XP stores a single repeatable entry as a bare object.
@@ -629,14 +636,17 @@ function resolveBlocks(
             ...size,
           };
         }),
-        // The silhouette fields from the app's shadowed mixin, passed
-        // through verbatim — the frontend owns clamping and defaults.
-        form: block["blocks-images"].form,
-        notchEdge: block["blocks-images"].notchEdge,
-        notchOffset: block["blocks-images"].notchOffset,
-        notchWidth: block["blocks-images"].notchWidth,
-        notchDepth: block["blocks-images"].notchDepth,
+        // Editor choices from the app's shadowed mixin, passed through
+        // verbatim — the frontend owns clamping and defaults. The notch
+        // fields only exist when the editor picked that option.
+        size: block["blocks-images"].size,
+        alignment: block["blocks-images"].alignment,
+        form: imagesForm?._selected,
+        notchCorner: imagesNotch?.corner,
+        notchWidth: imagesNotch?.width,
+        notchDepth: imagesNotch?.depth,
       };
+    }
     case "blocks-cards": {
       const cards = block["blocks-cards"];
       return {

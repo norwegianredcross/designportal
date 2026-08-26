@@ -123,3 +123,17 @@ export function notchMaskDataUri({ edge, offset, width, depth, aspect }: NotchOp
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${Math.round(H * 10) / 10}" preserveAspectRatio="none"><path d="${roundedPath(pts)}" fill="#000"/></svg>`;
   return `url("data:image/svg+xml,${encodeURIComponent(svg)}")`;
 }
+
+/**
+ * Maps an editor's corner choice onto the generator's edge+offset model: a
+ * corner is a bite flush against one end of a horizontal edge. Shared by
+ * every block whose form option-set exposes the four corners; the
+ * generator's full generality (any edge, any offset) stays available to
+ * code.
+ */
+export const CORNER_TO_NOTCH: Record<string, { edge: NotchEdge; offset: number }> = {
+  "bottom-right": { edge: "bottom", offset: 100 },
+  "bottom-left": { edge: "bottom", offset: 0 },
+  "top-right": { edge: "top", offset: 100 },
+  "top-left": { edge: "top", offset: 0 },
+};

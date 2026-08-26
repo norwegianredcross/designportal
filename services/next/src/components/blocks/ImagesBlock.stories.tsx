@@ -26,11 +26,15 @@ const storyMeta = {
     meta: {
       table: { disable: true },
     },
-    // View-level props (the CMS data carries neither): single-image width
-    // and the Design retning silhouettes, exposed for live comparison.
+    // Code-level defaults (the CMS fields override them in production):
+    // single-image width/alignment and the Design retning silhouettes.
     size: {
       control: "select",
       options: ["full", "medium", "small"],
+    },
+    alignment: {
+      control: "select",
+      options: ["left", "right"],
     },
     shape: {
       control: "select",
@@ -56,11 +60,12 @@ export const Default: Story = {
   args: {
     data: {
       __typename: "no_rodekors_docs_BlockImages",
-      // The CMS silhouette fields are null in stories so the component
-      // props (the Storybook controls) drive the shape.
+      // The CMS fields are null in stories so the component props (the
+      // Storybook controls) drive size, alignment and shape.
+      size: null,
+      alignment: null,
       form: null,
-      notchEdge: null,
-      notchOffset: null,
+      notchCorner: null,
       notchWidth: null,
       notchDepth: null,
       items: [
@@ -81,11 +86,12 @@ export const Gallery: Story = {
   args: {
     data: {
       __typename: "no_rodekors_docs_BlockImages",
-      // The CMS silhouette fields are null in stories so the component
-      // props (the Storybook controls) drive the shape.
+      // The CMS fields are null in stories so the component props (the
+      // Storybook controls) drive size, alignment and shape.
+      size: null,
+      alignment: null,
       form: null,
-      notchEdge: null,
-      notchOffset: null,
+      notchCorner: null,
       notchWidth: null,
       notchDepth: null,
       items: [
@@ -127,11 +133,12 @@ export const Notch: Story = {
     notch: { edge: "bottom", offset: 100 },
     data: {
       __typename: "no_rodekors_docs_BlockImages",
-      // The CMS silhouette fields are null in stories so the component
-      // props (the Storybook controls) drive the shape.
+      // The CMS fields are null in stories so the component props (the
+      // Storybook controls) drive size, alignment and shape.
+      size: null,
+      alignment: null,
       form: null,
-      notchEdge: null,
-      notchOffset: null,
+      notchCorner: null,
       notchWidth: null,
       notchDepth: null,
       items: [
@@ -156,11 +163,12 @@ export const NotchWide: Story = {
     notch: { edge: "bottom", offset: 0, width: 55, depth: 18, aspect: "21 / 9" },
     data: {
       __typename: "no_rodekors_docs_BlockImages",
-      // The CMS silhouette fields are null in stories so the component
-      // props (the Storybook controls) drive the shape.
+      // The CMS fields are null in stories so the component props (the
+      // Storybook controls) drive size, alignment and shape.
+      size: null,
+      alignment: null,
       form: null,
-      notchEdge: null,
-      notchOffset: null,
+      notchCorner: null,
       notchWidth: null,
       notchDepth: null,
       items: [
