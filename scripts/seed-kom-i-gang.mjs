@@ -14,13 +14,7 @@
  *   DOCS_IMPORT_TOKEN=<token from no.rodekors.docs.cfg> node scripts/seed-kom-i-gang.mjs
  */
 
-// Helpers producing the exact option-set entries the blocks mixin stores —
-// one per block type used by this article.
-const text = (html) => ({ _selected: "blocks-text", "blocks-text": { text: html } });
-const code = (codeStr, language, label) => ({
-  _selected: "blocks-code",
-  "blocks-code": { code: codeStr, language, label },
-});
+import { code, postArticle, text } from "./seed-lib.mjs";
 
 const article = {
   parentPath: "/docs",
@@ -156,27 +150,4 @@ export default function Home() {
   },
 };
 
-// The service is mounted under the site. The public /master URL is used
-// because XP auth-walls /draft site URLs before any service code runs; the
-// service itself still writes to the draft branch and the publish flag
-// then pushes draft -> master.
-const serviceUrl =
-  process.env.XP_IMPORT_URL ?? "http://localhost:8080/site/designsystem-docs/master/docs/_/service/no.rodekors.docs/import-docs";
-
-const token = process.env.DOCS_IMPORT_TOKEN;
-if (!token) {
-  console.error("Set DOCS_IMPORT_TOKEN to the importToken value from the sandbox's no.rodekors.docs.cfg");
-  process.exit(1);
-}
-
-const res = await fetch(serviceUrl, {
-  method: "POST",
-  headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-  body: JSON.stringify(article),
-});
-const bodyText = await res.text();
-if (!res.ok) {
-  console.error(`Import failed: ${res.status} ${bodyText}`);
-  process.exit(1);
-}
-console.log(`Imported: ${bodyText}`);
+await postArticle(article);
