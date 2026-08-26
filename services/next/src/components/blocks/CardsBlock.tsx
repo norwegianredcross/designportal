@@ -118,11 +118,15 @@ function Card({
   vertical: boolean;
   reverse: boolean;
 }) {
-  // Per-card theme from the editor's theme selector; every theme has a
-  // background-tinted token, and neutral is the Figma default (lys beige).
-  // Unknown theme ids (the list lives in deploy config, not the schema) fall
-  // back to the neutral surface instead of a transparent card.
-  const surface = `var(--ds-color-${item.theme ?? "neutral"}-background-tinted, var(--ds-color-neutral-background-tinted))`;
+  // Per-card theme from the editor's theme selector, applied as a
+  // data-color SCOPE (same mechanism as faktaboks/trekkspill): inside it
+  // the generic tokens resolve to the theme's palette, so the surface AND
+  // the text follow the editor's choice — redaktøren mixes freely per
+  // card. Unknown theme ids (the list lives in deploy config, not the
+  // schema) don't match a scope and inherit the page's palette, with the
+  // neutral tint as the background fallback.
+  const scope = item.theme ?? "neutral";
+  const surface = "var(--ds-color-background-tinted, var(--ds-color-neutral-background-tinted))";
   const radius = "var(--ds-border-radius-lg)";
   // Stor (1 column) uses the roomier 40px padding/gap from the Figma spec;
   // medium/liten use 20px.
@@ -140,6 +144,9 @@ function Card({
         </Paragraph>
       ) : null}
       {item.title ? (
+        // No explicit color: the global heading rule uses the generic text
+        // token, which resolves inside this card's data-color scope — the
+        // title's tone follows the editor's theme choice by itself.
         <Heading level={3} data-size="xs" style={{ margin: 0 }}>
           {item.title}
         </Heading>
@@ -173,8 +180,10 @@ function Card({
     );
     const panel = (
       <div
+        data-color={scope}
         style={{
           backgroundColor: surface,
+          color: "var(--ds-color-text-default)",
           padding: pad,
           // The spec's extra 40px sits on the panel edge FACING AWAY from
           // the image, so it mirrors when the image moves below the text.
@@ -210,7 +219,14 @@ function Card({
     return (
       <div
         className={reverse ? styles.rowReverse : styles.row}
-        style={{ backgroundColor: surface, borderRadius: radius, padding: pad, gap: pad }}
+        data-color={scope}
+        style={{
+          backgroundColor: surface,
+          color: "var(--ds-color-text-default)",
+          borderRadius: radius,
+          padding: pad,
+          gap: pad,
+        }}
       >
         <img src={item.imageUrl} alt={item.imageAlt ?? ""} className={styles.sideImage} style={imageVars} />
         {text}
@@ -219,5 +235,18 @@ function Card({
   }
 
   // Uten bilde: plain tinted panel, all corners rounded.
-  return <div style={{ backgroundColor: surface, borderRadius: radius, padding: pad, height: "100%" }}>{text}</div>;
+  return (
+    <div
+      data-color={scope}
+      style={{
+        backgroundColor: surface,
+        color: "var(--ds-color-text-default)",
+        borderRadius: radius,
+        padding: pad,
+        height: "100%",
+      }}
+    >
+      {text}
+    </div>
+  );
 }

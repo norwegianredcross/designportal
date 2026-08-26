@@ -7,7 +7,8 @@ import { Source_Sans_3 } from "next/font/google";
 // from data-color scopes swapping token values.
 import "rk-designsystem/styles.css";
 // App frame only: body layout and the centered main column. Anything about
-// how things LOOK belongs to the design system import above.
+// how things LOOK belongs to the design system import above (one
+// exception: the maroon heading identity in globals.css).
 import "./globals.css";
 
 const sourceSans3 = Source_Sans_3({
