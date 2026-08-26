@@ -51,6 +51,7 @@ h4,
 h5,
 h6 {
   color: var(--ds-color-text-default);
+}
 
 /* Prose: designsystem-styling for redaksjonell HTML fra CMS-riktekst —
  * riktekst-visningene wrappes i .rk-prose (RichTextView className).

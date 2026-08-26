@@ -22,6 +22,15 @@ function customProps(css: string, selector: string): Record<string, string> {
   return props;
 }
 
+describe("globals.css", () => {
+  it("er syntaktisk balansert (en manglende klamme sluker alle regler etter seg)", () => {
+    // Regresjonsvakt: en tapt } i en merge gjorde at parseren slukte hele
+    // prose-seksjonen som ugyldige deklarasjoner — lenkene falt stille
+    // tilbake til nettleserens standardblå.
+    expect(proseCss.split("{").length).toBe(proseCss.split("}").length);
+  });
+});
+
 describe("rk-prose", () => {
   it("speiler Digdirs .ds-link-variabler eksakt", () => {
     const digdir = customProps(digdirCss, ".ds-link");
