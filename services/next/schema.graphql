@@ -653,6 +653,7 @@ type Part_no_rodekors_docs_blocks_view_Blocks {
   blocks_cards: Part_no_rodekors_docs_blocks_view_BlocksCards
   blocks_code: Part_no_rodekors_docs_blocks_view_BlocksCode
   blocks_demo: Part_no_rodekors_docs_blocks_view_BlocksDemo
+  blocks_summary: Part_no_rodekors_docs_blocks_view_BlocksSummary
   blocks_table: Part_no_rodekors_docs_blocks_view_BlocksTable
 }
 
@@ -708,6 +709,16 @@ type Part_no_rodekors_docs_blocks_view_BlocksQuote {
   publicationUrl: String
 }
 
+"""Summary"""
+type Part_no_rodekors_docs_blocks_view_BlocksSummary {
+  title: String
+  intro: String
+  items(offset: Int, first: Int): [Part_no_rodekors_docs_blocks_view_Items_4]
+  alignment: String
+  linkText: String
+  link: Part_no_rodekors_docs_blocks_view_Link_2
+}
+
 """Table"""
 type Part_no_rodekors_docs_blocks_view_BlocksTable {
   title: String
@@ -730,11 +741,17 @@ enum Part_no_rodekors_docs_blocks_view_Blocks_OptionEnum {
   blocks_cards
   blocks_code
   blocks_demo
+  blocks_summary
   blocks_table
 }
 
 """External"""
 type Part_no_rodekors_docs_blocks_view_External {
+  externalLink: String
+}
+
+"""External"""
+type Part_no_rodekors_docs_blocks_view_External_2 {
   externalLink: String
 }
 
@@ -753,6 +770,11 @@ enum Part_no_rodekors_docs_blocks_view_Form_OptionEnum {
 
 """Internal"""
 type Part_no_rodekors_docs_blocks_view_Internal {
+  internalLink: Content
+}
+
+"""Internal"""
+type Part_no_rodekors_docs_blocks_view_Internal_2 {
   internalLink: Content
 }
 
@@ -779,6 +801,13 @@ type Part_no_rodekors_docs_blocks_view_Items_3 {
   theme: String
 }
 
+"""Key figure"""
+type Part_no_rodekors_docs_blocks_view_Items_4 {
+  label: String
+  value: String
+  description: String
+}
+
 """Link"""
 type Part_no_rodekors_docs_blocks_view_Link {
   _selected: Part_no_rodekors_docs_blocks_view_Link_OptionEnum
@@ -787,8 +816,23 @@ type Part_no_rodekors_docs_blocks_view_Link {
   none: String
 }
 
+"""Link"""
+type Part_no_rodekors_docs_blocks_view_Link_2 {
+  _selected: Part_no_rodekors_docs_blocks_view_Link_OptionEnum_2
+  internal: Part_no_rodekors_docs_blocks_view_Internal_2
+  external: Part_no_rodekors_docs_blocks_view_External_2
+  none: String
+}
+
 """Link option enum."""
 enum Part_no_rodekors_docs_blocks_view_Link_OptionEnum {
+  internal
+  external
+  none
+}
+
+"""Link option enum."""
+enum Part_no_rodekors_docs_blocks_view_Link_OptionEnum_2 {
   internal
   external
   none
@@ -1093,6 +1137,7 @@ type XData_no_rodekors_docs_site_content_DataConfig_Blocks {
   blocks_cards: XData_no_rodekors_docs_site_content_DataConfig_BlocksCards
   blocks_code: XData_no_rodekors_docs_site_content_DataConfig_BlocksCode
   blocks_demo: XData_no_rodekors_docs_site_content_DataConfig_BlocksDemo
+  blocks_summary: XData_no_rodekors_docs_site_content_DataConfig_BlocksSummary
   blocks_table: XData_no_rodekors_docs_site_content_DataConfig_BlocksTable
 }
 
@@ -1148,6 +1193,16 @@ type XData_no_rodekors_docs_site_content_DataConfig_BlocksQuote {
   publicationUrl: String
 }
 
+"""Summary"""
+type XData_no_rodekors_docs_site_content_DataConfig_BlocksSummary {
+  title: String
+  intro: String
+  items(offset: Int, first: Int): [XData_no_rodekors_docs_site_content_DataConfig_Items_4]
+  alignment: String
+  linkText: String
+  link: XData_no_rodekors_docs_site_content_DataConfig_Link_2
+}
+
 """Table"""
 type XData_no_rodekors_docs_site_content_DataConfig_BlocksTable {
   title: String
@@ -1170,11 +1225,17 @@ enum XData_no_rodekors_docs_site_content_DataConfig_Blocks_OptionEnum {
   blocks_cards
   blocks_code
   blocks_demo
+  blocks_summary
   blocks_table
 }
 
 """External"""
 type XData_no_rodekors_docs_site_content_DataConfig_External {
+  externalLink: String
+}
+
+"""External"""
+type XData_no_rodekors_docs_site_content_DataConfig_External_2 {
   externalLink: String
 }
 
@@ -1193,6 +1254,11 @@ enum XData_no_rodekors_docs_site_content_DataConfig_Form_OptionEnum {
 
 """Internal"""
 type XData_no_rodekors_docs_site_content_DataConfig_Internal {
+  internalLink: Content
+}
+
+"""Internal"""
+type XData_no_rodekors_docs_site_content_DataConfig_Internal_2 {
   internalLink: Content
 }
 
@@ -1219,6 +1285,13 @@ type XData_no_rodekors_docs_site_content_DataConfig_Items_3 {
   theme: String
 }
 
+"""Key figure"""
+type XData_no_rodekors_docs_site_content_DataConfig_Items_4 {
+  label: String
+  value: String
+  description: String
+}
+
 """Link"""
 type XData_no_rodekors_docs_site_content_DataConfig_Link {
   _selected: XData_no_rodekors_docs_site_content_DataConfig_Link_OptionEnum
@@ -1227,8 +1300,23 @@ type XData_no_rodekors_docs_site_content_DataConfig_Link {
   none: String
 }
 
+"""Link"""
+type XData_no_rodekors_docs_site_content_DataConfig_Link_2 {
+  _selected: XData_no_rodekors_docs_site_content_DataConfig_Link_OptionEnum_2
+  internal: XData_no_rodekors_docs_site_content_DataConfig_Internal_2
+  external: XData_no_rodekors_docs_site_content_DataConfig_External_2
+  none: String
+}
+
 """Link option enum."""
 enum XData_no_rodekors_docs_site_content_DataConfig_Link_OptionEnum {
+  internal
+  external
+  none
+}
+
+"""Link option enum."""
+enum XData_no_rodekors_docs_site_content_DataConfig_Link_OptionEnum_2 {
   internal
   external
   none
@@ -1980,7 +2068,7 @@ type media_Video_Data {
 }
 
 """Your page content is build by a sequence of blocks."""
-union no_rodekors_docs_Block = no_rodekors_docs_BlockText | no_rodekors_docs_BlockAccordion | no_rodekors_docs_BlockQuote | no_rodekors_docs_BlockFactbox | no_rodekors_docs_BlockImages | no_rodekors_docs_BlockCards | no_rodekors_docs_BlockCode | no_rodekors_docs_BlockDemo | no_rodekors_docs_BlockTable
+union no_rodekors_docs_Block = no_rodekors_docs_BlockText | no_rodekors_docs_BlockAccordion | no_rodekors_docs_BlockQuote | no_rodekors_docs_BlockFactbox | no_rodekors_docs_BlockImages | no_rodekors_docs_BlockCards | no_rodekors_docs_BlockCode | no_rodekors_docs_BlockDemo | no_rodekors_docs_BlockTable | no_rodekors_docs_BlockSummary
 
 """A list of expandable sections"""
 type no_rodekors_docs_BlockAccordion {
@@ -2058,6 +2146,24 @@ type no_rodekors_docs_BlockQuote {
   publicationUrl: String
 }
 
+"""Key figures with an optional link"""
+type no_rodekors_docs_BlockSummary {
+  title: String
+  intro: String
+  items: [no_rodekors_docs_BlockSummaryItem]
+  alignment: String
+  linkText: String
+  url: String
+  contentPath: String
+}
+
+"""One key figure in a summary block"""
+type no_rodekors_docs_BlockSummaryItem {
+  label: String
+  value: String
+  description: String
+}
+
 """A table with an optional title"""
 type no_rodekors_docs_BlockTable {
   title: String
@@ -2116,6 +2222,7 @@ type no_rodekors_docs_Page_Blocks {
   blocks_cards: no_rodekors_docs_Page_BlocksCards
   blocks_code: no_rodekors_docs_Page_BlocksCode
   blocks_demo: no_rodekors_docs_Page_BlocksDemo
+  blocks_summary: no_rodekors_docs_Page_BlocksSummary
   blocks_table: no_rodekors_docs_Page_BlocksTable
 }
 
@@ -2171,6 +2278,16 @@ type no_rodekors_docs_Page_BlocksQuote {
   publicationUrl: String
 }
 
+"""Summary"""
+type no_rodekors_docs_Page_BlocksSummary {
+  title: String
+  intro: String
+  items(offset: Int, first: Int): [no_rodekors_docs_Page_Items_4]
+  alignment: String
+  linkText: String
+  link: no_rodekors_docs_Page_Link_2
+}
+
 """Table"""
 type no_rodekors_docs_Page_BlocksTable {
   title: String
@@ -2193,6 +2310,7 @@ enum no_rodekors_docs_Page_Blocks_OptionEnum {
   blocks_cards
   blocks_code
   blocks_demo
+  blocks_summary
   blocks_table
 }
 
@@ -2205,6 +2323,11 @@ type no_rodekors_docs_Page_Data {
 
 """External"""
 type no_rodekors_docs_Page_External {
+  externalLink: String
+}
+
+"""External"""
+type no_rodekors_docs_Page_External_2 {
   externalLink: String
 }
 
@@ -2223,6 +2346,11 @@ enum no_rodekors_docs_Page_Form_OptionEnum {
 
 """Internal"""
 type no_rodekors_docs_Page_Internal {
+  internalLink: Content
+}
+
+"""Internal"""
+type no_rodekors_docs_Page_Internal_2 {
   internalLink: Content
 }
 
@@ -2249,6 +2377,13 @@ type no_rodekors_docs_Page_Items_3 {
   theme: String
 }
 
+"""Key figure"""
+type no_rodekors_docs_Page_Items_4 {
+  label: String
+  value: String
+  description: String
+}
+
 """Link"""
 type no_rodekors_docs_Page_Link {
   _selected: no_rodekors_docs_Page_Link_OptionEnum
@@ -2257,8 +2392,23 @@ type no_rodekors_docs_Page_Link {
   none: String
 }
 
+"""Link"""
+type no_rodekors_docs_Page_Link_2 {
+  _selected: no_rodekors_docs_Page_Link_OptionEnum_2
+  internal: no_rodekors_docs_Page_Internal_2
+  external: no_rodekors_docs_Page_External_2
+  none: String
+}
+
 """Link option enum."""
 enum no_rodekors_docs_Page_Link_OptionEnum {
+  internal
+  external
+  none
+}
+
+"""Link option enum."""
+enum no_rodekors_docs_Page_Link_OptionEnum_2 {
   internal
   external
   none

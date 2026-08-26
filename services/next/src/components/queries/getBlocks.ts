@@ -107,6 +107,21 @@ export default () =>
               ...richTextFragment
             }
           }
+          # Key figures with an optional pre-resolved link (see guillotine).
+          ...on no_rodekors_docs_BlockSummary {
+            __typename
+            title
+            intro
+            items {
+              label
+              value
+              description
+            }
+            alignment
+            linkText
+            url
+            contentPath
+          }
           # Plain strings only — code is rendered verbatim, never as HTML.
           ...on no_rodekors_docs_BlockCode {
             __typename

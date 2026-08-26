@@ -97,6 +97,16 @@
           </items>
         </option>
 
+        <!-- LOCAL block (site/mixins/blocks-summary): key figures with an
+             optional link, per the BLOKK_OPPSUMMERING wireframe. -->
+        <option name="blocks-summary">
+          <label i18n="mixin.blocks-summary.displayName">Summary</label>
+          <help-text i18n="mixin.blocks-summary.description">Key figures with an optional link</help-text>
+          <items>
+            <mixin name="blocks-summary"/>
+          </items>
+        </option>
+
         <!-- LOCAL block (site/mixins/blocks-table): a styled table edited
              with Content Studio's rich-text table tooling. -->
         <option name="blocks-table">

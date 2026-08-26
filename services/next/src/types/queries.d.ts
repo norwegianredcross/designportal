@@ -129,6 +129,15 @@ export type GetBlocksQuery = {
         } & { __typename: "no_rodekors_docs_BlockQuote" })
       | ({
           title: string | null;
+          intro: string | null;
+          alignment: string | null;
+          linkText: string | null;
+          url: string | null;
+          contentPath: string | null;
+          items: Array<{ label: string | null; value: string | null; description: string | null } | null> | null;
+        } & { __typename: "no_rodekors_docs_BlockSummary" })
+      | ({
+          title: string | null;
           table: {
             processedHtml: string | null;
             links: Array<{
@@ -326,6 +335,15 @@ export type GetSidePageQuery = {
             } | null> | null;
           } | null;
         } & { __typename: "no_rodekors_docs_BlockQuote" })
+      | ({
+          title: string | null;
+          intro: string | null;
+          alignment: string | null;
+          linkText: string | null;
+          url: string | null;
+          contentPath: string | null;
+          items: Array<{ label: string | null; value: string | null; description: string | null } | null> | null;
+        } & { __typename: "no_rodekors_docs_BlockSummary" })
       | ({
           title: string | null;
           table: {

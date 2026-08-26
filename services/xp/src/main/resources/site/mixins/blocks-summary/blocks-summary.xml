@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- LOCAL block (not from lib-xp-item-blocks): the BLOKK_OPPSUMMERING
+     pattern - a title and intro over a row of key figures (big number,
+     label above, description below), with an optional "see more" link.
+     Values are TextLines, not Longs: real figures carry units and locale
+     formatting ("40 %", "4,2", "120+") that numbers can't. -->
+<mixin xmlns="urn:enonic:xp:model:1.0">
+  <display-name i18n="mixin.blocks-summary.displayName">Summary</display-name>
+  <description i18n="mixin.blocks-summary.description">Key figures with an optional link</description>
+
+  <form>
+    <input name="title" type="TextLine">
+      <label i18n="mixin.blocks-summary.title">Title</label>
+      <occurrences minimum="0" maximum="1"/>
+    </input>
+
+    <input name="intro" type="TextLine">
+      <label i18n="mixin.blocks-summary.intro">Intro</label>
+      <occurrences minimum="0" maximum="1"/>
+    </input>
+
+    <item-set name="items">
+      <label i18n="mixin.blocks-summary.item">Key figure</label>
+      <occurrences minimum="1" maximum="6"/>
+      <items>
+        <input name="label" type="TextLine">
+          <label i18n="mixin.blocks-summary.item.label">Label</label>
+          <occurrences minimum="0" maximum="1"/>
+        </input>
+        <input name="value" type="TextLine">
+          <label i18n="mixin.blocks-summary.item.value">Value</label>
+          <help-text i18n="mixin.blocks-summary.item.value.helpText">The big figure, e.g. "40 %", "120+", "4,2"</help-text>
+          <occurrences minimum="1" maximum="1"/>
+        </input>
+        <input name="description" type="TextLine">
+          <label i18n="mixin.blocks-summary.item.description">Description</label>
+          <occurrences minimum="0" maximum="1"/>
+        </input>
+      </items>
+    </item-set>
+
+    <input name="alignment" type="ComboBox">
+      <label i18n="mixin.blocks-summary.alignment">Alignment</label>
+      <occurrences minimum="0" maximum="1"/>
+      <config>
+        <option value="left" i18n="mixin.blocks-summary.alignment.left">Left</option>
+        <option value="center" i18n="mixin.blocks-summary.alignment.center">Centered</option>
+        <option value="spread" i18n="mixin.blocks-summary.alignment.spread">Spread across the width</option>
+      </config>
+      <default>left</default>
+    </input>
+
+    <input name="linkText" type="TextLine">
+      <label i18n="mixin.blocks-summary.linkText">Link text</label>
+      <help-text i18n="mixin.blocks-summary.linkText.helpText">The link only shows when both text and target are set</help-text>
+      <occurrences minimum="0" maximum="1"/>
+    </input>
+
+    <mixin name="blocks-link"/>
+  </form>
+</mixin>

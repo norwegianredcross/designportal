@@ -37,6 +37,9 @@ const OBJECT_TYPE_BLOCK_CARDS = "no_rodekors_docs_BlockCards";
 const OBJECT_TYPE_BLOCK_CODE = "no_rodekors_docs_BlockCode";
 const OBJECT_TYPE_BLOCK_DEMO = "no_rodekors_docs_BlockDemo";
 const OBJECT_TYPE_BLOCK_TABLE = "no_rodekors_docs_BlockTable";
+const OBJECT_TYPE_BLOCK_SUMMARY = "no_rodekors_docs_BlockSummary";
+// Not a union member: the nested key-figure type inside BlockSummary.
+const OBJECT_TYPE_BLOCK_SUMMARY_ITEM = "no_rodekors_docs_BlockSummaryItem";
 // Not a union member: the nested item type inside BlockCards.
 const OBJECT_TYPE_BLOCK_CARD = "no_rodekors_docs_BlockCard";
 const FIELD_BLOCKS = "blocks";
@@ -290,6 +293,50 @@ export function extensions(graphQL: GraphQL): Extensions {
           },
         },
       },
+      // One key figure inside a summary block. Lives outside the Block
+      // union — it only appears nested under BlockSummary.items.
+      [OBJECT_TYPE_BLOCK_SUMMARY_ITEM]: {
+        description: "One key figure in a summary block",
+        fields: {
+          label: {
+            type: graphQL.GraphQLString,
+          },
+          value: {
+            type: graphQL.GraphQLString,
+          },
+          description: {
+            type: graphQL.GraphQLString,
+          },
+        },
+      },
+      // Key figures with an optional link; the link arrives pre-resolved
+      // like the cards' (url XOR contentPath).
+      [OBJECT_TYPE_BLOCK_SUMMARY]: {
+        description: "Key figures with an optional link",
+        fields: {
+          title: {
+            type: graphQL.GraphQLString,
+          },
+          intro: {
+            type: graphQL.GraphQLString,
+          },
+          items: {
+            type: graphQL.list(graphQL.reference(OBJECT_TYPE_BLOCK_SUMMARY_ITEM)),
+          },
+          alignment: {
+            type: graphQL.GraphQLString,
+          },
+          linkText: {
+            type: graphQL.GraphQLString,
+          },
+          url: {
+            type: graphQL.GraphQLString,
+          },
+          contentPath: {
+            type: graphQL.GraphQLString,
+          },
+        },
+      },
     },
     unions: {
       [OBJECT_TYPE_BLOCK]: {
@@ -304,6 +351,7 @@ export function extensions(graphQL: GraphQL): Extensions {
           graphQL.reference(OBJECT_TYPE_BLOCK_CODE),
           graphQL.reference(OBJECT_TYPE_BLOCK_DEMO),
           graphQL.reference(OBJECT_TYPE_BLOCK_TABLE),
+          graphQL.reference(OBJECT_TYPE_BLOCK_SUMMARY),
         ],
       },
     },
@@ -466,6 +514,23 @@ type ResolvedTableBlock = {
   table?: string;
 };
 
+type ResolvedSummaryItem = {
+  label?: string;
+  value?: string;
+  description?: string;
+};
+
+type ResolvedSummaryBlock = {
+  __typename: typeof OBJECT_TYPE_BLOCK_SUMMARY;
+  title?: string;
+  intro?: string;
+  items: ResolvedSummaryItem[];
+  alignment?: string;
+  linkText?: string;
+  url?: string;
+  contentPath?: string;
+};
+
 type ResolvedDemoBlock = {
   __typename: typeof OBJECT_TYPE_BLOCK_DEMO;
   demo?: string;
@@ -520,6 +585,7 @@ function resolveBlocks(
   | ResolvedCodeBlock
   | ResolvedDemoBlock
   | ResolvedTableBlock
+  | ResolvedSummaryBlock
   | null {
   switch (block._selected) {
     case "blocks-text":
@@ -628,6 +694,28 @@ function resolveBlocks(
         title: block["blocks-table"].title,
         table: block["blocks-table"].table,
       };
+    case "blocks-summary": {
+      const summary = block["blocks-summary"];
+      // Same link resolution as the cards: internal targets fetched once
+      // for their path; external urls pass through verbatim.
+      const target =
+        summary.link?._selected === "internal" ? getOne({ key: summary.link.internal.internalLink }) : null;
+      return {
+        __typename: OBJECT_TYPE_BLOCK_SUMMARY,
+        title: summary.title,
+        intro: summary.intro,
+        // forceArray: XP stores a single repeatable entry as a bare object.
+        items: forceArray(summary.items).map((item) => ({
+          label: item.label,
+          value: item.value,
+          description: item.description,
+        })),
+        alignment: summary.alignment,
+        linkText: summary.linkText,
+        url: summary.link?._selected === "external" ? summary.link.external.externalLink : undefined,
+        contentPath: target?._path ?? undefined,
+      };
+    }
     case "blocks-demo":
       return {
         __typename: OBJECT_TYPE_BLOCK_DEMO,
