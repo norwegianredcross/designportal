@@ -96,6 +96,16 @@
             <mixin name="blocks-demo"/>
           </items>
         </option>
+
+        <!-- LOCAL block (site/mixins/blocks-table): a styled table edited
+             with Content Studio's rich-text table tooling. -->
+        <option name="blocks-table">
+          <label i18n="mixin.blocks-table.displayName">Table</label>
+          <help-text i18n="mixin.blocks-table.description">A table with an optional title</help-text>
+          <items>
+            <mixin name="blocks-table"/>
+          </items>
+        </option>
       </options>
     </option-set>
   </form>

@@ -367,5 +367,26 @@ export type SiteContent = {
           title?: string;
         };
       }
+    | {
+        /**
+         * Selected
+         */
+        _selected: "blocks-table";
+
+        /**
+         * Table
+         */
+        "blocks-table": {
+          /**
+           * Title
+           */
+          title?: string;
+
+          /**
+           * Table
+           */
+          table: string;
+        };
+      }
   >;
 };

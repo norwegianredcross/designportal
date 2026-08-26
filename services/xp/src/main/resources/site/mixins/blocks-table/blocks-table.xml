@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- LOCAL block (not from lib-xp-item-blocks): the BLOKK_TABELL pattern.
+     The table itself is an HtmlArea restricted to table tooling — Content
+     Studio's table editor gives editors real headers, row/column operations
+     and cell merging, which a rows-as-item-sets form can't match. The
+     frontend styles whatever table markup comes out (see TableBlock). -->
+<mixin xmlns="urn:enonic:xp:model:1.0">
+  <display-name i18n="mixin.blocks-table.displayName">Table</display-name>
+  <description i18n="mixin.blocks-table.description">A table with an optional title</description>
+
+  <form>
+    <input name="title" type="TextLine">
+      <label i18n="mixin.blocks-table.title">Title</label>
+      <occurrences minimum="0" maximum="1"/>
+    </input>
+
+    <input name="table" type="HtmlArea">
+      <label i18n="mixin.blocks-table.table">Table</label>
+      <help-text i18n="mixin.blocks-table.table.helpText">Choose "Headers: First row" in the table dialog to get the tinted header band</help-text>
+      <occurrences minimum="1" maximum="1"/>
+      <config>
+        <exclude>*</exclude>
+        <include>Table | Bold Italic | RemoveFormat | Link Unlink</include>
+      </config>
+    </input>
+  </form>
+</mixin>

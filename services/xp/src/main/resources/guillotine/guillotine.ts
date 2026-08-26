@@ -36,6 +36,7 @@ const OBJECT_TYPE_BLOCK_IMAGE = "no_rodekors_docs_BlockImage";
 const OBJECT_TYPE_BLOCK_CARDS = "no_rodekors_docs_BlockCards";
 const OBJECT_TYPE_BLOCK_CODE = "no_rodekors_docs_BlockCode";
 const OBJECT_TYPE_BLOCK_DEMO = "no_rodekors_docs_BlockDemo";
+const OBJECT_TYPE_BLOCK_TABLE = "no_rodekors_docs_BlockTable";
 // Not a union member: the nested item type inside BlockCards.
 const OBJECT_TYPE_BLOCK_CARD = "no_rodekors_docs_BlockCard";
 const FIELD_BLOCKS = "blocks";
@@ -273,6 +274,22 @@ export function extensions(graphQL: GraphQL): Extensions {
           },
         },
       },
+      // The table's markup comes from a table-only HtmlArea; RichText (not
+      // a plain string) so links inside cells resolve like everywhere else.
+      [OBJECT_TYPE_BLOCK_TABLE]: {
+        description: "A table with an optional title",
+        fields: {
+          title: {
+            type: graphQL.GraphQLString,
+          },
+          table: {
+            type: graphQL.reference(ObjectTypeName.RichText),
+            args: {
+              processHtml: graphQL.reference("ProcessHtmlInput"),
+            },
+          },
+        },
+      },
     },
     unions: {
       [OBJECT_TYPE_BLOCK]: {
@@ -286,6 +303,7 @@ export function extensions(graphQL: GraphQL): Extensions {
           graphQL.reference(OBJECT_TYPE_BLOCK_CARDS),
           graphQL.reference(OBJECT_TYPE_BLOCK_CODE),
           graphQL.reference(OBJECT_TYPE_BLOCK_DEMO),
+          graphQL.reference(OBJECT_TYPE_BLOCK_TABLE),
         ],
       },
     },
@@ -327,6 +345,10 @@ export function extensions(graphQL: GraphQL): Extensions {
                 type: "absolute",
               })
             : null,
+      },
+      [OBJECT_TYPE_BLOCK_TABLE]: {
+        table: (env: DataFetchingEnvironment<ProcessHtmlArgs, LocalContextRecord, ResolvedTableBlock>) =>
+          buildRichText(env.source.table, env.args),
       },
       [OBJECT_TYPE_BLOCK_FACTBOX]: {
         text: (env: DataFetchingEnvironment<ProcessHtmlArgs, LocalContextRecord, ResolvedFactboxBlock>) =>
@@ -437,6 +459,13 @@ type ResolvedCodeBlock = {
   label?: string;
 };
 
+type ResolvedTableBlock = {
+  __typename: typeof OBJECT_TYPE_BLOCK_TABLE;
+  title?: string;
+  // Raw HtmlArea string; becomes RichText via the field resolver.
+  table?: string;
+};
+
 type ResolvedDemoBlock = {
   __typename: typeof OBJECT_TYPE_BLOCK_DEMO;
   demo?: string;
@@ -490,6 +519,7 @@ function resolveBlocks(
   | ResolvedCardsBlock
   | ResolvedCodeBlock
   | ResolvedDemoBlock
+  | ResolvedTableBlock
   | null {
   switch (block._selected) {
     case "blocks-text":
@@ -591,6 +621,12 @@ function resolveBlocks(
         code: block["blocks-code"].code,
         language: block["blocks-code"].language,
         label: block["blocks-code"].label,
+      };
+    case "blocks-table":
+      return {
+        __typename: OBJECT_TYPE_BLOCK_TABLE,
+        title: block["blocks-table"].title,
+        table: block["blocks-table"].table,
       };
     case "blocks-demo":
       return {

@@ -1,0 +1,43 @@
+/* Styling for tables authored in the rich-text table editor. Lives in a
+ * module because the markup is editor-generated HTML — descendant
+ * selectors are the only way to reach it. Tokens-only. */
+
+/* Wide tables scroll inside the block instead of breaking the page — the
+ * one hard rule for docs tables (token/prop tables get wide). The outer
+ * border and radius live HERE, not on the table: border-collapse makes
+ * browsers ignore a table's own border-radius, while overflow clipping
+ * rounds the corners for free. */
+.scroller {
+  overflow-x: auto;
+  border: 1px solid var(--ds-color-neutral-border-subtle);
+  border-radius: var(--ds-border-radius-md);
+}
+
+.scroller table {
+  /* !important: Content Studio's table dialog writes an inline
+   * style="width:500px" by default, which would beat any selector. */
+  width: 100% !important;
+  border-collapse: collapse;
+  font-size: var(--ds-font-size-3);
+}
+
+.scroller th,
+.scroller td {
+  padding: var(--ds-size-2) var(--ds-size-4);
+  border: 1px solid var(--ds-color-neutral-border-subtle);
+  text-align: left;
+  vertical-align: top;
+}
+
+/* Header row: the tinted band from the BLOKK_TABELL wireframe. Covers both
+ * real <th> headers and a plain first row inside <thead>. */
+.scroller thead tr,
+.scroller th {
+  background-color: var(--ds-color-neutral-background-tinted);
+  font-weight: var(--ds-font-weight-medium);
+}
+
+/* Zebra striping on body rows, per the wireframe. */
+.scroller tbody tr:nth-child(even) {
+  background-color: var(--ds-color-neutral-background-tinted);
+}

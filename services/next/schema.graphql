@@ -653,6 +653,7 @@ type Part_no_rodekors_docs_blocks_view_Blocks {
   blocks_cards: Part_no_rodekors_docs_blocks_view_BlocksCards
   blocks_code: Part_no_rodekors_docs_blocks_view_BlocksCode
   blocks_demo: Part_no_rodekors_docs_blocks_view_BlocksDemo
+  blocks_table: Part_no_rodekors_docs_blocks_view_BlocksTable
 }
 
 """Accordion"""
@@ -707,6 +708,12 @@ type Part_no_rodekors_docs_blocks_view_BlocksQuote {
   publicationUrl: String
 }
 
+"""Table"""
+type Part_no_rodekors_docs_blocks_view_BlocksTable {
+  title: String
+  table(processHtml: ProcessHtmlInput): RichText
+}
+
 """Text"""
 type Part_no_rodekors_docs_blocks_view_BlocksText {
   title: String
@@ -723,6 +730,7 @@ enum Part_no_rodekors_docs_blocks_view_Blocks_OptionEnum {
   blocks_cards
   blocks_code
   blocks_demo
+  blocks_table
 }
 
 """External"""
@@ -1085,6 +1093,7 @@ type XData_no_rodekors_docs_site_content_DataConfig_Blocks {
   blocks_cards: XData_no_rodekors_docs_site_content_DataConfig_BlocksCards
   blocks_code: XData_no_rodekors_docs_site_content_DataConfig_BlocksCode
   blocks_demo: XData_no_rodekors_docs_site_content_DataConfig_BlocksDemo
+  blocks_table: XData_no_rodekors_docs_site_content_DataConfig_BlocksTable
 }
 
 """Accordion"""
@@ -1139,6 +1148,12 @@ type XData_no_rodekors_docs_site_content_DataConfig_BlocksQuote {
   publicationUrl: String
 }
 
+"""Table"""
+type XData_no_rodekors_docs_site_content_DataConfig_BlocksTable {
+  title: String
+  table(processHtml: ProcessHtmlInput): RichText
+}
+
 """Text"""
 type XData_no_rodekors_docs_site_content_DataConfig_BlocksText {
   title: String
@@ -1155,6 +1170,7 @@ enum XData_no_rodekors_docs_site_content_DataConfig_Blocks_OptionEnum {
   blocks_cards
   blocks_code
   blocks_demo
+  blocks_table
 }
 
 """External"""
@@ -1964,7 +1980,7 @@ type media_Video_Data {
 }
 
 """Your page content is build by a sequence of blocks."""
-union no_rodekors_docs_Block = no_rodekors_docs_BlockText | no_rodekors_docs_BlockAccordion | no_rodekors_docs_BlockQuote | no_rodekors_docs_BlockFactbox | no_rodekors_docs_BlockImages | no_rodekors_docs_BlockCards | no_rodekors_docs_BlockCode | no_rodekors_docs_BlockDemo
+union no_rodekors_docs_Block = no_rodekors_docs_BlockText | no_rodekors_docs_BlockAccordion | no_rodekors_docs_BlockQuote | no_rodekors_docs_BlockFactbox | no_rodekors_docs_BlockImages | no_rodekors_docs_BlockCards | no_rodekors_docs_BlockCode | no_rodekors_docs_BlockDemo | no_rodekors_docs_BlockTable
 
 """A list of expandable sections"""
 type no_rodekors_docs_BlockAccordion {
@@ -2042,6 +2058,12 @@ type no_rodekors_docs_BlockQuote {
   publicationUrl: String
 }
 
+"""A table with an optional title"""
+type no_rodekors_docs_BlockTable {
+  title: String
+  table(processHtml: ProcessHtmlInput): RichText
+}
+
 """Rich text field that can contain lists and tables"""
 type no_rodekors_docs_BlockText {
   title: String
@@ -2094,6 +2116,7 @@ type no_rodekors_docs_Page_Blocks {
   blocks_cards: no_rodekors_docs_Page_BlocksCards
   blocks_code: no_rodekors_docs_Page_BlocksCode
   blocks_demo: no_rodekors_docs_Page_BlocksDemo
+  blocks_table: no_rodekors_docs_Page_BlocksTable
 }
 
 """Accordion"""
@@ -2148,6 +2171,12 @@ type no_rodekors_docs_Page_BlocksQuote {
   publicationUrl: String
 }
 
+"""Table"""
+type no_rodekors_docs_Page_BlocksTable {
+  title: String
+  table(processHtml: ProcessHtmlInput): RichText
+}
+
 """Text"""
 type no_rodekors_docs_Page_BlocksText {
   title: String
@@ -2164,6 +2193,7 @@ enum no_rodekors_docs_Page_Blocks_OptionEnum {
   blocks_cards
   blocks_code
   blocks_demo
+  blocks_table
 }
 
 """Page - no.rodekors.docs:page data"""

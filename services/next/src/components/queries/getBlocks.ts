@@ -98,6 +98,15 @@ export default () =>
               contentPath
             }
           }
+          # The table block: markup from a table-only HtmlArea, styled by
+          # the view; RichText so links inside cells resolve.
+          ...on no_rodekors_docs_BlockTable {
+            __typename
+            title
+            table(processHtml: {type: absolute}) {
+              ...richTextFragment
+            }
+          }
           # Plain strings only — code is rendered verbatim, never as HTML.
           ...on no_rodekors_docs_BlockCode {
             __typename

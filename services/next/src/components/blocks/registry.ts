@@ -7,6 +7,7 @@ import { DemoBlock } from "./DemoBlock";
 import { FactboxBlock } from "./FactboxBlock";
 import { ImagesBlock } from "./ImagesBlock";
 import { QuoteBlock } from "./QuoteBlock";
+import { TableBlock } from "./TableBlock";
 import { TextBlock } from "./TextBlock";
 
 /**
@@ -29,4 +30,6 @@ export const blockComponents: Record<string, FunctionComponent<{ data: any; meta
   no_rodekors_docs_BlockCards: CardsBlock,
   // Gallery of figures; images arrive pre-scaled from XP (see ImagesBlock).
   no_rodekors_docs_BlockImages: ImagesBlock,
+  // Styled table from the rich-text table editor (local block).
+  no_rodekors_docs_BlockTable: TableBlock,
 };
