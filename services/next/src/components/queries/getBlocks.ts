@@ -98,29 +98,6 @@ export default () =>
               contentPath
             }
           }
-          # The hero/split block: text column beside an image. Link and
-          # notch fields arrive pre-resolved from XP (see guillotine.ts);
-          # the image is scaled for the mobile full-width stack at retina
-          # density (the desktop half-column needs less).
-          ...on no_rodekors_docs_BlockTextImage {
-            __typename
-            kicker
-            title
-            text(processHtml: {type: absolute}) {
-              ...richTextFragment
-            }
-            buttonText
-            url
-            contentPath
-            imageUrl(scale: "width(1536)")
-            altText
-            imagePlacement
-            form
-            notchCorner
-            notchWidth
-            notchDepth
-            theme
-          }
           # Plain strings only — code is rendered verbatim, never as HTML.
           ...on no_rodekors_docs_BlockCode {
             __typename

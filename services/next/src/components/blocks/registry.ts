@@ -8,7 +8,6 @@ import { FactboxBlock } from "./FactboxBlock";
 import { ImagesBlock } from "./ImagesBlock";
 import { QuoteBlock } from "./QuoteBlock";
 import { TextBlock } from "./TextBlock";
-import { TextImageBlock } from "./TextImageBlock";
 
 /**
  * The single source of truth for "which React component renders which
@@ -30,6 +29,4 @@ export const blockComponents: Record<string, FunctionComponent<{ data: any; meta
   no_rodekors_docs_BlockCards: CardsBlock,
   // Gallery of figures; images arrive pre-scaled from XP (see ImagesBlock).
   no_rodekors_docs_BlockImages: ImagesBlock,
-  // Hero/split: text column beside an image (local block).
-  no_rodekors_docs_BlockTextImage: TextImageBlock,
 };

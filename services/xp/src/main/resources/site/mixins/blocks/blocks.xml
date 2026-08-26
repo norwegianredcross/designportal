@@ -96,17 +96,6 @@
             <mixin name="blocks-demo"/>
           </items>
         </option>
-
-        <!-- LOCAL block (site/mixins/blocks-text-image): the hero/split
-             composition from the Design retning — text column beside an
-             image with the optional notched silhouette. -->
-        <option name="blocks-text-image">
-          <label i18n="mixin.blocks-text-image.displayName">Text and image</label>
-          <help-text i18n="mixin.blocks-text-image.description">A text column beside an image</help-text>
-          <items>
-            <mixin name="blocks-text-image"/>
-          </items>
-        </option>
       </options>
     </option-set>
   </form>
