@@ -26,27 +26,33 @@ export default () =>
             }
           }
         }
-        # The sidebar IS the content tree: the site's children in the
-        # site's childOrder (manual once an editor drag-sorts the tree;
-        # Content Studio's modified-time default until then). Unpublished
-        # pages never reach master, so publishing state is the visibility
-        # switch. The "/docs" key mirrors the site path in ENONIC_MAPPINGS
-        # (no:designsystem-docs/docs) — if the site is ever moved, both
-        # must change together. first:100 assumes a docs site never has
-        # more top-level pages than that; beyond it the nav truncates
-        # silently.
-        nav: get(key:"/docs") {
+        # The sidebar IS the content tree, scoped to the SECTION you are
+        # in: a section page (child of the site) lists its own children;
+        # an article lists its siblings (the parent section's children).
+        # Order follows the tree's childOrder (manual once editors sort);
+        # unpublished pages never reach master. first:100 assumes a
+        # section never has more pages than that.
+        nav: get(key:$path) {
           children(first:100) {
             displayName
             _path
-            # children returns EVERYTHING under the site (template folders
-            # included); the view keeps only real pages.
             type
-            # The page's kicker doubles as its sidebar category: pages with
-            # the same kicker group under one heading, in tree order.
             ... on no_rodekors_docs_Page {
               data {
                 kicker
+              }
+            }
+          }
+          parent {
+            _path
+            children(first:100) {
+              displayName
+              _path
+              type
+              ... on no_rodekors_docs_Page {
+                data {
+                  kicker
+                }
               }
             }
           }

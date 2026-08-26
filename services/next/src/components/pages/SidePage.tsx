@@ -6,6 +6,13 @@ import { blockComponents } from "@/components/blocks/registry";
 import { forceArray, isRichTextData, notNullOrUndefined } from "@/utils";
 import styles from "./SidePage.module.css";
 
+interface NavChild {
+  displayName?: string | null;
+  _path?: string | null;
+  type?: string | null;
+  data?: { kicker?: string | null } | null;
+}
+
 interface SidePageProps {
   data?: {
     get?: {
@@ -13,14 +20,8 @@ interface SidePageProps {
       data?: { kicker?: string | null; title?: string | null; intro?: unknown } | null;
     } | null;
     nav?: {
-      children?:
-        | ({
-            displayName?: string | null;
-            _path?: string | null;
-            type?: string | null;
-            data?: { kicker?: string | null } | null;
-          } | null)[]
-        | null;
+      children?: (NavChild | null)[] | null;
+      parent?: { _path?: string | null; children?: (NavChild | null)[] | null } | null;
     } | null;
     blocks?: unknown[] | null;
   };
@@ -30,19 +31,28 @@ interface SidePageProps {
 /**
  * Renders a Side directly from its content data — no page composition or
  * template required. The layout mirrors the docs SPA's Code-section shell:
- * a sticky sidebar (which IS the content tree — the site's children in
- * the site's childOrder, published pages only) beside the
+ * a sticky sidebar scoped to the SECTION you are in (a section page lists
+ * its own children; an article lists its siblings — the tree's childOrder,
+ * published pages only) beside the
  * article, whose header carries the SPA's article identity (kicker, maroon
  * display title, maroon ingress, red lead rule).
  */
 const SidePage = ({ data, meta }: SidePageProps) => {
   const header = data?.get?.data;
   const currentPath = data?.get?._path;
-  const navItems = forceArray(data?.nav?.children)
-    .filter(notNullOrUndefined)
-    // Only real pages belong in the nav — the tree also holds template
-    // folders and whatever else editors keep under the site.
-    .filter((item) => item.type === "no.rodekors.docs:page");
+  // Section scoping: a section page (one with page children of its own)
+  // lists those children; an article lists its siblings. Only real pages
+  // count — the tree also holds template folders and whatever else
+  // editors keep around.
+  const isPage = (item: NavChild) => item.type === "no.rodekors.docs:page";
+  const ownChildren = forceArray(data?.nav?.children).filter(notNullOrUndefined).filter(isPage);
+  const siblings = forceArray(data?.nav?.parent?.children).filter(notNullOrUndefined).filter(isPage);
+  // An empty SECTION landing (direct child of the site) gets no sidebar at
+  // all — falling back to siblings there would list the five sections,
+  // duplicating the header with a shifted meaning. Same /docs coupling as
+  // the queries.
+  const isEmptySectionLanding = ownChildren.length === 0 && data?.nav?.parent?._path === "/docs";
+  const navItems = ownChildren.length > 0 ? ownChildren : isEmptySectionLanding ? [] : siblings;
   // Group by kicker (the page's category line), preserving the editors'
   // tree order both for groups and within them; kicker-less pages gather
   // under the default heading.

@@ -24,6 +24,7 @@ import { getUrl, I18n } from "@enonic/nextjs-adapter";
 import { fetchContent } from "@enonic/nextjs-adapter/server";
 import MainView from "@enonic/nextjs-adapter/views/MainView";
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { Footer, Header } from "rk-designsystem";
 import type { CommonQuery } from "@/types/queries";
 import "../../components/_mappings";
@@ -42,6 +43,13 @@ export default async function Page({ params }: { params: Promise<PageProps> }) {
     ...resolvedParams,
     contentPath: resolvedParams.contentPath ?? [],
   });
+
+  // A missing or unpublished content path must be a real 404 — without
+  // this the shell (header/footer) renders around an empty main, which
+  // reads as a broken page rather than a moved/deleted one.
+  if (data.error?.code === "404") {
+    notFound();
+  }
 
   await I18n.setLocale(data.meta.locale ?? data.meta.defaultLocale);
 

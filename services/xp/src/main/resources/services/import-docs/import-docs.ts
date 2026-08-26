@@ -20,19 +20,23 @@
  * lib-content verbatim, so the seed scripts (scripts/seed-*.mjs) own the
  * block shapes and this file never needs to change when blocks are added.
  */
-import { create, get as getContent, modify, publish } from "/lib/xp/content";
+import { create, delete as deleteContent, get as getContent, modify, publish, unpublish } from "/lib/xp/content";
 import { run } from "/lib/xp/context";
 
 interface ImportPayload {
   /** Content-repo path of the parent, e.g. "/docs" (the site). */
-  parentPath: string;
+  parentPath?: string;
   /** URL slug for the article, e.g. "kom-i-gang". */
-  name: string;
-  displayName: string;
+  name?: string;
+  displayName?: string;
   /** Page fields verbatim: title, intro (HTML string), blocks (option-set array). */
-  data: Record<string, unknown>;
+  data?: Record<string, unknown>;
   /** Also push draft -> master so the public site renders it immediately. */
   publish?: boolean;
+  /** Paths to unpublish and delete BEFORE any upsert — lets restructure
+   * seeds clean up content that moved, instead of leaving ghosts at the
+   * old paths. Nonexistent paths are skipped silently (idempotent). */
+  remove?: string[];
 }
 
 export function post(req: { body?: string; headers: Record<string, string | undefined> }): {
@@ -56,8 +60,12 @@ export function post(req: { body?: string; headers: Record<string, string | unde
   } catch {
     return json(400, { error: "Body must be JSON" });
   }
-  if (!payload.parentPath || !payload.name || !payload.data) {
-    return json(400, { error: "parentPath, name and data are required" });
+  const hasUpsert = Boolean(payload.parentPath || payload.name || payload.data || payload.displayName);
+  if (hasUpsert && !(payload.parentPath && payload.name && payload.data && payload.displayName)) {
+    return json(400, { error: "parentPath, name, displayName and data are required together" });
+  }
+  if (!hasUpsert && !payload.remove?.length) {
+    return json(400, { error: "Nothing to do" });
   }
 
   // The anonymous caller carries no write access by itself; the token check
@@ -70,7 +78,28 @@ export function post(req: { body?: string; headers: Record<string, string | unde
     const result = run(
       { branch: "draft", user: { login: "su", idProvider: "system" }, principals: ["role:system.admin"] },
       () => {
-        const path = `${payload.parentPath}/${payload.name}`;
+        // Removals first, so a restructure can delete the old path and
+        // recreate at the new one in a single logical run of seeds.
+        const removed: string[] = [];
+        for (const removePath of payload.remove ?? []) {
+          const doomed = getContent({ key: removePath });
+          if (!doomed) continue;
+          // unpublish pulls it off master; delete drops the draft.
+          unpublish({ keys: [doomed._id] });
+          if (deleteContent({ key: removePath })) {
+            removed.push(removePath);
+          }
+        }
+        if (!hasUpsert) {
+          return { action: "removed", removed };
+        }
+        // hasUpsert guarantees these exist (guard above); the casts keep
+        // tsc aligned with that runtime guard.
+        const parentPath = payload.parentPath as string;
+        const name = payload.name as string;
+        const displayName = payload.displayName as string;
+        const data = payload.data as Record<string, unknown>;
+        const path = `${parentPath}/${name}`;
         const existing = getContent({ key: path });
 
         // Upsert so the seed scripts are safe to re-run while iterating on the
@@ -79,17 +108,17 @@ export function post(req: { body?: string; headers: Record<string, string | unde
           ? modify({
               key: path,
               editor: (c) => {
-                c.displayName = payload.displayName;
-                c.data = payload.data as typeof c.data;
+                c.displayName = displayName;
+                c.data = data as typeof c.data;
                 return c;
               },
             })
           : create({
-              parentPath: payload.parentPath,
-              name: payload.name,
-              displayName: payload.displayName,
+              parentPath,
+              name,
+              displayName,
               contentType: `${app.name}:page`,
-              data: payload.data,
+              data,
             });
         if (!content) {
           // modify() is typed nullable; unreachable here since we only modify
@@ -108,6 +137,7 @@ export function post(req: { body?: string; headers: Record<string, string | unde
           _id: content._id,
           _path: content._path,
           published: payload.publish === true,
+          removed,
         };
       },
     );

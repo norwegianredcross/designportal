@@ -17,17 +17,18 @@
 import { code, postArticle, text } from "./seed-lib.mjs";
 
 const article = {
-  parentPath: "/docs",
+  parentPath: "/docs/kode",
+  // The article moved from the flat /docs root into the Kode section; the
+  // remove op cleans up the old path so no ghost remains.
+  remove: ["/docs/kom-i-gang"],
   name: "kom-i-gang",
   displayName: "Kom i gang",
   // Published directly so the rendered page can be verified on the public
   // frontend right away; the article remains fully editable in Content Studio.
   publish: true,
   data: {
-    // Sidebar category (groups pages under one heading) and the header
-    // menu flag — the same fields editors control in Content Studio.
+    // Sidebar category — groups pages under one heading within the section.
     kicker: "Oversikt",
-    showInMenu: true,
     title: "Kom i gang",
     intro: "<p>For å ta i bruk Røde Kors Designsystem i din Next.js (eller annen React) applikasjon:</p>",
     blocks: [

@@ -274,6 +274,36 @@ export type GetSidePageQuery = {
             | { displayName: string | null; _path: string; type: string | null; data: { kicker: string | null } | null }
             | null
           > | null;
+          parent:
+            | {
+                _path: string;
+                children: Array<
+                  | { displayName: string | null; _path: string; type: string | null }
+                  | { displayName: string | null; _path: string; type: string | null }
+                  | {
+                      displayName: string | null;
+                      _path: string;
+                      type: string | null;
+                      data: { kicker: string | null } | null;
+                    }
+                  | null
+                > | null;
+              }
+            | {
+                _path: string;
+                children: Array<
+                  | { displayName: string | null; _path: string; type: string | null }
+                  | { displayName: string | null; _path: string; type: string | null }
+                  | {
+                      displayName: string | null;
+                      _path: string;
+                      type: string | null;
+                      data: { kicker: string | null } | null;
+                    }
+                  | null
+                > | null;
+              }
+            | null;
         }
       | {
           children: Array<
@@ -282,6 +312,36 @@ export type GetSidePageQuery = {
             | { displayName: string | null; _path: string; type: string | null; data: { kicker: string | null } | null }
             | null
           > | null;
+          parent:
+            | {
+                _path: string;
+                children: Array<
+                  | { displayName: string | null; _path: string; type: string | null }
+                  | { displayName: string | null; _path: string; type: string | null }
+                  | {
+                      displayName: string | null;
+                      _path: string;
+                      type: string | null;
+                      data: { kicker: string | null } | null;
+                    }
+                  | null
+                > | null;
+              }
+            | {
+                _path: string;
+                children: Array<
+                  | { displayName: string | null; _path: string; type: string | null }
+                  | { displayName: string | null; _path: string; type: string | null }
+                  | {
+                      displayName: string | null;
+                      _path: string;
+                      type: string | null;
+                      data: { kicker: string | null } | null;
+                    }
+                  | null
+                > | null;
+              }
+            | null;
         }
       | null;
     blocks: Array<

@@ -13,13 +13,15 @@ const articles = [];
 
 // ---------------------------------------------------------------- designtokens
 articles.push({
-  parentPath: "/docs",
+  parentPath: "/docs/kode",
+  remove: ["/docs/designtokens"],
   name: "designtokens",
-  displayName: "Røde Kors Designtokens",
+  // Short name for nav (the SPA's sidebar label); the full article title
+  // lives in data.title.
+  displayName: "Designtokens",
   publish: true,
   data: {
     kicker: "Oversikt",
-    showInMenu: true,
     title: "Røde Kors Designtokens",
     intro:
       "<p>Dette repositoriet er den sentrale kilden for alle designtokens (farger, typografi, avstander osv.) for Norges Røde Kors sine digitale produkter. Det fungerer som en sannhetskilde (single source of truth) som automatisk distribuerer stilendringer til alle tilkoblede prosjekter.</p>",
@@ -86,7 +88,8 @@ export default function RootLayout({ children }) {
 
 // ---------------------------------------------------------------------- fonter
 articles.push({
-  parentPath: "/docs",
+  parentPath: "/docs/kode",
+  remove: ["/docs/fonter"],
   name: "fonter",
   displayName: "Fonter",
   publish: true,
@@ -162,7 +165,8 @@ export default function App({ Component, pageProps }: AppProps) {
 
 // ---------------------------------------------------------------------- ikoner
 articles.push({
-  parentPath: "/docs",
+  parentPath: "/docs/kode",
+  remove: ["/docs/ikoner"],
   name: "ikoner",
   displayName: "Bruk av Ikoner",
   publish: true,
@@ -222,7 +226,8 @@ export function IconsExample() {
 
 // ----------------------------------------------------------------------- bidra
 articles.push({
-  parentPath: "/docs",
+  parentPath: "/docs/kode",
+  remove: ["/docs/bidra"],
   name: "bidra",
   displayName: "Bidra til Biblioteket",
   publish: true,
