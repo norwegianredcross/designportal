@@ -223,15 +223,39 @@ export type GetSidePageQueryVariables = Exact<{
 
 export type GetSidePageQuery = {
   guillotine: {
-    get: {
-      data: {
-        title: string | null;
-        intro: {
-          processedHtml: string | null;
-          links: Array<{ ref: string | null; uri: string | null } | null> | null;
-        } | null;
-      } | null;
-    } | null;
+    get:
+      | { _path: string }
+      | { _path: string }
+      | {
+          _path: string;
+          data: {
+            kicker: string | null;
+            title: string | null;
+            intro: {
+              processedHtml: string | null;
+              links: Array<{ ref: string | null; uri: string | null } | null> | null;
+            } | null;
+          } | null;
+        }
+      | null;
+    nav:
+      | {
+          children: Array<
+            | { displayName: string | null; _path: string; type: string | null }
+            | { displayName: string | null; _path: string; type: string | null }
+            | { displayName: string | null; _path: string; type: string | null; data: { kicker: string | null } | null }
+            | null
+          > | null;
+        }
+      | {
+          children: Array<
+            | { displayName: string | null; _path: string; type: string | null }
+            | { displayName: string | null; _path: string; type: string | null }
+            | { displayName: string | null; _path: string; type: string | null; data: { kicker: string | null } | null }
+            | null
+          > | null;
+        }
+      | null;
     blocks: Array<
       | ({
           title: string | null;

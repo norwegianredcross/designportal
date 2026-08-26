@@ -9,6 +9,13 @@
     <field-set>
       <label i18n="mixin.content-header.displayName">Content header</label>
       <items>
+        <!-- The article kicker ("stikktittel"/category line) above the
+             title, per the docs SPA's article shell. -->
+        <input type="TextLine" name="kicker">
+          <label i18n="mixin.content-header.kicker">Kicker</label>
+          <occurrences minimum="0" maximum="1"/>
+        </input>
+
         <input type="TextLine" name="title">
           <label i18n="mixin.content-header.title">Title</label>
           <occurrences minimum="0" maximum="1"/>

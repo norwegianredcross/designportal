@@ -1121,6 +1121,7 @@ type XData_no_rodekors_docs_ApplicationConfig {
 Extra data config for application ['no.rodekors.docs}'] and descriptor ['site-content']
 """
 type XData_no_rodekors_docs_site_content_DataConfig {
+  kicker: String
   title: String
   intro(processHtml: ProcessHtmlInput): RichText
   blocks(offset: Int, first: Int): [XData_no_rodekors_docs_site_content_DataConfig_Blocks]
@@ -2316,6 +2317,7 @@ enum no_rodekors_docs_Page_Blocks_OptionEnum {
 
 """Page - no.rodekors.docs:page data"""
 type no_rodekors_docs_Page_Data {
+  kicker: String
   title: String
   intro(processHtml: ProcessHtmlInput): RichText
   blocks(offset: Int, first: Int): [no_rodekors_docs_Page_Blocks]

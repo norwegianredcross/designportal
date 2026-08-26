@@ -1,0 +1,116 @@
+/* The docs layout: sticky sidebar beside the article column, mirroring the
+ * docs SPA's Code-section shell token for token (cream panel, pill links,
+ * red-tinted active state, maroon group title). Lives in a module because
+ * sticky positioning, hover states and the mobile restack need real CSS. */
+
+.layout {
+  display: flex;
+  gap: var(--ds-size-10);
+  align-items: flex-start;
+}
+
+.sidebar {
+  width: 280px;
+  flex-shrink: 0;
+  position: sticky;
+  top: var(--ds-size-6);
+  max-height: calc(100vh - var(--ds-size-12));
+  overflow-y: auto;
+  padding: var(--ds-size-6) var(--ds-size-4);
+  background: var(--ds-color-neutral-background-tinted);
+  border-radius: var(--ds-border-radius-xl);
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+}
+
+.group + .group {
+  margin-top: var(--ds-size-8);
+}
+
+.groupTitle {
+  font-size: var(--ds-font-size-2);
+  font-weight: var(--ds-font-weight-semibold);
+  color: var(--ds-color-primary-color-red-text-default);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0 0 var(--ds-size-2);
+  padding-left: var(--ds-size-3);
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.link {
+  display: block;
+  padding: var(--ds-size-2) var(--ds-size-3);
+  font-size: var(--ds-font-size-3);
+  color: var(--ds-color-neutral-text-default);
+  text-decoration: none;
+  border-radius: var(--ds-border-radius-full);
+  transition: background-color 0.2s ease;
+}
+
+.link:hover {
+  background-color: var(--ds-color-neutral-background-default);
+}
+
+.linkActive {
+  composes: link;
+  background-color: var(--ds-color-primary-color-red-surface-tinted);
+  color: var(--ds-color-primary-color-red-text-default);
+  font-weight: var(--ds-font-weight-medium);
+}
+
+.linkActive:hover {
+  background-color: var(--ds-color-primary-color-red-surface-hover);
+}
+
+.article {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+/* Article shell: the SPA's DocArticle treatment — uppercase kicker, maroon
+ * display title and ingress, thin red lead rule. */
+.kicker {
+  font-size: var(--ds-font-size-2);
+  font-weight: var(--ds-font-weight-semibold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ds-color-neutral-text-subtle);
+  margin: 0 0 var(--ds-size-3);
+}
+
+.ingress {
+  color: var(--ds-color-primary-color-red-text-default);
+}
+
+.leadRule {
+  border: none;
+  border-top: 2px solid var(--ds-color-primary-color-red-base-default);
+  width: var(--ds-size-30);
+  margin: var(--ds-size-6) 0 var(--ds-size-8);
+}
+
+/* Below the breakpoint the sidebar becomes a plain block above the
+ * article — sticky rails don't work on narrow screens. */
+@media (max-width: 900px) {
+  .layout {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    position: static;
+    width: 100%;
+    max-height: none;
+  }
+}

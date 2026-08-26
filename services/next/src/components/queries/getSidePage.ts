@@ -10,8 +10,11 @@ export default () =>
     query GetSidePage($path:ID!) {
       guillotine {
         get(key:$path) {
+          # _path identifies the current page in the sidebar (active state).
+          _path
           ... on no_rodekors_docs_Page {
             data {
+              kicker
               title
               intro {
                 processedHtml
@@ -19,6 +22,31 @@ export default () =>
                   ref
                   uri
                 }
+              }
+            }
+          }
+        }
+        # The sidebar IS the content tree: the site's children in the
+        # site's childOrder (manual once an editor drag-sorts the tree;
+        # Content Studio's modified-time default until then). Unpublished
+        # pages never reach master, so publishing state is the visibility
+        # switch. The "/docs" key mirrors the site path in ENONIC_MAPPINGS
+        # (no:designsystem-docs/docs) — if the site is ever moved, both
+        # must change together. first:100 assumes a docs site never has
+        # more top-level pages than that; beyond it the nav truncates
+        # silently.
+        nav: get(key:"/docs") {
+          children(first:100) {
+            displayName
+            _path
+            # children returns EVERYTHING under the site (template folders
+            # included); the view keeps only real pages.
+            type
+            # The page's kicker doubles as its sidebar category: pages with
+            # the same kicker group under one heading, in tree order.
+            ... on no_rodekors_docs_Page {
+              data {
+                kicker
               }
             }
           }
