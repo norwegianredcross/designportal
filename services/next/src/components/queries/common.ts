@@ -11,6 +11,21 @@ query Common($path:ID!){
       displayName
       type
     }
+    # Header navigation: the pages editors ticked "Show in main menu" on,
+    # in the site's childOrder. Same "/docs" <-> ENONIC_MAPPINGS coupling
+    # as the sidebar query in getSidePage.
+    menu: get(key:"/docs") {
+      children(first:100) {
+        displayName
+        _path
+        type
+        ... on no_rodekors_docs_Page {
+          data {
+            showInMenu
+          }
+        }
+      }
+    }
   }
 }`);
 

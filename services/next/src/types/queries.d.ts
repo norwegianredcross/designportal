@@ -15,6 +15,34 @@ export type CommonQuery = {
       | { displayName: string | null; type: string | null }
       | { displayName: string | null; type: string | null }
       | null;
+    menu:
+      | {
+          children: Array<
+            | { displayName: string | null; _path: string; type: string | null }
+            | { displayName: string | null; _path: string; type: string | null }
+            | {
+                displayName: string | null;
+                _path: string;
+                type: string | null;
+                data: { showInMenu: boolean | null } | null;
+              }
+            | null
+          > | null;
+        }
+      | {
+          children: Array<
+            | { displayName: string | null; _path: string; type: string | null }
+            | { displayName: string | null; _path: string; type: string | null }
+            | {
+                displayName: string | null;
+                _path: string;
+                type: string | null;
+                data: { showInMenu: boolean | null } | null;
+              }
+            | null
+          > | null;
+        }
+      | null;
   } | null;
 };
 

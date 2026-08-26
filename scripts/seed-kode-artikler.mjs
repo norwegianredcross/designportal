@@ -18,6 +18,8 @@ articles.push({
   displayName: "Røde Kors Designtokens",
   publish: true,
   data: {
+    kicker: "Oversikt",
+    showInMenu: true,
     title: "Røde Kors Designtokens",
     intro:
       "<p>Dette repositoriet er den sentrale kilden for alle designtokens (farger, typografi, avstander osv.) for Norges Røde Kors sine digitale produkter. Det fungerer som en sannhetskilde (single source of truth) som automatisk distribuerer stilendringer til alle tilkoblede prosjekter.</p>",
@@ -89,6 +91,7 @@ articles.push({
   displayName: "Fonter",
   publish: true,
   data: {
+    kicker: "Oversikt",
     title: "Fonter",
     intro:
       "<p>Røde Kors Designsystem bruker fonten Source Sans 3. For Next.js prosjekter, bruk next/font for optimal fontlasting.</p>",
@@ -164,6 +167,7 @@ articles.push({
   displayName: "Bruk av Ikoner",
   publish: true,
   data: {
+    kicker: "Oversikt",
     title: "Bruk av Ikoner",
     intro:
       "<p>Dette biblioteket er designet for å fungere sømløst med det offisielle ikonsettet fra NAV/Aksel.</p>",
@@ -223,6 +227,7 @@ articles.push({
   displayName: "Bidra til Biblioteket",
   publish: true,
   data: {
+    kicker: "Bidra",
     title: "Bidra til Biblioteket",
     intro:
       "<p>Denne guiden gir et sett med standarder og beste praksis for å lage nye komponenter. Å følge disse retningslinjene sikrer at komponentbiblioteket vårt forblir konsistent, tilgjengelig og enkelt å vedlikeholde.</p>",

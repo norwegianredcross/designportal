@@ -11,6 +11,11 @@ export type SiteContent = {
   title?: string;
 
   /**
+   * Show in main menu
+   */
+  showInMenu: boolean;
+
+  /**
    * Intro
    */
   intro?: string;

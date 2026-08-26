@@ -24,6 +24,10 @@ const article = {
   // frontend right away; the article remains fully editable in Content Studio.
   publish: true,
   data: {
+    // Sidebar category (groups pages under one heading) and the header
+    // menu flag — the same fields editors control in Content Studio.
+    kicker: "Oversikt",
+    showInMenu: true,
     title: "Kom i gang",
     intro: "<p>For å ta i bruk Røde Kors Designsystem i din Next.js (eller annen React) applikasjon:</p>",
     blocks: [

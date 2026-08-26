@@ -1123,6 +1123,7 @@ Extra data config for application ['no.rodekors.docs}'] and descriptor ['site-co
 type XData_no_rodekors_docs_site_content_DataConfig {
   kicker: String
   title: String
+  showInMenu: Boolean
   intro(processHtml: ProcessHtmlInput): RichText
   blocks(offset: Int, first: Int): [XData_no_rodekors_docs_site_content_DataConfig_Blocks]
 }
@@ -2319,6 +2320,7 @@ enum no_rodekors_docs_Page_Blocks_OptionEnum {
 type no_rodekors_docs_Page_Data {
   kicker: String
   title: String
+  showInMenu: Boolean
   intro(processHtml: ProcessHtmlInput): RichText
   blocks(offset: Int, first: Int): [no_rodekors_docs_Page_Blocks]
 }

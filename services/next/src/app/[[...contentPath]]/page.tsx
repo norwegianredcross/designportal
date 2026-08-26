@@ -17,14 +17,15 @@
  * Importing _mappings here is what populates the ComponentRegistry — the
  * import runs for its side effects.
  */
-import { I18n } from "@enonic/nextjs-adapter";
-import { fetchContent } from "@enonic/nextjs-adapter/server";
-import MainView from "@enonic/nextjs-adapter/views/MainView";
-import type { Metadata } from "next";
 // Imported straight from the package: rk-designsystem ships per-module
 // 'use client' banners, so server components can use Header/Footer without
 // local client wrappers.
+import { getUrl, I18n } from "@enonic/nextjs-adapter";
+import { fetchContent } from "@enonic/nextjs-adapter/server";
+import MainView from "@enonic/nextjs-adapter/views/MainView";
+import type { Metadata } from "next";
 import { Footer, Header } from "rk-designsystem";
+import type { CommonQuery } from "@/types/queries";
 import "../../components/_mappings";
 
 // Content is served from Enonic XP at request time, so render every page
@@ -44,9 +45,31 @@ export default async function Page({ params }: { params: Promise<PageProps> }) {
 
   await I18n.setLocale(data.meta.locale ?? data.meta.defaultLocale);
 
+  // Header navigation is editor-curated: the common query collects pages
+  // where "Show in main menu" is ticked; the tree's childOrder decides
+  // the sequence, and getUrl maps the content paths into app URLs.
+  // The adapter unwraps the guillotine level: common is the query's
+  // guillotine object directly ({ get, menu }).
+  const menuChildren = (data.common as CommonQuery["guillotine"] | null)?.menu?.children;
+  const navItems = (menuChildren ?? [])
+    .filter((item): item is NonNullable<typeof item> => Boolean(item))
+    // The generated children type is a union of content types; only the
+    // page member carries data, hence the "in" narrowing.
+    .filter((item) => item.type === "no.rodekors.docs:page" && "data" in item && item.data?.showInMenu && item._path)
+    .map((item) => ({
+      label: item.displayName ?? "",
+      href: getUrl(item._path ?? "", data.meta),
+    }));
+
   return (
     <>
-      <Header showUser={false} showSearch={false} showThemeToggle={true} />
+      <Header
+        showUser={false}
+        showSearch={false}
+        showThemeToggle={true}
+        navItems={navItems}
+        showNavItems={navItems.length > 0}
+      />
       <main>
         <MainView {...data} />
       </main>

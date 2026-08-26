@@ -33,6 +33,33 @@ const serviceUrl =
   process.env.XP_IMPORT_URL ??
   "http://localhost:8080/site/designsystem-docs/master/docs/_/service/no.rodekors.docs/import-docs";
 
+/** ContentSelector fields (e.g. the cards' internal links) store content
+ * REFERENCES — ids, not paths. This resolves a path to its id through the
+ * public Guillotine endpoint on master. */
+export async function contentId(path) {
+  const apiUrl = process.env.XP_API_URL ?? "http://localhost:8080/site/designsystem-docs/master";
+  const res = await fetch(apiUrl, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    // The path travels as a variable, never interpolated into the query.
+    body: JSON.stringify({
+      query: "query($k:ID!){ guillotine { get(key:$k) { _id } } }",
+      variables: { k: path },
+    }),
+  });
+  if (!res.ok) {
+    console.error(`Guillotine lookup failed for ${path}: ${res.status}`);
+    process.exit(1);
+  }
+  const json = await res.json();
+  const id = json?.data?.guillotine?.get?._id;
+  if (!id) {
+    console.error(`Could not resolve content id for ${path} — is it published?`);
+    process.exit(1);
+  }
+  return id;
+}
+
 export async function postArticle(article) {
   const token = process.env.DOCS_IMPORT_TOKEN;
   if (!token) {

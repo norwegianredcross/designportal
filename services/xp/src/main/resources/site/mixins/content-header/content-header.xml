@@ -21,6 +21,14 @@
           <occurrences minimum="0" maximum="1"/>
         </input>
 
+        <!-- Header navigation is curated: editors tick this on the few
+             pages that belong in the main menu (the common query collects
+             them on every render). -->
+        <input name="showInMenu" type="CheckBox">
+          <label i18n="mixin.content-header.showInMenu">Show in main menu</label>
+          <default>unchecked</default>
+        </input>
+
         <input name="intro" type="HtmlArea">
           <label i18n="mixin.content-header.intro">Intro</label>
           <occurrences minimum="0" maximum="1"/>
