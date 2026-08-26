@@ -653,6 +653,7 @@ type Part_no_rodekors_docs_blocks_view_Blocks {
   blocks_cards: Part_no_rodekors_docs_blocks_view_BlocksCards
   blocks_code: Part_no_rodekors_docs_blocks_view_BlocksCode
   blocks_demo: Part_no_rodekors_docs_blocks_view_BlocksDemo
+  blocks_text_image: Part_no_rodekors_docs_blocks_view_BlocksTextImage
 }
 
 """Accordion"""
@@ -715,6 +716,20 @@ type Part_no_rodekors_docs_blocks_view_BlocksText {
   text(processHtml: ProcessHtmlInput): RichText
 }
 
+"""Tekst og bilde"""
+type Part_no_rodekors_docs_blocks_view_BlocksTextImage {
+  kicker: String
+  title: String
+  text(processHtml: ProcessHtmlInput): RichText
+  buttonText: String
+  link: Part_no_rodekors_docs_blocks_view_Link_2
+  imageId: Content
+  altText: String
+  imagePlacement: String
+  form: Part_no_rodekors_docs_blocks_view_Form
+  theme: String
+}
+
 """Content blocks option enum."""
 enum Part_no_rodekors_docs_blocks_view_Blocks_OptionEnum {
   blocks_text
@@ -725,6 +740,7 @@ enum Part_no_rodekors_docs_blocks_view_Blocks_OptionEnum {
   blocks_cards
   blocks_code
   blocks_demo
+  blocks_text_image
 }
 
 """External"""
@@ -732,8 +748,31 @@ type Part_no_rodekors_docs_blocks_view_External {
   externalLink: String
 }
 
+"""External"""
+type Part_no_rodekors_docs_blocks_view_External_2 {
+  externalLink: String
+}
+
+"""Form"""
+type Part_no_rodekors_docs_blocks_view_Form {
+  _selected: Part_no_rodekors_docs_blocks_view_Form_OptionEnum
+  rounded: String
+  notch: Part_no_rodekors_docs_blocks_view_Notch
+}
+
+"""Form option enum."""
+enum Part_no_rodekors_docs_blocks_view_Form_OptionEnum {
+  rounded
+  notch
+}
+
 """Internal"""
 type Part_no_rodekors_docs_blocks_view_Internal {
+  internalLink: Content
+}
+
+"""Internal"""
+type Part_no_rodekors_docs_blocks_view_Internal_2 {
   internalLink: Content
 }
 
@@ -768,11 +807,33 @@ type Part_no_rodekors_docs_blocks_view_Link {
   none: String
 }
 
+"""Link"""
+type Part_no_rodekors_docs_blocks_view_Link_2 {
+  _selected: Part_no_rodekors_docs_blocks_view_Link_OptionEnum_2
+  internal: Part_no_rodekors_docs_blocks_view_Internal_2
+  external: Part_no_rodekors_docs_blocks_view_External_2
+  none: String
+}
+
 """Link option enum."""
 enum Part_no_rodekors_docs_blocks_view_Link_OptionEnum {
   internal
   external
   none
+}
+
+"""Link option enum."""
+enum Part_no_rodekors_docs_blocks_view_Link_OptionEnum_2 {
+  internal
+  external
+  none
+}
+
+"""Notch (utsnitt)"""
+type Part_no_rodekors_docs_blocks_view_Notch {
+  corner: String
+  width: String
+  depth: String
 }
 
 """PathMatchDSLExpressionInput type"""
@@ -1067,6 +1128,7 @@ type XData_no_rodekors_docs_site_content_DataConfig_Blocks {
   blocks_cards: XData_no_rodekors_docs_site_content_DataConfig_BlocksCards
   blocks_code: XData_no_rodekors_docs_site_content_DataConfig_BlocksCode
   blocks_demo: XData_no_rodekors_docs_site_content_DataConfig_BlocksDemo
+  blocks_text_image: XData_no_rodekors_docs_site_content_DataConfig_BlocksTextImage
 }
 
 """Accordion"""
@@ -1129,6 +1191,20 @@ type XData_no_rodekors_docs_site_content_DataConfig_BlocksText {
   text(processHtml: ProcessHtmlInput): RichText
 }
 
+"""Tekst og bilde"""
+type XData_no_rodekors_docs_site_content_DataConfig_BlocksTextImage {
+  kicker: String
+  title: String
+  text(processHtml: ProcessHtmlInput): RichText
+  buttonText: String
+  link: XData_no_rodekors_docs_site_content_DataConfig_Link_2
+  imageId: Content
+  altText: String
+  imagePlacement: String
+  form: XData_no_rodekors_docs_site_content_DataConfig_Form
+  theme: String
+}
+
 """Content blocks option enum."""
 enum XData_no_rodekors_docs_site_content_DataConfig_Blocks_OptionEnum {
   blocks_text
@@ -1139,6 +1215,7 @@ enum XData_no_rodekors_docs_site_content_DataConfig_Blocks_OptionEnum {
   blocks_cards
   blocks_code
   blocks_demo
+  blocks_text_image
 }
 
 """External"""
@@ -1146,8 +1223,31 @@ type XData_no_rodekors_docs_site_content_DataConfig_External {
   externalLink: String
 }
 
+"""External"""
+type XData_no_rodekors_docs_site_content_DataConfig_External_2 {
+  externalLink: String
+}
+
+"""Form"""
+type XData_no_rodekors_docs_site_content_DataConfig_Form {
+  _selected: XData_no_rodekors_docs_site_content_DataConfig_Form_OptionEnum
+  rounded: String
+  notch: XData_no_rodekors_docs_site_content_DataConfig_Notch
+}
+
+"""Form option enum."""
+enum XData_no_rodekors_docs_site_content_DataConfig_Form_OptionEnum {
+  rounded
+  notch
+}
+
 """Internal"""
 type XData_no_rodekors_docs_site_content_DataConfig_Internal {
+  internalLink: Content
+}
+
+"""Internal"""
+type XData_no_rodekors_docs_site_content_DataConfig_Internal_2 {
   internalLink: Content
 }
 
@@ -1182,11 +1282,33 @@ type XData_no_rodekors_docs_site_content_DataConfig_Link {
   none: String
 }
 
+"""Link"""
+type XData_no_rodekors_docs_site_content_DataConfig_Link_2 {
+  _selected: XData_no_rodekors_docs_site_content_DataConfig_Link_OptionEnum_2
+  internal: XData_no_rodekors_docs_site_content_DataConfig_Internal_2
+  external: XData_no_rodekors_docs_site_content_DataConfig_External_2
+  none: String
+}
+
 """Link option enum."""
 enum XData_no_rodekors_docs_site_content_DataConfig_Link_OptionEnum {
   internal
   external
   none
+}
+
+"""Link option enum."""
+enum XData_no_rodekors_docs_site_content_DataConfig_Link_OptionEnum_2 {
+  internal
+  external
+  none
+}
+
+"""Notch (utsnitt)"""
+type XData_no_rodekors_docs_site_content_DataConfig_Notch {
+  corner: String
+  width: String
+  depth: String
 }
 
 """Folder - base:folder"""
@@ -1928,7 +2050,7 @@ type media_Video_Data {
 }
 
 """Your page content is build by a sequence of blocks."""
-union no_rodekors_docs_Block = no_rodekors_docs_BlockText | no_rodekors_docs_BlockAccordion | no_rodekors_docs_BlockQuote | no_rodekors_docs_BlockFactbox | no_rodekors_docs_BlockImages | no_rodekors_docs_BlockCards | no_rodekors_docs_BlockCode | no_rodekors_docs_BlockDemo
+union no_rodekors_docs_Block = no_rodekors_docs_BlockText | no_rodekors_docs_BlockAccordion | no_rodekors_docs_BlockQuote | no_rodekors_docs_BlockFactbox | no_rodekors_docs_BlockImages | no_rodekors_docs_BlockCards | no_rodekors_docs_BlockCode | no_rodekors_docs_BlockDemo | no_rodekors_docs_BlockTextImage
 
 """A list of expandable sections"""
 type no_rodekors_docs_BlockAccordion {
@@ -2011,6 +2133,24 @@ type no_rodekors_docs_BlockText {
   text(processHtml: ProcessHtmlInput): RichText
 }
 
+"""A text column beside an image"""
+type no_rodekors_docs_BlockTextImage {
+  kicker: String
+  title: String
+  text(processHtml: ProcessHtmlInput): RichText
+  buttonText: String
+  url: String
+  contentPath: String
+  imageUrl(scale: String!): String
+  altText: String
+  imagePlacement: String
+  form: String
+  notchCorner: String
+  notchWidth: Int
+  notchDepth: Int
+  theme: String
+}
+
 """Page - no.rodekors.docs:page"""
 type no_rodekors_docs_Page implements Content {
   _id: ID!
@@ -2057,6 +2197,7 @@ type no_rodekors_docs_Page_Blocks {
   blocks_cards: no_rodekors_docs_Page_BlocksCards
   blocks_code: no_rodekors_docs_Page_BlocksCode
   blocks_demo: no_rodekors_docs_Page_BlocksDemo
+  blocks_text_image: no_rodekors_docs_Page_BlocksTextImage
 }
 
 """Accordion"""
@@ -2119,6 +2260,20 @@ type no_rodekors_docs_Page_BlocksText {
   text(processHtml: ProcessHtmlInput): RichText
 }
 
+"""Tekst og bilde"""
+type no_rodekors_docs_Page_BlocksTextImage {
+  kicker: String
+  title: String
+  text(processHtml: ProcessHtmlInput): RichText
+  buttonText: String
+  link: no_rodekors_docs_Page_Link_2
+  imageId: Content
+  altText: String
+  imagePlacement: String
+  form: no_rodekors_docs_Page_Form
+  theme: String
+}
+
 """Content blocks option enum."""
 enum no_rodekors_docs_Page_Blocks_OptionEnum {
   blocks_text
@@ -2129,6 +2284,7 @@ enum no_rodekors_docs_Page_Blocks_OptionEnum {
   blocks_cards
   blocks_code
   blocks_demo
+  blocks_text_image
 }
 
 """Page - no.rodekors.docs:page data"""
@@ -2143,8 +2299,31 @@ type no_rodekors_docs_Page_External {
   externalLink: String
 }
 
+"""External"""
+type no_rodekors_docs_Page_External_2 {
+  externalLink: String
+}
+
+"""Form"""
+type no_rodekors_docs_Page_Form {
+  _selected: no_rodekors_docs_Page_Form_OptionEnum
+  rounded: String
+  notch: no_rodekors_docs_Page_Notch
+}
+
+"""Form option enum."""
+enum no_rodekors_docs_Page_Form_OptionEnum {
+  rounded
+  notch
+}
+
 """Internal"""
 type no_rodekors_docs_Page_Internal {
+  internalLink: Content
+}
+
+"""Internal"""
+type no_rodekors_docs_Page_Internal_2 {
   internalLink: Content
 }
 
@@ -2179,11 +2358,33 @@ type no_rodekors_docs_Page_Link {
   none: String
 }
 
+"""Link"""
+type no_rodekors_docs_Page_Link_2 {
+  _selected: no_rodekors_docs_Page_Link_OptionEnum_2
+  internal: no_rodekors_docs_Page_Internal_2
+  external: no_rodekors_docs_Page_External_2
+  none: String
+}
+
 """Link option enum."""
 enum no_rodekors_docs_Page_Link_OptionEnum {
   internal
   external
   none
+}
+
+"""Link option enum."""
+enum no_rodekors_docs_Page_Link_OptionEnum_2 {
+  internal
+  external
+  none
+}
+
+"""Notch (utsnitt)"""
+type no_rodekors_docs_Page_Notch {
+  corner: String
+  width: String
+  depth: String
 }
 
 """Fragment - portal:fragment"""

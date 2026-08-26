@@ -330,5 +330,146 @@ export type Blocks = {
           title?: string;
         };
       }
+    | {
+        /**
+         * Selected
+         */
+        _selected: "blocks-text-image";
+
+        /**
+         * Tekst og bilde
+         */
+        "blocks-text-image": {
+          /**
+           * Stikktittel
+           */
+          kicker?: string;
+
+          /**
+           * Tittel
+           */
+          title: string;
+
+          /**
+           * Tekst
+           */
+          text?: string;
+
+          /**
+           * Knappetekst
+           */
+          buttonText?: string;
+
+          /**
+           * Link
+           */
+          link:
+            | {
+                /**
+                 * Selected
+                 */
+                _selected: "internal";
+
+                /**
+                 * Internal
+                 */
+                internal: {
+                  /**
+                   * Internal link
+                   */
+                  internalLink: string;
+                };
+              }
+            | {
+                /**
+                 * Selected
+                 */
+                _selected: "external";
+
+                /**
+                 * External
+                 */
+                external: {
+                  /**
+                   * External link
+                   */
+                  externalLink: string;
+                };
+              }
+            | {
+                /**
+                 * Selected
+                 */
+                _selected: "none";
+
+                /**
+                 * None
+                 */
+                none: Record<string, unknown>;
+              };
+
+          /**
+           * Bilde
+           */
+          imageId: string;
+
+          /**
+           * Alternativ tekst for bildet
+           */
+          altText: string;
+
+          /**
+           * Bildeplassering
+           */
+          imagePlacement?: "right" | "left";
+
+          /**
+           * Form
+           */
+          form?:
+            | {
+                /**
+                 * Selected
+                 */
+                _selected: "rounded";
+
+                /**
+                 * Avrundet
+                 */
+                rounded: Record<string, unknown>;
+              }
+            | {
+                /**
+                 * Selected
+                 */
+                _selected: "notch";
+
+                /**
+                 * Notch (utsnitt)
+                 */
+                notch: {
+                  /**
+                   * Hjørne
+                   */
+                  corner?: "bottom-right" | "bottom-left" | "top-right" | "top-left";
+
+                  /**
+                   * Utsnittets bredde i prosent
+                   */
+                  width?: number;
+
+                  /**
+                   * Utsnittets dybde i prosent
+                   */
+                  depth?: number;
+                };
+              };
+
+          /**
+           * Theme
+           */
+          theme?: string;
+        };
+      }
   >;
 };

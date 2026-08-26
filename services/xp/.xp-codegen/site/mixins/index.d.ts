@@ -13,5 +13,6 @@ export type BlocksLink = import("./blocks-link").BlocksLink;
 export type BlocksQuote = import("./blocks-quote").BlocksQuote;
 export type BlocksReuse = import("./blocks-reuse").BlocksReuse;
 export type BlocksText = import("./blocks-text").BlocksText;
+export type BlocksTextImage = import("./blocks-text-image").BlocksTextImage;
 export type BlocksTheme = import("./blocks-theme").BlocksTheme;
 export type ContentHeader = import("./content-header").ContentHeader;

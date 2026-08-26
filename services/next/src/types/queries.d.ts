@@ -146,6 +146,38 @@ export type GetBlocksQuery = {
             } | null> | null;
           } | null;
         } & { __typename: "no_rodekors_docs_BlockText" })
+      | ({
+          kicker: string | null;
+          title: string | null;
+          buttonText: string | null;
+          url: string | null;
+          contentPath: string | null;
+          imageUrl: string | null;
+          altText: string | null;
+          imagePlacement: string | null;
+          form: string | null;
+          notchCorner: string | null;
+          notchWidth: number | null;
+          notchDepth: number | null;
+          theme: string | null;
+          text: {
+            processedHtml: string | null;
+            links: Array<{
+              ref: string | null;
+              uri: string | null;
+              content: { _id: string } | { _id: string } | null;
+              media: {
+                intent: MediaIntentType | null;
+                content: { _id: string } | { _id: string } | { mediaUrl: string | null; _id: string } | null;
+              } | null;
+            } | null> | null;
+            images: Array<{
+              ref: string | null;
+              image: { _id: string } | { _id: string } | { imageUrl: string | null; _id: string } | null;
+              style: { name: string | null; aspectRatio: string | null; filter: string | null } | null;
+            } | null> | null;
+          } | null;
+        } & { __typename: "no_rodekors_docs_BlockTextImage" })
       | null
     > | null;
   } | null;
@@ -324,6 +356,38 @@ export type GetSidePageQuery = {
             } | null> | null;
           } | null;
         } & { __typename: "no_rodekors_docs_BlockText" })
+      | ({
+          kicker: string | null;
+          title: string | null;
+          buttonText: string | null;
+          url: string | null;
+          contentPath: string | null;
+          imageUrl: string | null;
+          altText: string | null;
+          imagePlacement: string | null;
+          form: string | null;
+          notchCorner: string | null;
+          notchWidth: number | null;
+          notchDepth: number | null;
+          theme: string | null;
+          text: {
+            processedHtml: string | null;
+            links: Array<{
+              ref: string | null;
+              uri: string | null;
+              content: { _id: string } | { _id: string } | null;
+              media: {
+                intent: MediaIntentType | null;
+                content: { _id: string } | { _id: string } | { mediaUrl: string | null; _id: string } | null;
+              } | null;
+            } | null> | null;
+            images: Array<{
+              ref: string | null;
+              image: { _id: string } | { _id: string } | { imageUrl: string | null; _id: string } | null;
+              style: { name: string | null; aspectRatio: string | null; filter: string | null } | null;
+            } | null> | null;
+          } | null;
+        } & { __typename: "no_rodekors_docs_BlockTextImage" })
       | null
     > | null;
   } | null;

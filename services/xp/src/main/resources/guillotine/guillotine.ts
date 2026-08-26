@@ -36,6 +36,7 @@ const OBJECT_TYPE_BLOCK_IMAGE = "no_rodekors_docs_BlockImage";
 const OBJECT_TYPE_BLOCK_CARDS = "no_rodekors_docs_BlockCards";
 const OBJECT_TYPE_BLOCK_CODE = "no_rodekors_docs_BlockCode";
 const OBJECT_TYPE_BLOCK_DEMO = "no_rodekors_docs_BlockDemo";
+const OBJECT_TYPE_BLOCK_TEXT_IMAGE = "no_rodekors_docs_BlockTextImage";
 // Not a union member: the nested item type inside BlockCards.
 const OBJECT_TYPE_BLOCK_CARD = "no_rodekors_docs_BlockCard";
 const FIELD_BLOCKS = "blocks";
@@ -269,6 +270,63 @@ export function extensions(graphQL: GraphQL): Extensions {
           },
         },
       },
+      // The hero/split block: a text column beside an image. Link fields
+      // are pre-resolved like the cards' (url XOR contentPath), the image
+      // follows the quote/image contract (id in storage, URL in the API),
+      // and the notch fields mirror the editor's corner-based option-set.
+      [OBJECT_TYPE_BLOCK_TEXT_IMAGE]: {
+        description: "A text column beside an image",
+        fields: {
+          kicker: {
+            type: graphQL.GraphQLString,
+          },
+          title: {
+            type: graphQL.GraphQLString,
+          },
+          text: {
+            type: graphQL.reference(ObjectTypeName.RichText),
+            args: {
+              processHtml: graphQL.reference("ProcessHtmlInput"),
+            },
+          },
+          buttonText: {
+            type: graphQL.GraphQLString,
+          },
+          url: {
+            type: graphQL.GraphQLString,
+          },
+          contentPath: {
+            type: graphQL.GraphQLString,
+          },
+          imageUrl: {
+            type: graphQL.GraphQLString,
+            args: {
+              scale: graphQL.nonNull(graphQL.GraphQLString),
+            },
+          },
+          altText: {
+            type: graphQL.GraphQLString,
+          },
+          imagePlacement: {
+            type: graphQL.GraphQLString,
+          },
+          form: {
+            type: graphQL.GraphQLString,
+          },
+          notchCorner: {
+            type: graphQL.GraphQLString,
+          },
+          notchWidth: {
+            type: graphQL.GraphQLInt,
+          },
+          notchDepth: {
+            type: graphQL.GraphQLInt,
+          },
+          theme: {
+            type: graphQL.GraphQLString,
+          },
+        },
+      },
     },
     unions: {
       [OBJECT_TYPE_BLOCK]: {
@@ -282,6 +340,7 @@ export function extensions(graphQL: GraphQL): Extensions {
           graphQL.reference(OBJECT_TYPE_BLOCK_CARDS),
           graphQL.reference(OBJECT_TYPE_BLOCK_CODE),
           graphQL.reference(OBJECT_TYPE_BLOCK_DEMO),
+          graphQL.reference(OBJECT_TYPE_BLOCK_TEXT_IMAGE),
         ],
       },
     },
@@ -319,6 +378,20 @@ export function extensions(graphQL: GraphQL): Extensions {
                 // runtime; the arg is typed optional only because Guillotine's
                 // resolver interface requires it, and the cast bridges to the
                 // portal lib's template-literal scale type ("square(96)" etc.).
+                scale: env.args.scale as ImageUrlParams["scale"],
+                type: "absolute",
+              })
+            : null,
+      },
+      [OBJECT_TYPE_BLOCK_TEXT_IMAGE]: {
+        text: (env: DataFetchingEnvironment<ProcessHtmlArgs, LocalContextRecord, ResolvedTextImageBlock>) =>
+          buildRichText(env.source.text, env.args),
+        imageUrl: (env: DataFetchingEnvironment<{ scale?: string }, LocalContextRecord, ResolvedTextImageBlock>) =>
+          env.source.imageId
+            ? imageUrl({
+                id: env.source.imageId,
+                // Non-null in the schema, so always present at runtime; the
+                // cast bridges to the portal lib's template-literal type.
                 scale: env.args.scale as ImageUrlParams["scale"],
                 type: "absolute",
               })
@@ -432,6 +505,26 @@ type ResolvedCodeBlock = {
   label?: string;
 };
 
+type ResolvedTextImageBlock = {
+  __typename: typeof OBJECT_TYPE_BLOCK_TEXT_IMAGE;
+  kicker?: string;
+  title?: string;
+  // Raw HtmlArea string; becomes RichText via the field resolver.
+  text?: string;
+  buttonText?: string;
+  url?: string;
+  contentPath?: string;
+  // Media id for the imageUrl field resolver, like quote/image items.
+  imageId?: string;
+  altText?: string;
+  imagePlacement?: string;
+  form?: string;
+  notchCorner?: string;
+  notchWidth?: number;
+  notchDepth?: number;
+  theme?: string;
+};
+
 type ResolvedDemoBlock = {
   __typename: typeof OBJECT_TYPE_BLOCK_DEMO;
   demo?: string;
@@ -485,6 +578,7 @@ function resolveBlocks(
   | ResolvedCardsBlock
   | ResolvedCodeBlock
   | ResolvedDemoBlock
+  | ResolvedTextImageBlock
   | null {
   switch (block._selected) {
     case "blocks-text":
@@ -582,6 +676,32 @@ function resolveBlocks(
         language: block["blocks-code"].language,
         label: block["blocks-code"].label,
       };
+    case "blocks-text-image": {
+      const ti = block["blocks-text-image"];
+      // Same link resolution as the cards: internal targets fetched once
+      // for their path; external urls pass through verbatim.
+      const target = ti.link?._selected === "internal" ? getOne({ key: ti.link.internal.internalLink }) : null;
+      // The corner-based notch fields only exist when the editor picked
+      // the notch option in the form option-set.
+      const notch = ti.form?._selected === "notch" ? ti.form.notch : undefined;
+      return {
+        __typename: OBJECT_TYPE_BLOCK_TEXT_IMAGE,
+        kicker: ti.kicker,
+        title: ti.title,
+        text: ti.text,
+        buttonText: ti.buttonText,
+        url: ti.link?._selected === "external" ? ti.link.external.externalLink : undefined,
+        contentPath: target?._path ?? undefined,
+        imageId: ti.imageId,
+        altText: ti.altText,
+        imagePlacement: ti.imagePlacement,
+        form: ti.form?._selected,
+        notchCorner: notch?.corner,
+        notchWidth: notch?.width,
+        notchDepth: notch?.depth,
+        theme: ti.theme,
+      };
+    }
     case "blocks-demo":
       return {
         __typename: OBJECT_TYPE_BLOCK_DEMO,
