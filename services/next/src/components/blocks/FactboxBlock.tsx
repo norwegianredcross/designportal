@@ -37,7 +37,9 @@ export function FactboxBlock({ data, meta }: FactboxProps) {
             {data.title}
           </Heading>
         ) : null}
-        {isRichTextData(data.text) ? <RichTextView data={data.text} meta={meta} renderMacroInEditMode={false} /> : null}
+        {isRichTextData(data.text) ? (
+          <RichTextView className="rk-prose" data={data.text} meta={meta} renderMacroInEditMode={false} />
+        ) : null}
       </CardBlock>
     </Card>
   );

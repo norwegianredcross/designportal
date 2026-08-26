@@ -27,7 +27,7 @@ const SidePage = ({ data, meta }: SidePageProps) => {
       <header>
         <h1>{header?.title}</h1>
         {isRichTextData(header?.intro) ? (
-          <RichTextView data={header.intro} meta={meta} renderMacroInEditMode={false} />
+          <RichTextView className="rk-prose" data={header.intro} meta={meta} renderMacroInEditMode={false} />
         ) : null}
         <hr />
       </header>

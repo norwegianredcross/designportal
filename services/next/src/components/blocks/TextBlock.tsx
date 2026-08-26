@@ -21,7 +21,9 @@ export function TextBlock({ data, meta }: TextProps) {
           empty so migrated articles that carry headings inside the rich
           text don't get stray empty <h2> elements. */}
       {data.title ? <h2>{data.title}</h2> : null}
-      {isRichTextData(data.text) ? <RichTextView data={data.text} meta={meta} renderMacroInEditMode={false} /> : null}
+      {isRichTextData(data.text) ? (
+        <RichTextView className="rk-prose" data={data.text} meta={meta} renderMacroInEditMode={false} />
+      ) : null}
     </>
   );
 }

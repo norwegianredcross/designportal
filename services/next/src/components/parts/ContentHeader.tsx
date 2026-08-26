@@ -10,7 +10,7 @@ const ContentHeader = (props: PartProps<GetContentHeaderData>) => {
     <header>
       <h1>{props.data?.title}</h1>
       {isRichTextData(props.data?.intro) ? (
-        <RichTextView data={props.data.intro} meta={props.meta} renderMacroInEditMode={false} />
+        <RichTextView className="rk-prose" data={props.data.intro} meta={props.meta} renderMacroInEditMode={false} />
       ) : null}
       <hr />
     </header>

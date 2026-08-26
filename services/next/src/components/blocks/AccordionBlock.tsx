@@ -26,7 +26,7 @@ export function AccordionBlock({ data, meta }: AccordionProps) {
           <Details key={item.title} data-color={data.theme ?? undefined}>
             <DetailsSummary>{item.title}</DetailsSummary>
             {isRichTextData(item.text) ? (
-              <RichTextView data={item.text} meta={meta} renderMacroInEditMode={false} />
+              <RichTextView className="rk-prose" data={item.text} meta={meta} renderMacroInEditMode={false} />
             ) : null}
             <DetailsContent></DetailsContent>
           </Details>

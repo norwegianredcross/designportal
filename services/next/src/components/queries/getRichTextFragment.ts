@@ -2,8 +2,8 @@
  * Shared fragment for HtmlArea fields. Guillotine's RichText is more than a
  * string: processedHtml keeps working hrefs/srcs (resolved to real URLs by
  * processHtml) and ADDS data-link-ref/data-image-ref marker attributes; the
- * links/images arrays describe what each marker points to. The adapter's
- * RichTextView uses the markers to upgrade plain tags into componentized
+ * links/images arrays describe what each marker points to. The app's
+ * RkRichTextView uses the markers to upgrade plain tags into componentized
  * links/images at render time — which is why rich text queries must select
  * this whole shape, not just processedHtml.
  */

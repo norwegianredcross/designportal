@@ -25,7 +25,9 @@ export function QuoteBlock({ data, meta }: QuoteProps) {
   return (
     <figure>
       <blockquote>
-        {isRichTextData(data.text) ? <RichTextView data={data.text} meta={meta} renderMacroInEditMode={false} /> : null}
+        {isRichTextData(data.text) ? (
+          <RichTextView className="rk-prose" data={data.text} meta={meta} renderMacroInEditMode={false} />
+        ) : null}
       </blockquote>
       <figcaption>
         {data.imageUrl ? (
