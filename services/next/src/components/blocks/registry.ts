@@ -5,6 +5,7 @@ import { CardsBlock } from "./CardsBlock";
 import { CodeBlock } from "./CodeBlock";
 import { DemoBlock } from "./DemoBlock";
 import { FactboxBlock } from "./FactboxBlock";
+import { HeroBlock } from "./HeroBlock";
 import { ImagesBlock } from "./ImagesBlock";
 import { QuoteBlock } from "./QuoteBlock";
 import { SummaryBlock } from "./SummaryBlock";
@@ -35,4 +36,6 @@ export const blockComponents: Record<string, FunctionComponent<{ data: any; meta
   no_rodekors_docs_BlockTable: TableBlock,
   // Key figures with an optional link (local block).
   no_rodekors_docs_BlockSummary: SummaryBlock,
+  // Landing panel with the notched corner (local block).
+  no_rodekors_docs_BlockHero: HeroBlock,
 };

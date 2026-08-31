@@ -118,6 +118,14 @@ export type GetBlocksQuery = {
           } | null;
         } & { __typename: "no_rodekors_docs_BlockFactbox" })
       | ({
+          badge: string | null;
+          badgeMeta: string | null;
+          kicker: string | null;
+          title: string | null;
+          lead: string | null;
+          actions: Array<{ linkText: string | null; url: string | null; contentPath: string | null } | null> | null;
+        } & { __typename: "no_rodekors_docs_BlockHero" })
+      | ({
           size: string | null;
           alignment: string | null;
           form: string | null;
@@ -409,6 +417,14 @@ export type GetSidePageQuery = {
             } | null> | null;
           } | null;
         } & { __typename: "no_rodekors_docs_BlockFactbox" })
+      | ({
+          badge: string | null;
+          badgeMeta: string | null;
+          kicker: string | null;
+          title: string | null;
+          lead: string | null;
+          actions: Array<{ linkText: string | null; url: string | null; contentPath: string | null } | null> | null;
+        } & { __typename: "no_rodekors_docs_BlockHero" })
       | ({
           size: string | null;
           alignment: string | null;

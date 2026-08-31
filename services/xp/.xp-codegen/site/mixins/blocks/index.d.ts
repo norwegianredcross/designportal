@@ -29,6 +29,105 @@ export type Blocks = {
         /**
          * Selected
          */
+        _selected: "blocks-hero";
+
+        /**
+         * Hero
+         */
+        "blocks-hero": {
+          /**
+           * Badge
+           */
+          badge?: string;
+
+          /**
+           * Badge meta
+           */
+          badgeMeta?: string;
+
+          /**
+           * Kicker
+           */
+          kicker?: string;
+
+          /**
+           * Title
+           */
+          title: string;
+
+          /**
+           * Lead
+           */
+          lead?: string;
+
+          /**
+           * Call to action
+           */
+          actions?: Array<{
+            /**
+             * Button text
+             */
+            linkText: string;
+
+            /**
+             * Link
+             */
+            link:
+              | {
+                  /**
+                   * Selected
+                   */
+                  _selected: "internal";
+
+                  /**
+                   * Internal
+                   */
+                  internal: {
+                    /**
+                     * Internal link
+                     */
+                    internalLink: string;
+                  };
+                }
+              | {
+                  /**
+                   * Selected
+                   */
+                  _selected: "external";
+
+                  /**
+                   * External
+                   */
+                  external: {
+                    /**
+                     * External link
+                     */
+                    externalLink: string;
+                  };
+                }
+              | {
+                  /**
+                   * Selected
+                   */
+                  _selected: "none";
+
+                  /**
+                   * None
+                   */
+                  none: Record<string, unknown>;
+                };
+          }>;
+
+          /**
+           * Show component shelf
+           */
+          showSpecimen: boolean;
+        };
+      }
+    | {
+        /**
+         * Selected
+         */
         _selected: "blocks-accordion";
 
         /**

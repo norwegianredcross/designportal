@@ -37,6 +37,9 @@ const OBJECT_TYPE_BLOCK_CARDS = "no_rodekors_docs_BlockCards";
 const OBJECT_TYPE_BLOCK_CODE = "no_rodekors_docs_BlockCode";
 const OBJECT_TYPE_BLOCK_DEMO = "no_rodekors_docs_BlockDemo";
 const OBJECT_TYPE_BLOCK_TABLE = "no_rodekors_docs_BlockTable";
+const OBJECT_TYPE_BLOCK_HERO = "no_rodekors_docs_BlockHero";
+// Not a union member: one call-to-action nested inside BlockHero.
+const OBJECT_TYPE_BLOCK_HERO_ACTION = "no_rodekors_docs_BlockHeroAction";
 const OBJECT_TYPE_BLOCK_SUMMARY = "no_rodekors_docs_BlockSummary";
 // Not a union member: the nested key-figure type inside BlockSummary.
 const OBJECT_TYPE_BLOCK_SUMMARY_ITEM = "no_rodekors_docs_BlockSummaryItem";
@@ -293,6 +296,49 @@ export function extensions(graphQL: GraphQL): Extensions {
           },
         },
       },
+      // One call to action in a hero. Lives outside the Block union —
+      // it only appears nested under BlockHero.actions. The link arrives
+      // pre-resolved (url XOR contentPath), same contract as the cards.
+      [OBJECT_TYPE_BLOCK_HERO_ACTION]: {
+        description: "One call to action in a hero block",
+        fields: {
+          linkText: {
+            type: graphQL.GraphQLString,
+          },
+          url: {
+            type: graphQL.GraphQLString,
+          },
+          contentPath: {
+            type: graphQL.GraphQLString,
+          },
+        },
+      },
+      // The landing panel. Plain strings throughout: the lead is a
+      // TextArea rather than an HtmlArea, so nothing here needs the
+      // rich-text processing the text and factbox blocks go through.
+      [OBJECT_TYPE_BLOCK_HERO]: {
+        description: "Landing panel with a notched corner, title and calls to action",
+        fields: {
+          badge: {
+            type: graphQL.GraphQLString,
+          },
+          badgeMeta: {
+            type: graphQL.GraphQLString,
+          },
+          kicker: {
+            type: graphQL.GraphQLString,
+          },
+          title: {
+            type: graphQL.GraphQLString,
+          },
+          lead: {
+            type: graphQL.GraphQLString,
+          },
+          actions: {
+            type: graphQL.list(graphQL.reference(OBJECT_TYPE_BLOCK_HERO_ACTION)),
+          },
+        },
+      },
       // One key figure inside a summary block. Lives outside the Block
       // union — it only appears nested under BlockSummary.items.
       [OBJECT_TYPE_BLOCK_SUMMARY_ITEM]: {
@@ -352,6 +398,7 @@ export function extensions(graphQL: GraphQL): Extensions {
           graphQL.reference(OBJECT_TYPE_BLOCK_DEMO),
           graphQL.reference(OBJECT_TYPE_BLOCK_TABLE),
           graphQL.reference(OBJECT_TYPE_BLOCK_SUMMARY),
+          graphQL.reference(OBJECT_TYPE_BLOCK_HERO),
         ],
       },
     },
@@ -514,6 +561,22 @@ type ResolvedTableBlock = {
   table?: string;
 };
 
+type ResolvedHeroAction = {
+  linkText?: string;
+  url?: string;
+  contentPath?: string;
+};
+
+type ResolvedHeroBlock = {
+  __typename: typeof OBJECT_TYPE_BLOCK_HERO;
+  badge?: string;
+  badgeMeta?: string;
+  kicker?: string;
+  title?: string;
+  lead?: string;
+  actions: ResolvedHeroAction[];
+};
+
 type ResolvedSummaryItem = {
   label?: string;
   value?: string;
@@ -586,6 +649,7 @@ function resolveBlocks(
   | ResolvedDemoBlock
   | ResolvedTableBlock
   | ResolvedSummaryBlock
+  | ResolvedHeroBlock
   | null {
   switch (block._selected) {
     case "blocks-text":
@@ -694,6 +758,30 @@ function resolveBlocks(
         title: block["blocks-table"].title,
         table: block["blocks-table"].table,
       };
+    case "blocks-hero": {
+      const hero = block["blocks-hero"];
+      return {
+        __typename: OBJECT_TYPE_BLOCK_HERO,
+        badge: hero.badge,
+        badgeMeta: hero.badgeMeta,
+        kicker: hero.kicker,
+        title: hero.title,
+        lead: hero.lead,
+        // forceArray: XP stores a single repeatable entry as a bare
+        // object. Each action resolves its own link the way the cards
+        // and the summary do — internal fetched once for its path,
+        // external passed through verbatim.
+        actions: forceArray(hero.actions).map((action) => {
+          const target =
+            action.link?._selected === "internal" ? getOne({ key: action.link.internal.internalLink }) : null;
+          return {
+            linkText: action.linkText,
+            url: action.link?._selected === "external" ? action.link.external.externalLink : undefined,
+            contentPath: target?._path ?? undefined,
+          };
+        }),
+      };
+    }
     case "blocks-summary": {
       const summary = block["blocks-summary"];
       // Same link resolution as the cards: internal targets fetched once

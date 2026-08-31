@@ -108,6 +108,21 @@ export default () =>
             }
           }
           # Key figures with an optional pre-resolved link (see guillotine).
+          # The landing hero. Actions arrive with their links pre-resolved
+          # by XP (url XOR contentPath), same contract as the cards.
+          ...on no_rodekors_docs_BlockHero {
+            __typename
+            badge
+            badgeMeta
+            kicker
+            title
+            lead
+            actions {
+              linkText
+              url
+              contentPath
+            }
+          }
           ...on no_rodekors_docs_BlockSummary {
             __typename
             title

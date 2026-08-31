@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- LOCAL block (not from lib-xp-item-blocks): the docs landing hero — the
+     typography-led cream panel with the "krysset" step cut out of its
+     top-left corner, carried over from the docs SPA's Home page.
+
+     The notch is the brand-mark slot: it holds a small stamp (the release
+     tag in the SPA) plus a quiet meta word. Both are editorial here rather
+     than derived, because the CMS has no view of package.json.
+
+     Actions are an item-set rather than two fixed link fields so the block
+     composes blocks-link once per action — the same internal/external
+     choice the cards use — instead of duplicating its fields under
+     prefixed names. -->
+<mixin xmlns="urn:enonic:xp:model:1.0">
+  <display-name i18n="mixin.blocks-hero.displayName">Hero</display-name>
+  <description i18n="mixin.blocks-hero.description">Landing panel with a notched corner, title and calls to action</description>
+
+  <form>
+    <input name="badge" type="TextLine">
+      <label i18n="mixin.blocks-hero.badge">Badge</label>
+      <help-text i18n="mixin.blocks-hero.badge.helpText">The stamp in the notched corner, e.g. a version number</help-text>
+      <occurrences minimum="0" maximum="1"/>
+    </input>
+
+    <input name="badgeMeta" type="TextLine">
+      <label i18n="mixin.blocks-hero.badgeMeta">Badge meta</label>
+      <help-text i18n="mixin.blocks-hero.badgeMeta.helpText">Quiet text beside the stamp, e.g. "Open Source"</help-text>
+      <occurrences minimum="0" maximum="1"/>
+    </input>
+
+    <input name="kicker" type="TextLine">
+      <label i18n="mixin.blocks-hero.kicker">Kicker</label>
+      <occurrences minimum="0" maximum="1"/>
+    </input>
+
+    <input name="title" type="TextLine">
+      <label i18n="mixin.blocks-hero.title">Title</label>
+      <occurrences minimum="1" maximum="1"/>
+    </input>
+
+    <input name="lead" type="TextArea">
+      <label i18n="mixin.blocks-hero.lead">Lead</label>
+      <occurrences minimum="0" maximum="1"/>
+    </input>
+
+    <item-set name="actions">
+      <label i18n="mixin.blocks-hero.action">Call to action</label>
+      <help-text i18n="mixin.blocks-hero.action.helpText">The first is rendered as the primary button, the second as secondary</help-text>
+      <occurrences minimum="0" maximum="2"/>
+      <items>
+        <input name="linkText" type="TextLine">
+          <label i18n="mixin.blocks-hero.action.linkText">Button text</label>
+          <occurrences minimum="1" maximum="1"/>
+        </input>
+        <mixin name="blocks-link"/>
+      </items>
+    </item-set>
+  </form>
+</mixin>

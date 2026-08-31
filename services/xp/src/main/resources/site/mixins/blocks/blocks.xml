@@ -17,6 +17,17 @@
           </items>
         </option>
 
+        <!-- LOCAL block (site/mixins/blocks-hero): the landing panel with the
+             notched corner. First in the list because it is the block a
+             landing page starts with. -->
+        <option name="blocks-hero">
+          <label i18n="mixin.blocks-hero.displayName">Hero</label>
+          <help-text i18n="mixin.blocks-hero.description">Landing panel with a notched corner, title and calls to action</help-text>
+          <items>
+            <mixin name="blocks-hero"/>
+          </items>
+        </option>
+
         <option name="blocks-accordion">
           <label i18n="mixin.blocks-accordion.displayName">Accordion</label>
           <help-text i18n="mixin.blocks-accordion.description">A list of expandable sections</help-text>
