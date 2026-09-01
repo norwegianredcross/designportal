@@ -6,6 +6,7 @@ import { Heading, Paragraph } from "rk-designsystem";
 import { blockComponents } from "@/components/blocks/registry";
 import type { Block } from "@/types/blocks";
 import { forceArray, isRichTextData, notNullOrUndefined } from "@/utils";
+import blockStyles from "../parts/BlocksView.module.css";
 import styles from "./SidePage.module.css";
 
 interface NavChild {
@@ -108,17 +109,27 @@ const SidePage = ({ data, meta }: SidePageProps) => {
           ) : null}
           <hr className={styles.leadRule} />
         </header>
-        {blocks.map((block, index) => {
-          // Same widening as BlocksView: the registry is correlated per
-          // typename, but TypeScript cannot narrow the lookup and the union
-          // together.
-          const BlockView = blockComponents[block.__typename] as
-            | FunctionComponent<{ data: Block; meta: MetaData }>
-            | undefined;
-          if (!BlockView) return null;
-          // biome-ignore lint/suspicious/noArrayIndexKey: block order is stable
-          return <BlockView key={`block-${index}`} data={block} meta={meta} />;
-        })}
+        {/* Same container as BlocksView so a Side and a blocks-view part space
+            their blocks identically — the rhythm has one owner. */}
+        <div className={blockStyles.blocks}>
+          {blocks.map((block, index) => {
+            // Same widening as BlocksView: the registry is correlated per
+            // typename, but TypeScript cannot narrow the lookup and the union
+            // together.
+            const BlockView = blockComponents[block.__typename] as
+              | FunctionComponent<{ data: Block; meta: MetaData }>
+              | undefined;
+            if (!BlockView) return null;
+            return (
+              // Same wrapper as BlocksView — see its module for why blocks
+              // need their own boundary element.
+              // biome-ignore lint/suspicious/noArrayIndexKey: block order is stable
+              <div key={`block-${index}`} className={blockStyles.block} data-block={block.__typename}>
+                <BlockView data={block} meta={meta} />
+              </div>
+            );
+          })}
+        </div>
       </article>
     </div>
   );

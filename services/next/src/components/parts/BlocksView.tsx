@@ -5,10 +5,15 @@ import type { GetBlocksQuery } from "@/types/queries";
 import type { Get, PartProps } from "@/types/utils";
 import { forceArray } from "@/utils";
 import { blockComponents } from "../blocks/registry";
+import styles from "./BlocksView.module.css";
 
 type GetBlocksQueryBlock = NonNullable<Get<GetBlocksQuery, "guillotine.blocks">>;
 
 const BlocksView = (props: PartProps<GetBlocksQueryBlock[]>) => {
+  return <div className={styles.blocks}>{renderBlocks(props)}</div>;
+};
+
+const renderBlocks = (props: PartProps<GetBlocksQueryBlock[]>) => {
   return forceArray(props.data).map((data, index) => {
     // The registry is correlated per typename, but TypeScript cannot narrow the
     // lookup and the block union together, so widen to the union the
@@ -19,8 +24,15 @@ const BlocksView = (props: PartProps<GetBlocksQueryBlock[]>) => {
 
     if (!Block) return null;
 
-    // biome-ignore lint/suspicious/noArrayIndexKey: This will not be re-ordered, so allow index in key
-    return <Block key={`block-${index}`} data={data} meta={props.meta} />;
+    return (
+      // The wrapper is the block boundary the stylesheet keys on. Blocks that
+      // return fragments would otherwise spill several roots into the flex
+      // container and pick up between-block spacing internally.
+      // biome-ignore lint/suspicious/noArrayIndexKey: This will not be re-ordered, so allow index in key
+      <div key={`block-${index}`} className={styles.block} data-block={data.__typename}>
+        <Block data={data} meta={props.meta} />
+      </div>
+    );
   });
 };
 

@@ -22,7 +22,7 @@ interface TableProps {
 export function TableBlock({ data, meta }: TableProps) {
   if (!isRichTextData(data.table)) return null;
   return (
-    <section style={{ marginBlock: "var(--ds-size-10)" }}>
+    <section>
       {data.title ? (
         <Heading level={2} data-size="sm" style={{ marginBottom: "var(--ds-size-5)" }}>
           {data.title}

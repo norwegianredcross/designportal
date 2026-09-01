@@ -23,7 +23,7 @@ export function CodeBlock({ data }: CodeProps) {
     // Blocks stack as bare siblings and rely on their elements' own margins
     // for rhythm; the pre's UA margin is zeroed for the header join below,
     // so the wrapper carries the block's vertical spacing instead.
-    <div style={{ marginBlock: "var(--ds-size-4)" }}>
+    <div>
       {/* Header bar attached on top of the panel: the controls used to be
           absolutely overlaid on the code, which collided with long
           single-line snippets. In their own bar they can never cover code,

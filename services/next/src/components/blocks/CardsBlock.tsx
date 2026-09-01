@@ -42,7 +42,7 @@ export function CardsBlock({ data, meta }: CardsProps) {
   const placement = data.imagePlacement ?? (columns === 3 ? "top" : "left");
   const vertical = placement === "top" || placement === "bottom";
   return (
-    <section style={{ marginBlock: "var(--ds-size-10)" }}>
+    <section>
       {data.title ? (
         <Heading level={2} data-size="sm" style={{ marginBottom: "var(--ds-size-5)" }}>
           {data.title}

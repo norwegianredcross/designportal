@@ -30,7 +30,7 @@ export function SummaryBlock({ data, meta }: SummaryProps) {
   // mapped into this app's URL space, same as the cards.
   const href = data.url ?? (data.contentPath ? getUrl(data.contentPath, meta) : undefined);
   return (
-    <section style={{ marginBlock: "var(--ds-size-10)" }}>
+    <section>
       {data.title ? (
         <Heading
           level={2}

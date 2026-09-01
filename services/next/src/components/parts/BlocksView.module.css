@@ -1,0 +1,32 @@
+/* One owner for the rhythm between blocks.
+ *
+ * Each block used to carry its own marginBlock, so the spacing was decided in
+ * six places, none able to see its neighbours — and being inline, no
+ * stylesheet could override it. The rk.no CMS puts a single rule on this
+ * container; we do the same, with one exception below.
+ *
+ * Every block is wrapped in its own element by the renderer. That is load
+ * bearing: TextBlock and AccordionBlock return FRAGMENTS, so without a wrapper
+ * their several roots become direct children here and the between-blocks
+ * margin lands *inside* a text block, between its heading and its prose. */
+.blocks {
+  display: flex;
+  flex-direction: column;
+}
+
+.block + .block {
+  margin-top: var(--ds-size-12);
+}
+
+/* A figure illustrates the prose directly above it, so it belongs to that text
+ * rather than sitting equidistant between two sections. With an even gap
+ * everywhere the Design retning pages read as a flat alternating list of
+ * paragraph, picture, paragraph — nothing tells the eye which text an image
+ * goes with.
+ *
+ * Keyed on the block's own __typename, which the renderer stamps on every
+ * wrapper. An earlier version asked ImagesBlock to mark itself, and the
+ * attribute was silently lost the moment another change rewrote that element. */
+.block + .block[data-block$="BlockImages"] {
+  margin-top: var(--ds-size-5);
+}

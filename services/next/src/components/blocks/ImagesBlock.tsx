@@ -79,9 +79,6 @@ export function ImagesBlock({ data, size = "medium", alignment = "left", shape =
   return (
     <div
       style={{
-        // Same vertical rhythm as the cards block: the figures' browser
-        // margins are zeroed below, so the wrapper carries the spacing.
-        marginBlock: "var(--ds-size-10)",
         display: "grid",
         // Two tracks that share the row exactly (gap subtracted); the 240px
         // floor collapses the gallery to one column on narrow screens. A
