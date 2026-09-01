@@ -70,6 +70,7 @@ const SidePage = ({ data, meta }: SidePageProps) => {
   // let this index the registry with any string, which is exactly what the
   // typed registry is there to prevent.
   const blocks = forceArray(data?.blocks).filter(notNullOrUndefined) as Block[];
+  const leadsWithHero = blocks[0]?.__typename === "no_rodekors_docs_BlockHero";
   return (
     <div className={styles.layout}>
       {navItems.length > 0 ? (
@@ -95,20 +96,25 @@ const SidePage = ({ data, meta }: SidePageProps) => {
         </nav>
       ) : null}
       <article className={styles.article}>
-        <header>
-          {header?.kicker ? <p className={styles.kicker}>{header.kicker}</p> : null}
-          <Heading level={1} data-size="xl">
-            {header?.title}
-          </Heading>
-          {isRichTextData(header?.intro) ? (
-            <Paragraph data-size="lg" asChild className={styles.ingress}>
-              <div>
-                <RichTextView className="rk-prose" data={header.intro} meta={meta} renderMacroInEditMode={false} />
-              </div>
-            </Paragraph>
-          ) : null}
-          <hr className={styles.leadRule} />
-        </header>
+        {/* A hero block IS the page header — it carries the kicker, the h1 and
+            the lead itself. Rendering the article header above one gives the
+            page two <h1>s saying the same thing, stacked. */}
+        {leadsWithHero ? null : (
+          <header>
+            {header?.kicker ? <p className={styles.kicker}>{header.kicker}</p> : null}
+            <Heading level={1} data-size="xl">
+              {header?.title}
+            </Heading>
+            {isRichTextData(header?.intro) ? (
+              <Paragraph data-size="lg" asChild className={styles.ingress}>
+                <div>
+                  <RichTextView className="rk-prose" data={header.intro} meta={meta} renderMacroInEditMode={false} />
+                </div>
+              </Paragraph>
+            ) : null}
+            <hr className={styles.leadRule} />
+          </header>
+        )}
         {/* Same container as BlocksView so a Side and a blocks-view part space
             their blocks identically — the rhythm has one owner. */}
         <div className={blockStyles.blocks}>

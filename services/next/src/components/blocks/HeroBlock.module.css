@@ -8,7 +8,10 @@
   background-color: var(--ds-color-neutral-background-tinted);
   border-radius: var(--ds-border-radius-lg);
   border-top-left-radius: 0; /* corner is cut away by the notch */
-  padding: calc(var(--ds-size-26) + var(--ds-size-10)) var(--ds-size-8) var(--ds-size-12);
+  /* Top clears the notch (its height + one step); sides and bottom match so
+     the panel reads as one balanced block rather than text pinned to a
+     corner. Was 144/32/48 — the text sat low with a void beneath it. */
+  padding: calc(var(--ds-size-14) + var(--ds-size-12)) var(--ds-size-12) var(--ds-size-12);
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -30,12 +33,14 @@
   position: absolute;
   top: 0;
   left: 0;
-  height: var(--ds-size-26);
-  min-width: calc(var(--ds-size-30) * 2);
+  height: var(--ds-size-14);
+  min-width: calc(var(--ds-size-30) + var(--ds-size-10));
   background-color: var(--ds-color-neutral-background-default);
   border-bottom-right-radius: var(--ds-border-radius-lg);
-  padding-left: var(--ds-size-8);
-  padding-right: var(--ds-size-15);
+  /* Matches the panel's left padding — the badge must sit on the same
+     vertical line as the kicker and the title. */
+  padding-left: var(--ds-size-12);
+  padding-right: var(--ds-size-10);
   display: flex;
   align-items: center;
   gap: var(--ds-size-3);
@@ -88,7 +93,7 @@
    from the library sheet. */
 .title.title {
   margin-bottom: var(--ds-size-6);
-  max-width: 18ch;
+  max-width: 26ch;
   font-size: var(--ds-font-size-9);
   font-weight: var(--ds-font-weight-semibold);
   letter-spacing: -0.02em;
@@ -99,7 +104,7 @@
 /* LIBRARY GAP: Paragraph has no `subtle` variant. */
 .lead {
   color: var(--ds-color-neutral-text-default);
-  max-width: 55ch;
+  max-width: 62ch;
   margin-bottom: var(--ds-size-10);
   white-space: pre-line; /* the lead is a TextArea; editors' breaks survive */
 }
@@ -112,7 +117,7 @@
 
 @media (max-width: 850px) {
   .panel {
-    padding: calc(var(--ds-size-26) + var(--ds-size-6)) var(--ds-size-5) var(--ds-size-8);
+    padding: calc(var(--ds-size-14) + var(--ds-size-8)) var(--ds-size-6) var(--ds-size-8);
   }
 
   .panelPlain {

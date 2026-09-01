@@ -33,6 +33,12 @@ export function HeroBlock({ data, meta }: HeroProps) {
     action.url ?? (action.contentPath ? getUrl(action.contentPath, meta) : undefined);
   const linked = actions.filter((action) => hrefOf(action));
   const hasNotch = Boolean(data.badge || data.badgeMeta);
+  // At display size the balanced two-line wrap splits the organisation's name
+  // ("Ett system for Røde / Kors sine digitale flater"), which no measure
+  // fixes — text-wrap: balance picks that break at every width the panel
+  // allows. A non-breaking space binds the pair, so the line falls somewhere
+  // else no matter what an editor types in the title field.
+  const title = data.title?.replace(/Røde Kors/g, "Røde\u00A0Kors");
 
   return (
     <section className={`${styles.panel}${hasNotch ? "" : ` ${styles.panelPlain}`}`}>
@@ -46,7 +52,7 @@ export function HeroBlock({ data, meta }: HeroProps) {
       {data.kicker ? <span className={styles.kicker}>{data.kicker}</span> : null}
 
       <Heading level={1} className={styles.title}>
-        {data.title}
+        {title}
       </Heading>
 
       {data.lead ? (
@@ -73,7 +79,6 @@ export function HeroBlock({ data, meta }: HeroProps) {
           ))}
         </div>
       ) : null}
-
     </section>
   );
 }

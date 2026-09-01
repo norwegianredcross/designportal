@@ -22,3 +22,7 @@ await import("./seed-kode-artikler.mjs");
 
 // 3. Sections, including the full kode landing with resolved card links.
 await import("./seed-seksjoner.mjs");
+
+// 4. Front page last: its cards resolve every section id, so all five
+//    sections must exist and be published before this runs.
+await import("./seed-forside.mjs");

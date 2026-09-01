@@ -37,11 +37,20 @@ export type PageProps = {
   contentPath?: string[];
 };
 
+/**
+ * The empty URL path resolves to the site content itself, which is a
+ * portal:site — a type _mappings.tsx registers no view for, so the root
+ * rendered header, an empty <main> and footer under a 200. Serve the front
+ * page there instead. A rewrite, not a redirect: the URL stays "/".
+ */
+const FRONT_PAGE = "forside";
+const resolveContentPath = (contentPath?: string[]) => (contentPath?.length ? contentPath : [FRONT_PAGE]);
+
 export default async function Page({ params }: { params: Promise<PageProps> }) {
   const resolvedParams = await params;
   const data = await fetchContent({
     ...resolvedParams,
-    contentPath: resolvedParams.contentPath ?? [],
+    contentPath: resolveContentPath(resolvedParams.contentPath),
   });
 
   // A missing or unpublished content path must be a real 404 — without
@@ -90,7 +99,7 @@ export async function generateMetadata({ params }: { params: Promise<PageProps> 
   const resolvedParams = await params;
   const { common } = await fetchContent({
     ...resolvedParams,
-    contentPath: resolvedParams.contentPath ?? [],
+    contentPath: resolveContentPath(resolvedParams.contentPath),
   });
   return {
     title: common?.get?.displayName ?? "Not found",
