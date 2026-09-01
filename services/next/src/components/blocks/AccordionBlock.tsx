@@ -1,14 +1,10 @@
 import type { MetaData } from "@enonic/nextjs-adapter/types/componentProps";
 import RichTextView from "@enonic/nextjs-adapter/views/RichTextView";
-import type { GetBlocksQuery } from "@/types/queries";
-import type { Get } from "@/types/utils";
+import type { BlockByTypename } from "@/types/blocks";
 import { forceArray, isRichTextData, notNullOrUndefined } from "@/utils";
 import { Details, DetailsContent, DetailsSummary } from "../partials/Details";
 
-type AccordionData = Extract<
-  NonNullable<Get<GetBlocksQuery, "guillotine.blocks">>,
-  { __typename: "no_rodekors_docs_BlockAccordion" }
->;
+type AccordionData = BlockByTypename<"no_rodekors_docs_BlockAccordion">;
 
 export type AccordionProps = {
   data: AccordionData;

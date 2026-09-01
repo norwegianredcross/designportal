@@ -1,14 +1,10 @@
 import type { MetaData } from "@enonic/nextjs-adapter/types/componentProps";
 import RichTextView from "@enonic/nextjs-adapter/views/RichTextView";
 import { Avatar, Link, Paragraph } from "rk-designsystem";
-import type { GetBlocksQuery } from "@/types/queries";
-import type { Get } from "@/types/utils";
+import type { BlockByTypename } from "@/types/blocks";
 import { isRichTextData } from "@/utils";
 
-type QuoteData = Extract<
-  NonNullable<Get<GetBlocksQuery, "guillotine.blocks">>,
-  { __typename: "no_rodekors_docs_BlockQuote" }
->;
+type QuoteData = BlockByTypename<"no_rodekors_docs_BlockQuote">;
 
 interface QuoteProps {
   data: QuoteData;

@@ -2,15 +2,11 @@ import { getUrl } from "@enonic/nextjs-adapter";
 import type { MetaData } from "@enonic/nextjs-adapter/types/componentProps";
 import type { CSSProperties } from "react";
 import { Heading, Paragraph } from "rk-designsystem";
-import type { GetBlocksQuery } from "@/types/queries";
-import type { Get } from "@/types/utils";
+import type { BlockByTypename } from "@/types/blocks";
 import { forceArray, notNullOrUndefined } from "@/utils";
 import styles from "./CardsBlock.module.css";
 
-type CardsData = Extract<
-  NonNullable<Get<GetBlocksQuery, "guillotine.blocks">>,
-  { __typename: "no_rodekors_docs_BlockCards" }
->;
+type CardsData = BlockByTypename<"no_rodekors_docs_BlockCards">;
 
 type CardItem = NonNullable<NonNullable<CardsData["items"]>[number]>;
 

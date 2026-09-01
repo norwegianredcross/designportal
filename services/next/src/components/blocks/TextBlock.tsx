@@ -1,13 +1,9 @@
 import type { MetaData } from "@enonic/nextjs-adapter/types/componentProps";
 import RichTextView from "@enonic/nextjs-adapter/views/RichTextView";
-import type { GetBlocksQuery } from "@/types/queries";
-import type { Get } from "@/types/utils";
+import type { BlockByTypename } from "@/types/blocks";
 import { isRichTextData } from "@/utils";
 
-type TextData = Extract<
-  NonNullable<Get<GetBlocksQuery, "guillotine.blocks">>,
-  { __typename: "no_rodekors_docs_BlockText" }
->;
+type TextData = BlockByTypename<"no_rodekors_docs_BlockText">;
 
 interface TextProps {
   data: TextData;

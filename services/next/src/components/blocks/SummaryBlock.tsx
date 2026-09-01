@@ -2,14 +2,10 @@ import { getUrl } from "@enonic/nextjs-adapter";
 import type { MetaData } from "@enonic/nextjs-adapter/types/componentProps";
 import { ArrowRightIcon } from "@navikt/aksel-icons";
 import { Heading, Link, Paragraph } from "rk-designsystem";
-import type { GetBlocksQuery } from "@/types/queries";
-import type { Get } from "@/types/utils";
+import type { BlockByTypename } from "@/types/blocks";
 import { forceArray, notNullOrUndefined } from "@/utils";
 
-type SummaryData = Extract<
-  NonNullable<Get<GetBlocksQuery, "guillotine.blocks">>,
-  { __typename: "no_rodekors_docs_BlockSummary" }
->;
+type SummaryData = BlockByTypename<"no_rodekors_docs_BlockSummary">;
 
 interface SummaryProps {
   data: SummaryData;

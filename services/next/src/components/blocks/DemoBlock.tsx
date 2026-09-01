@@ -1,14 +1,10 @@
 import type { MetaData } from "@enonic/nextjs-adapter/types/componentProps";
 import { Heading } from "rk-designsystem";
-import type { GetBlocksQuery } from "@/types/queries";
-import type { Get } from "@/types/utils";
+import type { BlockByTypename } from "@/types/blocks";
 import styles from "./DemoBlock.module.css";
 import { demos } from "./demos";
 
-type DemoData = Extract<
-  NonNullable<Get<GetBlocksQuery, "guillotine.blocks">>,
-  { __typename: "no_rodekors_docs_BlockDemo" }
->;
+type DemoData = BlockByTypename<"no_rodekors_docs_BlockDemo">;
 
 interface DemoProps {
   data: DemoData;

@@ -1,12 +1,8 @@
 import type { MetaData } from "@enonic/nextjs-adapter/types/componentProps";
-import type { GetBlocksQuery } from "@/types/queries";
-import type { Get } from "@/types/utils";
+import type { BlockByTypename } from "@/types/blocks";
 import { CopyButton } from "./CopyButton";
 
-type CodeData = Extract<
-  NonNullable<Get<GetBlocksQuery, "guillotine.blocks">>,
-  { __typename: "no_rodekors_docs_BlockCode" }
->;
+type CodeData = BlockByTypename<"no_rodekors_docs_BlockCode">;
 
 interface CodeProps {
   data: CodeData;

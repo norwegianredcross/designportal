@@ -1,8 +1,10 @@
 import { getUrl } from "@enonic/nextjs-adapter";
 import type { MetaData } from "@enonic/nextjs-adapter/types/componentProps";
 import RichTextView from "@enonic/nextjs-adapter/views/RichTextView";
+import type { FunctionComponent } from "react";
 import { Heading, Paragraph } from "rk-designsystem";
 import { blockComponents } from "@/components/blocks/registry";
+import type { Block } from "@/types/blocks";
 import { forceArray, isRichTextData, notNullOrUndefined } from "@/utils";
 import styles from "./SidePage.module.css";
 
@@ -63,9 +65,10 @@ const SidePage = ({ data, meta }: SidePageProps) => {
     if (group) group.items.push(item);
     else groups.push({ title, items: [item] });
   }
-  const blocks = forceArray(data?.blocks).filter(notNullOrUndefined) as Array<{
-    __typename: string;
-  }>;
+  // The real block union rather than `{ __typename: string }`: the loose cast
+  // let this index the registry with any string, which is exactly what the
+  // typed registry is there to prevent.
+  const blocks = forceArray(data?.blocks).filter(notNullOrUndefined) as Block[];
   return (
     <div className={styles.layout}>
       {navItems.length > 0 ? (
@@ -106,10 +109,15 @@ const SidePage = ({ data, meta }: SidePageProps) => {
           <hr className={styles.leadRule} />
         </header>
         {blocks.map((block, index) => {
-          const Block = blockComponents[block.__typename];
-          if (!Block) return null;
+          // Same widening as BlocksView: the registry is correlated per
+          // typename, but TypeScript cannot narrow the lookup and the union
+          // together.
+          const BlockView = blockComponents[block.__typename] as
+            | FunctionComponent<{ data: Block; meta: MetaData }>
+            | undefined;
+          if (!BlockView) return null;
           // biome-ignore lint/suspicious/noArrayIndexKey: block order is stable
-          return <Block key={`block-${index}`} data={block} meta={meta} />;
+          return <BlockView key={`block-${index}`} data={block} meta={meta} />;
         })}
       </article>
     </div>

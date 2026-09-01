@@ -1,15 +1,11 @@
 import type { MetaData } from "@enonic/nextjs-adapter/types/componentProps";
 import RichTextView from "@enonic/nextjs-adapter/views/RichTextView";
 import { Heading } from "rk-designsystem";
-import type { GetBlocksQuery } from "@/types/queries";
-import type { Get } from "@/types/utils";
+import type { BlockByTypename } from "@/types/blocks";
 import { isRichTextData } from "@/utils";
 import styles from "./TableBlock.module.css";
 
-type TableData = Extract<
-  NonNullable<Get<GetBlocksQuery, "guillotine.blocks">>,
-  { __typename: "no_rodekors_docs_BlockTable" }
->;
+type TableData = BlockByTypename<"no_rodekors_docs_BlockTable">;
 
 interface TableProps {
   data: TableData;

@@ -1,5 +1,6 @@
 import type { MetaData } from "@enonic/nextjs-adapter/types/componentProps";
 import type { FunctionComponent } from "react";
+import type { Block, BlockByTypename } from "@/types/blocks";
 import { AccordionBlock } from "./AccordionBlock";
 import { CardsBlock } from "./CardsBlock";
 import { CodeBlock } from "./CodeBlock";
@@ -19,7 +20,19 @@ import { TextBlock } from "./TextBlock";
  * the Side content-type view) read from this map, so a new block is wired
  * in exactly one place on the frontend.
  */
-export const blockComponents: Record<string, FunctionComponent<{ data: any; meta: MetaData }>> = {
+type BlockProps<Data> = { data: Data; meta: MetaData };
+
+/**
+ * Keys are constrained to the real `__typename` union, and each one's value
+ * must accept exactly that block's data. The previous
+ * `Record<string, FunctionComponent<{ data: any }>>` accepted a misspelled
+ * key or a component wired to the wrong block without a murmur from tsc.
+ */
+type BlockRegistry = {
+  [Name in Block["__typename"]]?: FunctionComponent<BlockProps<BlockByTypename<Name>>>;
+};
+
+export const blockComponents: BlockRegistry = {
   no_rodekors_docs_BlockText: TextBlock,
   no_rodekors_docs_BlockAccordion: AccordionBlock,
   no_rodekors_docs_BlockQuote: QuoteBlock,
