@@ -620,9 +620,15 @@ function mediaPixelSize(imageId?: string): { width?: number; height?: number } {
   } | null;
   const info = media?.x?.media?.imageInfo;
   // Number(): guillotine types these as strings on some content vintages.
-  return info?.imageWidth && info?.imageHeight
-    ? { width: Number(info.imageWidth), height: Number(info.imageHeight) }
-    : {};
+  // A truthiness check is not enough — a non-numeric legacy value passes it
+  // and Number() turns it into NaN, which cannot serialize as GraphQLInt and
+  // puts an error on the whole blocks response. Unreadable metadata is treated
+  // as absent instead, which the frontend already handles by loading the image
+  // without reserved space.
+  const width = Number(info?.imageWidth);
+  const height = Number(info?.imageHeight);
+  if (!Number.isFinite(width) || !Number.isFinite(height) || width <= 0 || height <= 0) return {};
+  return { width, height };
 }
 
 /** Alt text stored ON the image content (Content Studio's own alt-text

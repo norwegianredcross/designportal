@@ -21,10 +21,15 @@ export function AccordionBlock({ data, meta }: AccordionProps) {
         .map((item) => (
           <Details key={item.title} data-color={data.theme ?? undefined}>
             <DetailsSummary>{item.title}</DetailsSummary>
-            {isRichTextData(item.text) ? (
-              <RichTextView className="rk-prose" data={item.text} meta={meta} renderMacroInEditMode={false} />
-            ) : null}
-            <DetailsContent></DetailsContent>
+            {/* Inside the content slot, not beside it: an expandable section's
+                body is what Details collapses, and DetailsContent carries the
+                padding and open/close behaviour. Rendered as a sibling the
+                text sat outside that wrapper, with an empty slot next to it. */}
+            <DetailsContent className="rk-prose">
+              {isRichTextData(item.text) ? (
+                <RichTextView data={item.text} meta={meta} renderMacroInEditMode={false} />
+              ) : null}
+            </DetailsContent>
           </Details>
         ))}
     </>
