@@ -1,9 +1,9 @@
 /* The interactive/responsive half of the cardsblokk styling. Tokens-only,
- * but it can't live inline: hover/focus states and the mobile stacking
- * media query have no inline-style equivalent. Static, data-driven values
- * (theme surface, per-size padding, image sizes) stay inline in
- * CardsBlock.tsx and reach this file through the two custom properties
- * set there (--card-image-width / --card-image-ratio). */
+ * The whole of the block's styling. The few values the editor decides —
+ * column count, per-size padding, image dimensions — arrive as custom
+ * properties set in CardsBlock.tsx, because they cannot be enumerated here.
+ * Everything else, including the hover state and the mobile stacking that
+ * have no inline equivalent at all, lives in this file. */
 
 .cardLink {
   color: inherit;
@@ -61,4 +61,103 @@
     width: 100%;
     aspect-ratio: 16 / 9;
   }
+}
+
+.title {
+  margin-bottom: var(--ds-size-5);
+}
+
+/* Exactly `--card-columns` tracks when they fit: the minimum is each track's
+   exact share of the row (gaps subtracted, so the math adds up), and the
+   240px floor collapses the count on narrow screens instead of overflowing.
+   auto-fill (not -fit) keeps the empty tracks, so two cards in a 3-column
+   block stay card-sized instead of stretching across the row. */
+.grid {
+  display: grid;
+  gap: var(--ds-size-5);
+  grid-template-columns: repeat(
+      auto-fill,
+      minmax(max(240px, calc((100% - (var(--card-columns) - 1) * var(--ds-size-5)) / var(--card-columns))), 1fr)
+    );
+}
+
+.cell {
+  height: 100%;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+/* The "stikktittel": uppercase micro-heading. The 0.05em tracking is a raw
+   value on purpose — the token scale tops out at 0.015em, and untracked
+   uppercase reads cramped. */
+.kicker {
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0;
+}
+
+/* No explicit colour on the title: the global heading rule uses the generic
+   text token, which resolves inside the card's data-color scope, so the tone
+   follows the editor's theme by itself. */
+.cardTitle,
+.cardText {
+  margin: 0;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.topImage {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  display: block;
+  border-radius: var(--ds-border-radius-lg) var(--ds-border-radius-lg) 0 0;
+}
+
+.topImageReverse {
+  border-radius: 0 0 var(--ds-border-radius-lg) var(--ds-border-radius-lg);
+}
+
+/* Surface and radius are constants, not editor choices; only the padding
+   varies, and it arrives as --card-pad. */
+.panel {
+  background-color: var(--ds-color-background-tinted, var(--ds-color-neutral-background-tinted));
+  color: var(--ds-color-text-default);
+  padding: var(--card-pad);
+  /* The spec's extra 40px sits on the panel edge FACING AWAY from the image,
+     so it mirrors when the image moves below the text. */
+  padding-bottom: var(--ds-size-10);
+  border-radius: 0 0 var(--ds-border-radius-lg) var(--ds-border-radius-lg);
+  flex-grow: 1;
+}
+
+.panelReverse {
+  padding-top: var(--ds-size-10);
+  padding-bottom: var(--card-pad);
+  border-radius: var(--ds-border-radius-lg) var(--ds-border-radius-lg) 0 0;
+}
+
+.sidePanel {
+  background-color: var(--ds-color-background-tinted, var(--ds-color-neutral-background-tinted));
+  color: var(--ds-color-text-default);
+  border-radius: var(--ds-border-radius-lg);
+  padding: var(--card-pad);
+  gap: var(--card-pad);
+}
+
+.plainPanel {
+  background-color: var(--ds-color-background-tinted, var(--ds-color-neutral-background-tinted));
+  color: var(--ds-color-text-default);
+  border-radius: var(--ds-border-radius-lg);
+  padding: var(--card-pad);
+  height: 100%;
 }

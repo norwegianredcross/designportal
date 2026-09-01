@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { Alert, Badge, Button, Card, CardBlock, Details, Paragraph, Tag } from "rk-designsystem";
 import { DetailsContent, DetailsSummary } from "@/components/partials/Details";
+import styles from "./demos.module.css";
 
 /**
  * The curated demo registry: every demo an editor can choose in the
@@ -12,21 +13,21 @@ import { DetailsContent, DetailsSummary } from "@/components/partials/Details";
  */
 export const demos: Record<string, ReactNode> = {
   "button-variants": (
-    <div style={{ display: "flex", gap: "var(--ds-size-3)", flexWrap: "wrap" }}>
+    <div className={styles.row}>
       <Button variant="primary">Primær</Button>
       <Button variant="secondary">Sekundær</Button>
       <Button variant="tertiary">Tertiær</Button>
     </div>
   ),
   "alert-severities": (
-    <div style={{ display: "grid", gap: "var(--ds-size-3)" }}>
+    <div className={styles.stack}>
       <Alert data-color="info">Informasjon til leseren.</Alert>
       <Alert data-color="warning">Noe krever oppmerksomhet.</Alert>
       <Alert data-color="danger">Noe gikk galt.</Alert>
     </div>
   ),
   "card-scopes": (
-    <div style={{ display: "flex", gap: "var(--ds-size-3)", flexWrap: "wrap" }}>
+    <div className={styles.row}>
       <Card variant="tinted" data-color="primary-color-red">
         <CardBlock>
           <Paragraph data-size="sm">primary-color-red</Paragraph>
@@ -53,7 +54,7 @@ export const demos: Record<string, ReactNode> = {
     </Details>
   ),
   "tag-badge": (
-    <div style={{ display: "flex", gap: "var(--ds-size-3)", alignItems: "center" }}>
+    <div className={styles.rowCentered}>
       <Tag>Emneknagg</Tag>
       <Badge count={4} />
     </div>

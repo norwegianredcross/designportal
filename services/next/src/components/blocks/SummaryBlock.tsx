@@ -4,6 +4,7 @@ import { ArrowRightIcon } from "@navikt/aksel-icons";
 import { Heading, Link, Paragraph } from "rk-designsystem";
 import type { BlockByTypename } from "@/types/blocks";
 import { forceArray, notNullOrUndefined } from "@/utils";
+import styles from "./SummaryBlock.module.css";
 
 type SummaryData = BlockByTypename<"no_rodekors_docs_BlockSummary">;
 
@@ -32,65 +33,36 @@ export function SummaryBlock({ data, meta }: SummaryProps) {
   return (
     <section>
       {data.title ? (
-        <Heading
-          level={2}
-          data-size="sm"
-          // Tight above the intro; the siblings' full gap when the intro
-          // is absent and the figures follow directly.
-          style={{ marginBottom: data.intro ? "var(--ds-size-2)" : "var(--ds-size-5)" }}
-        >
+        <Heading level={2} data-size="sm" className={data.intro ? styles.titleWithIntro : styles.title}>
           {data.title}
         </Heading>
       ) : null}
       {data.intro ? (
-        <Paragraph data-size="md" style={{ margin: "0 0 var(--ds-size-6)" }}>
+        <Paragraph data-size="md" className={styles.intro}>
           {data.intro}
         </Paragraph>
       ) : null}
       <div
-        style={{
-          display: "flex",
-          flexWrap: "wrap",
-          gap: "var(--ds-size-10)",
-          // The editor's alignment: figures parked left (default),
-          // centered, or spread across the full row width. Unknown values
-          // fall back to left.
-          justifyContent:
-            data.alignment === "center" ? "center" : data.alignment === "spread" ? "space-between" : "flex-start",
-        }}
+        className={`${styles.figures}${
+          data.alignment === "center"
+            ? ` ${styles.figuresCenter}`
+            : data.alignment === "spread"
+              ? ` ${styles.figuresSpread}`
+              : ""
+        }`}
       >
         {items.map((item, index) => (
           // biome-ignore lint/suspicious/noArrayIndexKey: figure order is stable
-          <div key={`figure-${index}`} style={{ minWidth: "8rem" }}>
+          <div key={`figure-${index}`} className={styles.figure}>
             {item.label ? (
               // Same uppercase micro-label treatment as the cards' kicker.
-              <Paragraph
-                data-size="xs"
-                style={{ textTransform: "uppercase", letterSpacing: "0.05em", margin: "0 0 var(--ds-size-1)" }}
-              >
+              <Paragraph data-size="xs" className={styles.label}>
                 {item.label}
               </Paragraph>
             ) : null}
-            {/* The figure itself: display scale, maroon via the global
-                heading token rule's palette (explicit token here since a
-                number is not a heading element). */}
-            <div
-              style={{
-                fontSize: "var(--ds-font-size-9)",
-                fontWeight: "var(--ds-font-weight-medium)",
-                // Raw value: the line-height token scale (sm/md/lg) has no
-                // display-tight step for big standalone figures.
-                lineHeight: 1.1,
-                color: "var(--ds-color-text-default)",
-              }}
-            >
-              {item.value}
-            </div>
+            <div className={styles.value}>{item.value}</div>
             {item.description ? (
-              <Paragraph
-                data-size="sm"
-                style={{ margin: "var(--ds-size-1) 0 0", color: "var(--ds-color-neutral-text-subtle)" }}
-              >
+              <Paragraph data-size="sm" className={styles.description}>
                 {item.description}
               </Paragraph>
             ) : null}
@@ -98,8 +70,8 @@ export function SummaryBlock({ data, meta }: SummaryProps) {
         ))}
       </div>
       {data.linkText && href ? (
-        <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "var(--ds-size-6)" }}>
-          <Link href={href} style={{ display: "inline-flex", alignItems: "center", gap: "var(--ds-size-1)" }}>
+        <div className={styles.linkRow}>
+          <Link href={href} className={styles.link}>
             {data.linkText}
             {/* The wireframe's arrow; decorative, the text carries meaning. */}
             <ArrowRightIcon aria-hidden />

@@ -1,0 +1,76 @@
+/* BLOKK_BILDE. Was inline styles.
+ *
+ * Values the editor chooses (image size, the notch mask, an image's own
+ * aspect ratio) still arrive as inline custom properties — they come from CMS
+ * data and cannot be enumerated here. Everything static lives in this file. */
+
+.wrapper {
+  display: grid;
+  gap: var(--ds-size-5);
+  grid-template-columns: 1fr;
+}
+
+/* Two tracks that share the row exactly (gap subtracted); the 240px floor
+   collapses the gallery to one column on narrow screens. A single image spans
+   the one track it gets. */
+.gallery {
+  grid-template-columns: repeat(auto-fill, minmax(max(240px, calc((100% - var(--ds-size-5)) / 2)), 1fr));
+}
+
+.figure {
+  margin: 0;
+  /* Set from the editor's size choice; medium is the graceful fallback for an
+     unknown value, same posture as the theme and corner lookups. */
+  width: var(--rk-image-width, 60%);
+}
+
+/* Gallery tiles fill their track. */
+.figureInGallery {
+  width: auto;
+}
+
+/* Right-parked images push against the column's right edge; blocks stack, so
+   nothing wraps into the space they leave. */
+.figureRight {
+  margin-left: auto;
+}
+
+.image {
+  width: 100%;
+  /* cover in both modes: gallery tiles crop to 2:1, and a capped single image
+     crops rather than squashing when the height cap bites first. */
+  object-fit: cover;
+  display: block;
+  border-radius: var(--ds-border-radius-lg);
+  aspect-ratio: var(--rk-image-aspect, auto);
+  height: auto;
+  /* A lone image keeps its natural shape up to this cap; beyond it the
+     cover-crop keeps the column tidy instead of towering over the article. */
+  max-height: 32rem;
+}
+
+.imageInGallery {
+  aspect-ratio: 2 / 1;
+  height: auto;
+  max-height: none;
+}
+
+/* The notched silhouette: one image masked by a generated SVG path (see
+   notchMask.ts). The mask and its aspect ratio arrive as custom properties
+   because the geometry is composed per block from the editor's fields. */
+.imageNotched {
+  width: 100%;
+  object-fit: cover;
+  display: block;
+  aspect-ratio: var(--rk-notch-aspect);
+  mask-image: var(--rk-notch-mask);
+  mask-size: 100% 100%;
+}
+
+.caption {
+  font-size: var(--ds-font-size-2);
+  color: var(--ds-color-neutral-text-subtle);
+  margin-top: var(--ds-size-2);
+  /* Unbroken strings (URLs in captions) wrap instead of escaping the tile. */
+  overflow-wrap: break-word;
+}

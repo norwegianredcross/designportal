@@ -1,0 +1,20 @@
+/* Layout for the curated demo examples. The demos show design system
+ * components; these classes only arrange them, and live here rather than
+ * inline so the file stays a readable list of examples. */
+
+.row {
+  display: flex;
+  gap: var(--ds-size-3);
+  flex-wrap: wrap;
+}
+
+.rowCentered {
+  display: flex;
+  gap: var(--ds-size-3);
+  align-items: center;
+}
+
+.stack {
+  display: grid;
+  gap: var(--ds-size-3);
+}

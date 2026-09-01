@@ -41,3 +41,9 @@
 .scroller tbody tr:nth-child(even) {
   background-color: var(--ds-color-neutral-background-tinted);
 }
+
+/* Was inline. The block's outer rhythm now comes from BlocksView's container,
+   so only the title's own spacing lives here. */
+.title {
+  margin-bottom: var(--ds-size-5);
+}

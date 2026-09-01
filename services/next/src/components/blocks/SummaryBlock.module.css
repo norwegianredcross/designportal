@@ -1,0 +1,73 @@
+/* BLOKK_OPPSUMMERING. Was inline styles; moved here so the block's look lives
+ * in one readable place and can be overridden by a stylesheet at all. */
+
+.title {
+  margin-bottom: var(--ds-size-5);
+}
+
+/* Tight above an intro; the siblings' full gap when the figures follow the
+ * title directly. */
+.titleWithIntro {
+  margin-bottom: var(--ds-size-2);
+}
+
+.intro {
+  margin: 0 0 var(--ds-size-6);
+}
+
+.figures {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ds-size-10);
+  justify-content: flex-start;
+}
+
+/* The editor's alignment: parked left (default), centred, or spread across the
+   full row. An unknown value keeps the default. */
+.figuresCenter {
+  justify-content: center;
+}
+
+.figuresSpread {
+  justify-content: space-between;
+}
+
+.figure {
+  min-width: 8rem;
+}
+
+/* Same uppercase micro-label treatment as the cards' kicker. */
+.label {
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0 0 var(--ds-size-1);
+}
+
+/* The figure itself: display scale, maroon via the generic text token — set
+   explicitly because a number is not a heading element, so the global heading
+   rule does not reach it. */
+.value {
+  font-size: var(--ds-font-size-9);
+  font-weight: var(--ds-font-weight-medium);
+  /* Raw value: the line-height token scale has no display-tight step for a
+     big standalone figure. */
+  line-height: 1.1;
+  color: var(--ds-color-text-default);
+}
+
+.description {
+  margin: var(--ds-size-1) 0 0;
+  color: var(--ds-color-neutral-text-subtle);
+}
+
+.linkRow {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: var(--ds-size-6);
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-size-1);
+}

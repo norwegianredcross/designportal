@@ -2,6 +2,7 @@ import type { MetaData } from "@enonic/nextjs-adapter/types/componentProps";
 import type { CSSProperties } from "react";
 import type { BlockByTypename } from "@/types/blocks";
 import { forceArray, notNullOrUndefined } from "@/utils";
+import styles from "./ImagesBlock.module.css";
 import { CORNER_TO_NOTCH, type NotchEdge, notchMaskDataUri } from "./notchMask";
 
 type ImagesData = BlockByTypename<"no_rodekors_docs_BlockImages">;
@@ -77,18 +78,7 @@ export function ImagesBlock({ data, size = "medium", alignment = "left", shape =
     aspect: notch?.aspect ?? "4 / 3",
   };
   return (
-    <div
-      style={{
-        display: "grid",
-        // Two tracks that share the row exactly (gap subtracted); the 240px
-        // floor collapses the gallery to one column on narrow screens. A
-        // single image spans the one track it gets.
-        gridTemplateColumns: gallery
-          ? "repeat(auto-fill, minmax(max(240px, calc((100% - var(--ds-size-5)) / 2)), 1fr))"
-          : "1fr",
-        gap: "var(--ds-size-5)",
-      }}
-    >
+    <div className={`${styles.wrapper}${gallery ? ` ${styles.gallery}` : ""}`}>
       {items.map((item, index) => {
         const notched = !gallery && effectiveShape === "notch";
         // Reserve the image's own aspect ratio (from the media metadata)
@@ -99,41 +89,25 @@ export function ImagesBlock({ data, size = "medium", alignment = "left", shape =
           <img
             src={item.imageUrl ?? undefined}
             alt={item.altText ?? ""}
-            style={
-              notched
-                ? undefined
-                : {
-                    width: "100%",
-                    // Gallery tiles are uniform ~2:1 crops per the Figma
-                    // sheet. A lone image keeps its natural shape up to a
-                    // height cap — beyond it, cover-cropping keeps the
-                    // column tidy instead of towering over the article.
-                    aspectRatio: gallery ? "2 / 1" : naturalRatio,
-                    // cover in BOTH modes: gallery tiles crop to 2:1, and a
-                    // capped single image crops instead of squashing when
-                    // the height cap kicks in before its natural height.
-                    objectFit: "cover",
-                    height: gallery ? undefined : "auto",
-                    maxHeight: gallery ? undefined : "32rem",
-                    display: "block",
-                    borderRadius: "var(--ds-border-radius-lg)",
-                  }
-            }
+            className={`${styles.image}${gallery ? ` ${styles.imageInGallery}` : ""}`}
+            // Reserve the image's own aspect ratio (from the media metadata)
+            // before the file loads; without both dimensions the browser sizes
+            // it on arrival as before.
+            style={naturalRatio ? ({ "--rk-image-aspect": naturalRatio } as CSSProperties) : undefined}
           />
         );
         return (
-          // biome-ignore lint/suspicious/noArrayIndexKey: gallery order is stable
           <figure
+            // biome-ignore lint/suspicious/noArrayIndexKey: gallery order is stable
             key={`image-${index}`}
-            style={{
-              margin: 0,
-              // Unknown CMS values fall back to medium, same graceful
-              // posture as the theme/corner lookups.
-              width: gallery ? undefined : (SIZE_WIDTH[effectiveSize] ?? SIZE_WIDTH.medium),
-              // Right-parked images push against the column's right edge;
-              // stacking blocks means nothing wraps into the open space.
-              marginLeft: !gallery && effectiveAlignment === "right" ? "auto" : undefined,
-            }}
+            className={`${styles.figure}${gallery ? ` ${styles.figureInGallery}` : ""}${
+              !gallery && effectiveAlignment === "right" ? ` ${styles.figureRight}` : ""
+            }`}
+            style={
+              gallery
+                ? undefined
+                : ({ "--rk-image-width": SIZE_WIDTH[effectiveSize] ?? SIZE_WIDTH.medium } as CSSProperties)
+            }
           >
             {notched ? (
               // The notched silhouette: one image masked by a generated
@@ -142,34 +116,18 @@ export function ImagesBlock({ data, size = "medium", alignment = "left", shape =
               <img
                 src={item.imageUrl ?? undefined}
                 alt={item.altText ?? ""}
+                className={styles.imageNotched}
                 style={
                   {
-                    width: "100%",
-                    aspectRatio: effectiveNotch.aspect,
-                    objectFit: "cover",
-                    display: "block",
-                    maskImage: notchMaskDataUri(effectiveNotch),
-                    maskSize: "100% 100%",
+                    "--rk-notch-aspect": effectiveNotch.aspect,
+                    "--rk-notch-mask": notchMaskDataUri(effectiveNotch),
                   } as CSSProperties
                 }
               />
             ) : (
               img
             )}
-            {item.caption ? (
-              <figcaption
-                style={{
-                  fontSize: "var(--ds-font-size-2)",
-                  color: "var(--ds-color-neutral-text-subtle)",
-                  marginTop: "var(--ds-size-2)",
-                  // Unbroken strings (URLs in captions) wrap instead of
-                  // escaping the tile.
-                  overflowWrap: "break-word",
-                }}
-              >
-                {item.caption}
-              </figcaption>
-            ) : null}
+            {item.caption ? <figcaption className={styles.caption}>{item.caption}</figcaption> : null}
           </figure>
         );
       })}

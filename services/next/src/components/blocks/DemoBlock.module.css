@@ -1,3 +1,11 @@
+/* Framed example panel: the dashed border marks "this is a demo, not page
+ * content" — layout glue, not component styling. Was inline. */
+.panel {
+  border: 1px dashed var(--ds-color-neutral-border-default);
+  border-radius: var(--ds-border-radius-lg);
+  padding: var(--ds-size-5);
+}
+
 /* Demos must show the library's out-of-the-box look. The site-wide maroon
  * heading rule (globals.css) is an element selector; this class-scoped
  * selector outranks it, so a demoed Heading renders with the component's

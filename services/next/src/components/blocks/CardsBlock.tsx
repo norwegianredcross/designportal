@@ -44,23 +44,11 @@ export function CardsBlock({ data, meta }: CardsProps) {
   return (
     <section>
       {data.title ? (
-        <Heading level={2} data-size="sm" style={{ marginBottom: "var(--ds-size-5)" }}>
+        <Heading level={2} data-size="sm" className={styles.title}>
           {data.title}
         </Heading>
       ) : null}
-      <div
-        style={{
-          display: "grid",
-          // Exactly `columns` tracks when they fit: the minimum is each
-          // track's exact share of the row (gaps subtracted, so the math
-          // adds up), and the minimum floor collapses the count on narrow
-          // screens instead of overflowing. auto-fill (not -fit) keeps the
-          // empty tracks, so two cards in a 3-column block stay card-sized
-          // instead of stretching to fill the row.
-          gridTemplateColumns: `repeat(auto-fill, minmax(max(240px, calc((100% - ${columns - 1} * var(--ds-size-5)) / ${columns})), 1fr))`,
-          gap: "var(--ds-size-5)",
-        }}
-      >
+      <div className={styles.grid} style={{ "--card-columns": columns } as CSSProperties}>
         {items.map((item, index) => {
           // Exactly one of url/contentPath is set (or neither, for "none");
           // internal contentPaths are mapped into this app's URL space.
@@ -93,7 +81,7 @@ export function CardsBlock({ data, meta }: CardsProps) {
             </a>
           ) : (
             // biome-ignore lint/suspicious/noArrayIndexKey: card order is stable
-            <div key={`card-${index}`} style={{ height: "100%" }}>
+            <div key={`card-${index}`} className={styles.cell}>
               {card}
             </div>
           );
@@ -122,20 +110,21 @@ function Card({
   // schema) don't match a scope and inherit the page's palette, with the
   // neutral tint as the background fallback.
   const scope = item.theme ?? "neutral";
-  const surface = "var(--ds-color-background-tinted, var(--ds-color-neutral-background-tinted))";
-  const radius = "var(--ds-border-radius-lg)";
   // Stor (1 column) uses the roomier 40px padding/gap from the Figma spec;
   // medium/liten use 20px.
   const pad = columns === 1 ? "var(--ds-size-10)" : "var(--ds-size-5)";
+  // The one value the module cannot know: it depends on the editor's column
+  // choice. Everything else about the panel lives in CardsBlock.module.css.
+  const padVar = { "--card-pad": pad } as CSSProperties;
 
   const text = (
-    <div style={{ display: "flex", flexDirection: "column", flex: "1 1 0", minWidth: 0 }}>
+    <div className={styles.text}>
       {item.kicker ? (
         // The "stikktittel": uppercase micro-heading. The 0.05em tracking is
         // a raw value on purpose — the token scale has no uppercase-tracking
         // step (it tops out at 0.015em), and untracked uppercase reads
         // cramped.
-        <Paragraph data-size="xs" style={{ textTransform: "uppercase", letterSpacing: "0.05em", margin: 0 }}>
+        <Paragraph data-size="xs" className={styles.kicker}>
           {item.kicker}
         </Paragraph>
       ) : null}
@@ -143,12 +132,12 @@ function Card({
         // No explicit color: the global heading rule uses the generic text
         // token, which resolves inside this card's data-color scope — the
         // title's tone follows the editor's theme choice by itself.
-        <Heading level={3} data-size="xs" style={{ margin: 0 }}>
+        <Heading level={3} data-size="xs" className={styles.cardTitle}>
           {item.title}
         </Heading>
       ) : null}
       {item.cardText ? (
-        <Paragraph data-size="md" style={{ margin: 0 }}>
+        <Paragraph data-size="md" className={styles.cardText}>
           {item.cardText}
         </Paragraph>
       ) : null}
@@ -165,35 +154,16 @@ function Card({
         // editor gave the media no alt text.
         src={item.imageUrl}
         alt={item.imageAlt ?? ""}
-        style={{
-          width: "100%",
-          aspectRatio: "16 / 9",
-          objectFit: "cover",
-          display: "block",
-          borderRadius: reverse ? `0 0 ${radius} ${radius}` : `${radius} ${radius} 0 0`,
-        }}
+        className={`${styles.topImage}${reverse ? ` ${styles.topImageReverse}` : ""}`}
       />
     );
     const panel = (
-      <div
-        data-color={scope}
-        style={{
-          backgroundColor: surface,
-          color: "var(--ds-color-text-default)",
-          padding: pad,
-          // The spec's extra 40px sits on the panel edge FACING AWAY from
-          // the image, so it mirrors when the image moves below the text.
-          paddingTop: reverse ? "var(--ds-size-10)" : pad,
-          paddingBottom: reverse ? pad : "var(--ds-size-10)",
-          borderRadius: reverse ? `${radius} ${radius} 0 0` : `0 0 ${radius} ${radius}`,
-          flexGrow: 1,
-        }}
-      >
+      <div data-color={scope} className={`${styles.panel}${reverse ? ` ${styles.panelReverse}` : ""}`} style={padVar}>
         {text}
       </div>
     );
     return (
-      <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
+      <div className={styles.stack}>
         {reverse ? panel : image}
         {reverse ? image : panel}
       </div>
@@ -214,15 +184,9 @@ function Card({
     } as CSSProperties;
     return (
       <div
-        className={reverse ? styles.rowReverse : styles.row}
+        className={`${reverse ? styles.rowReverse : styles.row} ${styles.sidePanel}`}
         data-color={scope}
-        style={{
-          backgroundColor: surface,
-          color: "var(--ds-color-text-default)",
-          borderRadius: radius,
-          padding: pad,
-          gap: pad,
-        }}
+        style={padVar}
       >
         <img src={item.imageUrl} alt={item.imageAlt ?? ""} className={styles.sideImage} style={imageVars} />
         {text}
@@ -232,16 +196,7 @@ function Card({
 
   // Uten bilde: plain tinted panel, all corners rounded.
   return (
-    <div
-      data-color={scope}
-      style={{
-        backgroundColor: surface,
-        color: "var(--ds-color-text-default)",
-        borderRadius: radius,
-        padding: pad,
-        height: "100%",
-      }}
-    >
+    <div data-color={scope} className={styles.plainPanel} style={padVar}>
       {text}
     </div>
   );

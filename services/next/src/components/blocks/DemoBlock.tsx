@@ -28,18 +28,8 @@ export function DemoBlock({ data }: DemoProps) {
           {data.title}
         </Heading>
       ) : null}
-      {/* Framed example panel: dashed border marks "this is a demo, not
-          page content" — layout glue, not component styling. */}
-      <div
-        className={styles.panel}
-        style={{
-          border: "1px dashed var(--ds-color-neutral-border-default)",
-          borderRadius: "var(--ds-border-radius-lg)",
-          padding: "var(--ds-size-5)",
-        }}
-      >
-        {demo}
-      </div>
+      {/* Framed example panel — see the module for why it is dashed. */}
+      <div className={styles.panel}>{demo}</div>
     </section>
   );
 }
