@@ -26,6 +26,13 @@ export const demos: Record<string, ReactNode> = {
       <Alert data-color="danger">Noe gikk galt.</Alert>
     </div>
   ),
+  /* All four scopes, not a sample of three. The set is not arbitrary: it is
+     exactly what the editor's theme selector offers, which the lib's
+     theme-selector service builds from the app's `themes` config
+     (no.rodekors.docs.cfg). Showing three of four made the demo look like a
+     taster and left the panel half empty; showing the whole set makes it a
+     statement of what the system actually themes through. Keep in step with
+     that config. */
   "card-scopes": (
     <div className={styles.row}>
       <Card variant="tinted" data-color="primary-color-red">
@@ -33,14 +40,19 @@ export const demos: Record<string, ReactNode> = {
           <Paragraph data-size="sm">primary-color-red</Paragraph>
         </CardBlock>
       </Card>
+      <Card variant="tinted" data-color="neutral">
+        <CardBlock>
+          <Paragraph data-size="sm">neutral</Paragraph>
+        </CardBlock>
+      </Card>
       <Card variant="tinted" data-color="additional-color-ocean">
         <CardBlock>
           <Paragraph data-size="sm">additional-color-ocean</Paragraph>
         </CardBlock>
       </Card>
-      <Card variant="tinted" data-color="neutral">
+      <Card variant="tinted" data-color="additional-color-jungle">
         <CardBlock>
-          <Paragraph data-size="sm">neutral</Paragraph>
+          <Paragraph data-size="sm">additional-color-jungle</Paragraph>
         </CardBlock>
       </Card>
     </div>

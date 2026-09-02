@@ -31,6 +31,10 @@ const card = (title, textStr, internalLink) => ({
 // up front so the block literal below stays readable.
 const kodeId = await contentId("/docs/kode");
 const komponenterId = await contentId("/docs/komponenter");
+// The Hjelpekorps photograph. The only real photograph in the repo today —
+// every other media item is a UI mockup or a diagram — so the front page and
+// Design retning share it until there is more photography to draw on.
+const heroFotoId = await contentId("/docs/designretning/DesignretningHeroFoto.png");
 
 await postArticle({
   parentPath: "/docs",
@@ -58,12 +62,41 @@ await postArticle({
           ],
         },
       },
+      // Ekte mennesker, ekte bilder. The Design retning names this a bærende
+      // element ("Mennesker i fokus") and says outright that "bilder og tekst
+      // er de viktigste — de bærer historiene og menneskene som gjør
+      // merkevaren ekte". The front page had neither a person nor a picture on
+      // it, which is most of why it read as generic: everything below the hero
+      // was text on tint. Full width and directly under the hero, so the first
+      // thing after the promise is who the promise is for.
+      {
+        _selected: "blocks-images",
+        "blocks-images": {
+          size: "full",
+          items: [
+            {
+              imageId: heroFotoId,
+              altText: "Frivillige fra Røde Kors Hjelpekorps i aksjon i fjellet",
+            },
+          ],
+        },
+      },
       // Big figures are one of the Design retning's own devices ("Skala" —
-      // big type and big stat numbers). Real counts, not decoration: 60 is
-      // metadata.json's component entries (the published artifact downstream
-      // templates consume), 388 the unique --ds-* custom properties in
-      // rk-design-tokens, 6 the brand colour scopes components re-theme
-      // through. Regenerate these when the library moves.
+      // big type and big stat numbers). Real counts, not decoration, and all
+      // three re-verified against their sources: 60 is metadata.json's
+      // component entries (the published artifact downstream templates
+      // consume), 388 the unique --ds-* custom properties across
+      // rk-design-tokens' css.
+      //
+      // The third said 6 and was wrong — there are 4. The scopes a component
+      // can be re-themed through are the ones the editor's theme selector
+      // offers, and that list is built by the lib's theme-selector service
+      // from the app's `themes` config (no.rodekors.docs.cfg), which names
+      // primary-color-red, neutral, additional-color-ocean and
+      // additional-color-jungle. Digdir's own semantic scopes (info, warning,
+      // danger, success) resolve too, but no block form exposes them, and
+      // accent/brand1/brand2 are aliases of primary-color-red. Regenerate
+      // these when the library moves.
       {
         _selected: "blocks-summary",
         "blocks-summary": {
@@ -72,24 +105,26 @@ await postArticle({
           items: [
             { label: "Komponenter", value: "60", description: "React-komponenter klare til bruk" },
             { label: "Designtokens", value: "388", description: "farger, avstander og typografi" },
-            { label: "Fargeskalaer", value: "6", description: "komponentene temes gjennom dem" },
+            { label: "Fargeskalaer", value: "4", description: "komponentene temes gjennom dem" },
           ],
           linkText: "Se komponentene",
           link: { _selected: "internal", internal: { internalLink: komponenterId } },
         },
       },
-      // One live component, not a gallery. A design system front page that
-      // only describes itself is the thing worth fixing here — but a wall of
-      // demos would just be the specimen shelf again with more pixels. Buttons
-      // are the most recognisable surface in the library, so a single
-      // variants demo carries "these are real, working components" on its own.
-      // The five curated demos live in components/blocks/demos.tsx; the editor
-      // picks one from the same list in Content Studio.
+      // Still ONE live component, not a gallery — a wall of demos would just
+      // be the specimen shelf again with more pixels. But the button variants
+      // occupied 290px of a 1090px panel, so three quarters of it was empty
+      // and the block read as filler. card-scopes fills the row and carries
+      // more at the same time: it is the same component re-themed through the
+      // colour scopes, which is the one thing about this system a screenshot
+      // cannot show. The five curated demos live in
+      // components/blocks/demos.tsx; the editor picks one from the same list
+      // in Content Studio.
       {
         _selected: "blocks-demo",
         "blocks-demo": {
-          demo: "button-variants",
-          title: "Ekte komponenter, rett fra biblioteket",
+          demo: "card-scopes",
+          title: "Én komponent, fire fargeskalaer",
         },
       },
       {
