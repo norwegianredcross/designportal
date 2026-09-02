@@ -1,7 +1,7 @@
 import { getUrl } from "@enonic/nextjs-adapter";
 import type { MetaData } from "@enonic/nextjs-adapter/types/componentProps";
 import { ArrowRightIcon } from "@navikt/aksel-icons";
-import { Button, Heading, Paragraph, Tag } from "rk-designsystem";
+import { Button, GraphicElement, Heading, Paragraph, Tag } from "rk-designsystem";
 import type { GetBlocksQuery } from "@/types/queries";
 import type { Get } from "@/types/utils";
 import { forceArray, notNullOrUndefined } from "@/utils";
@@ -60,6 +60,14 @@ export function HeroBlock({ data, meta }: HeroProps) {
           {data.lead}
         </Paragraph>
       ) : null}
+
+      {/* The rød tråd, in the corner the board puts it: on the direction's own
+          hero (Figma 2436:44864) the panel's bottom-right is stepped away and
+          the cross sits in the gap. Ours keeps its step top-left, where the
+          version stamp lives, so the mark takes the opposite corner.
+          GraphicElement is the library's own brand-shape component — position
+          rather than CSS rotation, per its docs. */}
+      <GraphicElement shape="cross" position="bottom-right" size="lg" className={styles.cross} />
 
       {linked.length > 0 ? (
         <div className={styles.actions}>

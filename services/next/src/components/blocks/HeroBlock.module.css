@@ -113,6 +113,20 @@
   display: flex;
   flex-wrap: wrap;
   gap: var(--ds-size-4);
+  /* Above the mark, so a wrapped button never disappears behind it. */
+  position: relative;
+  z-index: 1;
+}
+
+/* Parked in the panel's bottom-right corner and allowed to run off the edge,
+   the way the board crops it against the step. overflow: hidden on .panel does
+   the cropping, so the mark reads as a fragment rather than a floating shape.
+   Placement only — the shape's own orientation comes from its `position` prop,
+   because the component's docs say not to rotate it with CSS. */
+.cross {
+  position: absolute;
+  right: calc(-1 * var(--ds-size-6));
+  bottom: calc(-1 * var(--ds-size-6));
 }
 
 @media (max-width: 850px) {
