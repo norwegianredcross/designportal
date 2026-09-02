@@ -7,6 +7,33 @@ import { CORNER_TO_NOTCH, type NotchEdge, notchMaskDataUri } from "./notchMask";
 
 type ImagesData = BlockByTypename<"no_rodekors_docs_BlockImages">;
 
+type ImagesItem = NonNullable<NonNullable<ImagesData["items"]>[number]>;
+
+/**
+ * `image` is typed as the Content interface, so only its media_Image member carries a URL.
+ * The query selects no __typename for it, so narrow on the field itself.
+ */
+function toImage(image: ImagesItem["image"]) {
+  return image && "imageUrl" in image && image.imageUrl ? image : null;
+}
+
+type Image = NonNullable<ReturnType<typeof toImage>>;
+
+/**
+ * The source dimensions, which XP stores as strings in the media:imageInfo x-data and leaves out
+ * entirely for images uploaded before it existed. The view only wants the RATIO, to reserve
+ * layout space before the file loads; unreadable metadata just means no reservation.
+ */
+function toDimensions(image: Image) {
+  const info = "x" in image ? image.x?.media?.imageInfo : null;
+  const width = Number(info?.imageWidth);
+  const height = Number(info?.imageHeight);
+
+  if (!Number.isFinite(width) || !Number.isFinite(height) || width <= 0 || height <= 0) return null;
+
+  return { width, height };
+}
+
 interface ImagesProps {
   data: ImagesData;
   meta: MetaData;
@@ -56,9 +83,15 @@ interface ImagesProps {
 const SIZE_WIDTH = { full: "100%", medium: "60%", small: "40%" } as const;
 
 export function ImagesBlock({ data, size = "medium", alignment = "left", shape = "rounded", notch }: ImagesProps) {
+  // Pair each entry with its narrowed media_Image up front, so the render
+  // below never has to re-narrow and entries without a usable image drop out.
   const items = forceArray(data.items)
     .filter(notNullOrUndefined)
-    .filter((item) => item.imageUrl);
+    .map((item) => {
+      const image = toImage(item.image);
+      return image ? { item, image } : null;
+    })
+    .filter(notNullOrUndefined);
   if (items.length === 0) return null;
   const gallery = items.length > 1;
   // Content Studio wins over code: the shadowed mixin's fields (size,
@@ -79,20 +112,25 @@ export function ImagesBlock({ data, size = "medium", alignment = "left", shape =
   };
   return (
     <div className={`${styles.wrapper}${gallery ? ` ${styles.gallery}` : ""}`}>
-      {items.map((item, index) => {
+      {items.map(({ item, image }, index) => {
         const notched = !gallery && effectiveShape === "notch";
         // Reserve the image's own aspect ratio (from the media metadata)
-        // before the file loads; without both dimensions the browser sizes
-        // it on arrival like before.
-        const naturalRatio = item.width && item.height ? `${item.width} / ${item.height}` : undefined;
+        // before the file loads; without readable dimensions the browser
+        // sizes it on arrival like before.
+        // Named dimensions, not `size` — that is already the component's
+        // width prop, and shadowing it here would be a trap for the next edit.
+        const dimensions = toDimensions(image);
+        const naturalRatio = dimensions ? `${dimensions.width} / ${dimensions.height}` : undefined;
+        /* Density descriptors rather than widths: the 1x scale already matches the article
+           column, so the only open question is the display's pixel ratio. Left off entirely
+           when the 2x scale is missing, so the browser falls back to src. */
+        const srcSet = image.imageUrl2x ? `${image.imageUrl} 1x, ${image.imageUrl2x} 2x` : undefined;
         const img = (
           <img
-            src={item.imageUrl ?? undefined}
+            src={image.imageUrl ?? undefined}
+            srcSet={srcSet}
             alt={item.altText ?? ""}
             className={`${styles.image}${gallery ? ` ${styles.imageInGallery}` : ""}`}
-            // Reserve the image's own aspect ratio (from the media metadata)
-            // before the file loads; without both dimensions the browser sizes
-            // it on arrival as before.
             style={naturalRatio ? ({ "--rk-image-aspect": naturalRatio } as CSSProperties) : undefined}
           />
         );
@@ -114,7 +152,8 @@ export function ImagesBlock({ data, size = "medium", alignment = "left", shape =
               // SVG path (see notchMask.ts). The mask's viewBox matches
               // the aspect ratio set here, so the geometry never distorts.
               <img
-                src={item.imageUrl ?? undefined}
+                src={image.imageUrl ?? undefined}
+                srcSet={srcSet}
                 alt={item.altText ?? ""}
                 className={styles.imageNotched}
                 style={

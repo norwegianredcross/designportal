@@ -36,7 +36,13 @@ export default () =>
               ...richTextFragment
             }
             author
-            imageUrl(scale: "square(96)")
+            image {
+              _id
+              ... on media_Image {
+                imageUrl(scale: "square(96)", type: absolute)
+                imageUrl2x: imageUrl(scale: "square(192)", type: absolute)
+              }
+            }
             publicationTitle
             publicationUrl
           }
@@ -48,11 +54,7 @@ export default () =>
             }
             theme
           }
-          # No richTextFragment here: image fields are plain strings, and the
-          # imageUrl arrives pre-scaled from the XP side: 2x the 1090px
-          # article column (globals.css), so full-width images stay sharp on
-          # retina displays. XP never upscales past the original, so small
-          # sources are unaffected.
+          # No richTextFragment here: the image block carries no rich text.
           ...on no_rodekors_docs_BlockImages {
             __typename
             # Editor choices (shadowed mixin): single-image size/alignment
@@ -65,13 +67,29 @@ export default () =>
             notchWidth
             notchDepth
             items {
-              imageUrl(scale: "width(2180)")
+              image {
+                _id
+                ... on media_Image {
+                  # 1x is the 1090px article column (globals.css); 2x covers
+                  # retina. XP never upscales past the original, so a small
+                  # source just serves the same file twice.
+                  imageUrl(scale: "width(1090)", type: absolute)
+                  imageUrl2x: imageUrl(scale: "width(2180)", type: absolute)
+                  # Source pixel size, which XP's media-info extraction writes
+                  # into x-data at upload. The view derives the aspect ratio
+                  # from it and reserves space before the file loads (no CLS).
+                  x {
+                    media {
+                      imageInfo {
+                        imageWidth
+                        imageHeight
+                      }
+                    }
+                  }
+                }
+              }
               altText
               caption
-              # Original pixel size — the view derives the aspect ratio and
-              # reserves space before the file loads (no layout shift).
-              width
-              height
             }
           }
           # Card links come pre-resolved from XP: url = external address
@@ -90,9 +108,18 @@ export default () =>
               # claim "text" as RichText while a card's text is a plain
               # string.
               cardText: text
-              imageUrl(scale: "width(768)")
-              # Alt from the image CONTENT (the card form has no alt field).
-              imageAlt
+              image {
+                _id
+                ... on media_Image {
+                  imageUrl(scale: "width(768)", type: absolute)
+                  imageUrl2x: imageUrl(scale: "width(1536)", type: absolute)
+                  # The card form has no alt field, so the image content's own
+                  # alt text speaks for it; empty means decorative.
+                  data {
+                    altText
+                  }
+                }
+              }
               theme
               url
               contentPath

@@ -70,9 +70,13 @@ export const Default: Story = {
       notchDepth: null,
       items: [
         {
-          imageUrl: "https://placehold.co/600x800/D52B1E/fff?text=Bilde",
-          width: null,
-          height: null,
+          image: {
+            _id: "story-image-1",
+            imageUrl: "https://placehold.co/600x800/D52B1E/fff?text=Bilde",
+            imageUrl2x: "https://placehold.co/1200x1600/D52B1E/fff?text=Bilde",
+            // Source pixel size, as strings — that is how XP stores media:imageInfo.
+            x: { media: { imageInfo: { imageWidth: "600", imageHeight: "800" } } },
+          },
           altText: "Frivillige fra Røde Kors deler ut mat",
           caption: "Frivillige i aksjon under vinterberedskapen.",
         },
@@ -96,16 +100,24 @@ export const Gallery: Story = {
       notchDepth: null,
       items: [
         {
-          imageUrl: "https://placehold.co/768x432/D52B1E/fff?text=1",
-          width: null,
-          height: null,
+          image: {
+            _id: "story-image-2",
+            imageUrl: "https://placehold.co/768x432/D52B1E/fff?text=1",
+            imageUrl2x: "https://placehold.co/1536x864/D52B1E/fff?text=1",
+            // Source pixel size, as strings — that is how XP stores media:imageInfo.
+            x: { media: { imageInfo: { imageWidth: "768", imageHeight: "432" } } },
+          },
           altText: "Første bilde",
           caption: "Med bildetekst.",
         },
         {
-          imageUrl: "https://placehold.co/768x432/1E1E1E/fff?text=2",
-          width: null,
-          height: null,
+          image: {
+            _id: "story-image-3",
+            imageUrl: "https://placehold.co/768x432/1E1E1E/fff?text=2",
+            imageUrl2x: "https://placehold.co/1536x864/1E1E1E/fff?text=2",
+            // Source pixel size, as strings — that is how XP stores media:imageInfo.
+            x: { media: { imageInfo: { imageWidth: "768", imageHeight: "432" } } },
+          },
           altText: "Andre bilde",
           caption: null,
         },
@@ -113,9 +125,13 @@ export const Gallery: Story = {
           // Odd count: the third tile wraps to its own row at column width
           // (auto-fill keeps the empty track) instead of stretching. Its
           // portrait source also pins the uniform 2:1 crop.
-          imageUrl: "https://placehold.co/600x800/78909C/fff?text=3",
-          width: null,
-          height: null,
+          image: {
+            _id: "story-image-4",
+            imageUrl: "https://placehold.co/600x800/78909C/fff?text=3",
+            imageUrl2x: "https://placehold.co/1200x1600/78909C/fff?text=3",
+            // Source pixel size, as strings — that is how XP stores media:imageInfo.
+            x: { media: { imageInfo: { imageWidth: "600", imageHeight: "800" } } },
+          },
           altText: "Tredje bilde",
           caption: "Oddetall wrapper pent.",
         },
@@ -143,9 +159,13 @@ export const Notch: Story = {
       notchDepth: null,
       items: [
         {
-          imageUrl: "https://placehold.co/800x600/2E7D32/fff?text=Bilde",
-          width: null,
-          height: null,
+          image: {
+            _id: "story-image-5",
+            imageUrl: "https://placehold.co/800x600/2E7D32/fff?text=Bilde",
+            imageUrl2x: "https://placehold.co/1600x1200/2E7D32/fff?text=Bilde",
+            // Source pixel size, as strings — that is how XP stores media:imageInfo.
+            x: { media: { imageInfo: { imageWidth: "800", imageHeight: "600" } } },
+          },
           altText: "Telt i skogen",
           caption: null,
         },
@@ -173,9 +193,13 @@ export const NotchWide: Story = {
       notchDepth: null,
       items: [
         {
-          imageUrl: "https://placehold.co/1600x686/D52B1E/fff?text=Bred",
-          width: null,
-          height: null,
+          image: {
+            _id: "story-image-6",
+            imageUrl: "https://placehold.co/1600x686/D52B1E/fff?text=Bred",
+            imageUrl2x: "https://placehold.co/3200x1372/D52B1E/fff?text=Bred",
+            // Source pixel size, as strings — that is how XP stores media:imageInfo.
+            x: { media: { imageInfo: { imageWidth: "1600", imageHeight: "686" } } },
+          },
           altText: "Bredt heltebilde",
           caption: null,
         },

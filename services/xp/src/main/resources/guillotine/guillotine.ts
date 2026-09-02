@@ -12,11 +12,14 @@
  *
  * Adding a block always touches the union member type and the
  * `resolveBlocks` switch that maps `_selected` -> typed object — plus field
- * resolvers when a field needs server-side processing (rich text, image
- * URLs); plain string fields resolve on their own.
+ * resolvers when a field needs a server-side lookup (rich text, or an image
+ * id turned into its media content); plain string fields resolve on their own.
+ *
+ * `resolveBlocks` itself only reshapes what the editor stored — it never
+ * reads other content. Anything that costs a lookup belongs in a field
+ * resolver, so a query that does not ask for it does not pay for it.
  */
 import { type Content, get as getOne } from "/lib/xp/content";
-import { imageUrl, type ImageUrlParams } from "/lib/xp/portal";
 import { forceArray } from "/lib/rodekors/arrays";
 import { buildRichText, type ProcessHtmlArgs } from "/lib/rodekors/rich-text";
 import { type DataFetchingEnvironment, type Extensions, type GraphQL, ObjectTypeName } from "@enonic-types/guillotine";
@@ -90,14 +93,13 @@ export function extensions(graphQL: GraphQL): Extensions {
           author: {
             type: graphQL.GraphQLString,
           },
-          // The editor stores a media content id (ImageSelector); the API
-          // exposes a ready-to-use URL instead so the frontend never needs
-          // to resolve media content itself.
-          imageUrl: {
-            type: graphQL.GraphQLString,
-            args: {
-              scale: graphQL.nonNull(graphQL.GraphQLString),
-            },
+          // The mixin stores the picked image as an id. Exposing it as the
+          // Content interface rather than media_Image lets the client narrow
+          // with `... on media_Image` and ask Guillotine's own imageUrl field
+          // for whatever scales it wants — the same way images in a RichText
+          // work. Nothing about presentation is decided here any more.
+          image: {
+            type: graphQL.reference(ObjectTypeName.Content),
           },
           publicationTitle: {
             type: graphQL.GraphQLString,
@@ -133,28 +135,19 @@ export function extensions(graphQL: GraphQL): Extensions {
       [OBJECT_TYPE_BLOCK_IMAGE]: {
         description: "One image in an images block",
         fields: {
-          // Same contract as the quote block: the editor stores a media id,
-          // the API hands the frontend a finished URL at the requested scale.
-          imageUrl: {
-            type: graphQL.GraphQLString,
-            args: {
-              scale: graphQL.nonNull(graphQL.GraphQLString),
-            },
+          // The mixin stores the picked image as an id. Exposing it as the
+          // Content interface rather than media_Image lets the client narrow
+          // with `... on media_Image` and ask Guillotine's own imageUrl field
+          // for whatever scales it wants — the same way images in a RichText
+          // work. Nothing about presentation is decided here any more.
+          image: {
+            type: graphQL.reference(ObjectTypeName.Content),
           },
           altText: {
             type: graphQL.GraphQLString,
           },
           caption: {
             type: graphQL.GraphQLString,
-          },
-          // Original pixel size of the media, read from the image content's
-          // metadata in resolveBlocks. The frontend only uses the RATIO —
-          // reserving layout space before the file loads (no CLS).
-          width: {
-            type: graphQL.GraphQLInt,
-          },
-          height: {
-            type: graphQL.GraphQLInt,
           },
         },
       },
@@ -199,21 +192,17 @@ export function extensions(graphQL: GraphQL): Extensions {
           kicker: {
             type: graphQL.GraphQLString,
           },
-          // Alt text for the card image, taken from the image CONTENT
-          // (its own alt-text/caption fields) since the card form has no
-          // alt field of its own — resolved in resolveBlocks.
-          imageAlt: {
-            type: graphQL.GraphQLString,
-          },
           // Plain string, not RichText: the editor field is a TextArea.
           text: {
             type: graphQL.GraphQLString,
           },
-          imageUrl: {
-            type: graphQL.GraphQLString,
-            args: {
-              scale: graphQL.nonNull(graphQL.GraphQLString),
-            },
+          // The mixin stores the picked image as an id. Exposing it as the
+          // Content interface rather than media_Image lets the client narrow
+          // with `... on media_Image` and ask Guillotine's own imageUrl field
+          // for whatever scales it wants — the same way images in a RichText
+          // work. Nothing about presentation is decided here any more.
+          image: {
+            type: graphQL.reference(ObjectTypeName.Content),
           },
           theme: {
             type: graphQL.GraphQLString,
@@ -428,18 +417,9 @@ export function extensions(graphQL: GraphQL): Extensions {
       [OBJECT_TYPE_BLOCK_QUOTE]: {
         text: (env: DataFetchingEnvironment<ProcessHtmlArgs, LocalContextRecord, ResolvedQuoteBlock>) =>
           buildRichText(env.source.text, env.args),
-        imageUrl: (env: DataFetchingEnvironment<{ scale?: string }, LocalContextRecord, ResolvedQuoteBlock>) =>
-          env.source.imageId
-            ? imageUrl({
-                id: env.source.imageId,
-                // The schema declares scale as non-null, so it is always set at
-                // runtime; the arg is typed optional only because Guillotine's
-                // resolver interface requires it, and the cast bridges to the
-                // portal lib's template-literal scale type ("square(96)" etc.).
-                scale: env.args.scale as ImageUrlParams["scale"],
-                type: "absolute",
-              })
-            : null,
+        // Look the image up lazily, so a query that skips it costs nothing
+        image: (env: DataFetchingEnvironment<Record<string, unknown>, LocalContextRecord, ResolvedQuoteBlock>) =>
+          env.source.imageId ? getOne({ key: env.source.imageId }) : null,
       },
       [OBJECT_TYPE_BLOCK_TABLE]: {
         table: (env: DataFetchingEnvironment<ProcessHtmlArgs, LocalContextRecord, ResolvedTableBlock>) =>
@@ -450,26 +430,14 @@ export function extensions(graphQL: GraphQL): Extensions {
           buildRichText(env.source.text, env.args),
       },
       [OBJECT_TYPE_BLOCK_IMAGE]: {
-        imageUrl: (env: DataFetchingEnvironment<{ scale?: string }, LocalContextRecord, ResolvedImageItem>) =>
-          env.source.imageId
-            ? imageUrl({
-                id: env.source.imageId,
-                // Non-null in the schema, so always present at runtime; the
-                // cast bridges to the portal lib's template-literal type.
-                scale: env.args.scale as ImageUrlParams["scale"],
-                type: "absolute",
-              })
-            : null,
+        // Look the image up lazily, so a query that skips it costs nothing
+        image: (env: DataFetchingEnvironment<Record<string, unknown>, LocalContextRecord, ResolvedImageItem>) =>
+          env.source.imageId ? getOne({ key: env.source.imageId }) : null,
       },
       [OBJECT_TYPE_BLOCK_CARD]: {
-        imageUrl: (env: DataFetchingEnvironment<{ scale?: string }, LocalContextRecord, ResolvedCardItem>) =>
-          env.source.imageId
-            ? imageUrl({
-                id: env.source.imageId,
-                scale: env.args.scale as ImageUrlParams["scale"],
-                type: "absolute",
-              })
-            : null,
+        // Look the image up lazily, so a query that skips it costs nothing
+        image: (env: DataFetchingEnvironment<Record<string, unknown>, LocalContextRecord, ResolvedCardItem>) =>
+          env.source.imageId ? getOne({ key: env.source.imageId }) : null,
       },
       HeadlessCms: {
         [FIELD_BLOCKS]: (env): unknown[] => {
@@ -494,7 +462,7 @@ type ResolvedQuoteBlock = {
   __typename: typeof OBJECT_TYPE_BLOCK_QUOTE;
   text?: string;
   author?: string;
-  // Kept as the raw media id; the imageUrl field resolver turns it into a URL.
+  // Kept as the raw media id; the image field resolver looks the content up.
   imageId?: string;
   publicationTitle?: string;
   publicationUrl?: string;
@@ -508,13 +476,11 @@ type ResolvedFactboxBlock = {
 };
 
 type ResolvedImageItem = {
-  // Raw media id from the ImageSelector; turned into a URL by the field
-  // resolver above so the frontend never touches media content.
+  // Raw media id from the ImageSelector; the image field resolver above
+  // turns it into the media content itself.
   imageId?: string;
   altText?: string;
   caption?: string;
-  width?: number;
-  height?: number;
 };
 
 type ResolvedImagesBlock = {
@@ -533,7 +499,6 @@ type ResolvedCardItem = {
   kicker?: string;
   text?: string;
   imageId?: string;
-  imageAlt?: string;
   theme?: string;
   url?: string;
   contentPath?: string;
@@ -607,52 +572,6 @@ type ResolvedAccordionBlock = {
   items: ResolvedTextBlock[];
 };
 
-/**
- * Original pixel size from the image content's media metadata (the x-data
- * XP's media-info extraction fills in at upload). Missing metadata just
- * omits the fields — the frontend falls back to loading without reserved
- * space.
- */
-function mediaPixelSize(imageId?: string): { width?: number; height?: number } {
-  if (!imageId) return {};
-  const media = getOne({ key: imageId }) as {
-    x?: { media?: { imageInfo?: { imageWidth?: number; imageHeight?: number } } };
-  } | null;
-  const info = media?.x?.media?.imageInfo;
-  // Number(): guillotine types these as strings on some content vintages.
-  // A truthiness check is not enough — a non-numeric legacy value passes it
-  // and Number() turns it into NaN, which cannot serialize as GraphQLInt and
-  // puts an error on the whole blocks response. Unreadable metadata is treated
-  // as absent instead, which the frontend already handles by loading the image
-  // without reserved space.
-  const width = Number(info?.imageWidth);
-  const height = Number(info?.imageHeight);
-  // Plain comparisons rather than Number.isFinite or the global isFinite.
-  //
-  // XP's server-side JavaScript runtime has no ES2015 Number statics:
-  // Number.isFinite throws "is not a function" at request time and takes the
-  // entire blocks response down with it. Biome's noGlobalIsFinite rule then
-  // pushes you straight back to that broken API, and this service lints with
-  // --error-on-warnings, so the global is not an option either.
-  //
-  // `!(n > 0)` covers NaN (every comparison with NaN is false), zero and
-  // negatives in one go; Infinity is the only survivor that needs naming.
-  const usable = (n: number) => n > 0 && n !== Number.POSITIVE_INFINITY;
-  if (!usable(width) || !usable(height)) return {};
-  return { width, height };
-}
-
-/** Alt text stored ON the image content (Content Studio's own alt-text
- * field, falling back to its caption). */
-function mediaAltText(imageId?: string): string | undefined {
-  if (!imageId) return undefined;
-  // Only the media's actual alt-text field: captions are visible prose
-  // ("Foto: ..."), and on cards the alt lands inside the wrapping link's
-  // accessible name — caption text does not belong there.
-  const media = getOne({ key: imageId }) as { data?: { altText?: string } } | null;
-  return media?.data?.altText ?? undefined;
-}
-
 function resolveBlocks(
   block: BlockRaw,
 ):
@@ -710,15 +629,11 @@ function resolveBlocks(
       return {
         __typename: OBJECT_TYPE_BLOCK_IMAGES,
         // forceArray: XP stores a single repeatable entry as a bare object.
-        items: forceArray(block["blocks-images"].items).map((item) => {
-          const size = mediaPixelSize(item.imageId);
-          return {
-            imageId: item.imageId,
-            altText: item.altText,
-            caption: item.caption,
-            ...size,
-          };
-        }),
+        items: forceArray(block["blocks-images"].items).map((item) => ({
+          imageId: item.imageId,
+          altText: item.altText,
+          caption: item.caption,
+        })),
         // Editor choices from the app's shadowed mixin, passed through
         // verbatim — the frontend owns clamping and defaults. The notch
         // fields only exist when the editor picked that option.
@@ -752,9 +667,6 @@ function resolveBlocks(
             kicker: item.kicker,
             text: item.text,
             imageId: item.imageId,
-            // The card form has no alt field, so the image CONTENT's own
-            // alt text (or caption) speaks for it; empty means decorative.
-            imageAlt: mediaAltText(item.imageId),
             theme: item.theme,
             url: item.link?._selected === "external" ? item.link.external.externalLink : undefined,
             contentPath: target?._path ?? undefined,

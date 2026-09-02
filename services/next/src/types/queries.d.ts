@@ -84,12 +84,20 @@ export type GetBlocksQuery = {
           items: Array<{
             title: string | null;
             kicker: string | null;
-            imageUrl: string | null;
-            imageAlt: string | null;
             theme: string | null;
             url: string | null;
             contentPath: string | null;
             cardText: string | null;
+            image:
+              | { _id: string }
+              | { _id: string }
+              | {
+                  imageUrl: string | null;
+                  _id: string;
+                  imageUrl2x: string | null;
+                  data: { altText: string | null } | null;
+                }
+              | null;
           } | null> | null;
         } & { __typename: "no_rodekors_docs_BlockCards" })
       | ({ code: string | null; language: string | null; label: string | null } & {
@@ -133,16 +141,24 @@ export type GetBlocksQuery = {
           notchWidth: number | null;
           notchDepth: number | null;
           items: Array<{
-            imageUrl: string | null;
             altText: string | null;
             caption: string | null;
-            width: number | null;
-            height: number | null;
+            image:
+              | { _id: string }
+              | { _id: string }
+              | {
+                  imageUrl: string | null;
+                  _id: string;
+                  imageUrl2x: string | null;
+                  x: {
+                    media: { imageInfo: { imageWidth: string | null; imageHeight: string | null } | null } | null;
+                  } | null;
+                }
+              | null;
           } | null> | null;
         } & { __typename: "no_rodekors_docs_BlockImages" })
       | ({
           author: string | null;
-          imageUrl: string | null;
           publicationTitle: string | null;
           publicationUrl: string | null;
           text: {
@@ -162,6 +178,11 @@ export type GetBlocksQuery = {
               style: { name: string | null; aspectRatio: string | null; filter: string | null } | null;
             } | null> | null;
           } | null;
+          image:
+            | { _id: string }
+            | { _id: string }
+            | { imageUrl: string | null; _id: string; imageUrl2x: string | null }
+            | null;
         } & { __typename: "no_rodekors_docs_BlockQuote" })
       | ({
           title: string | null;
@@ -384,12 +405,20 @@ export type GetSidePageQuery = {
           items: Array<{
             title: string | null;
             kicker: string | null;
-            imageUrl: string | null;
-            imageAlt: string | null;
             theme: string | null;
             url: string | null;
             contentPath: string | null;
             cardText: string | null;
+            image:
+              | { _id: string }
+              | { _id: string }
+              | {
+                  imageUrl: string | null;
+                  _id: string;
+                  imageUrl2x: string | null;
+                  data: { altText: string | null } | null;
+                }
+              | null;
           } | null> | null;
         } & { __typename: "no_rodekors_docs_BlockCards" })
       | ({ code: string | null; language: string | null; label: string | null } & {
@@ -433,16 +462,24 @@ export type GetSidePageQuery = {
           notchWidth: number | null;
           notchDepth: number | null;
           items: Array<{
-            imageUrl: string | null;
             altText: string | null;
             caption: string | null;
-            width: number | null;
-            height: number | null;
+            image:
+              | { _id: string }
+              | { _id: string }
+              | {
+                  imageUrl: string | null;
+                  _id: string;
+                  imageUrl2x: string | null;
+                  x: {
+                    media: { imageInfo: { imageWidth: string | null; imageHeight: string | null } | null } | null;
+                  } | null;
+                }
+              | null;
           } | null> | null;
         } & { __typename: "no_rodekors_docs_BlockImages" })
       | ({
           author: string | null;
-          imageUrl: string | null;
           publicationTitle: string | null;
           publicationUrl: string | null;
           text: {
@@ -462,6 +499,11 @@ export type GetSidePageQuery = {
               style: { name: string | null; aspectRatio: string | null; filter: string | null } | null;
             } | null> | null;
           } | null;
+          image:
+            | { _id: string }
+            | { _id: string }
+            | { imageUrl: string | null; _id: string; imageUrl2x: string | null }
+            | null;
         } & { __typename: "no_rodekors_docs_BlockQuote" })
       | ({
           title: string | null;

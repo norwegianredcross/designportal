@@ -2169,9 +2169,8 @@ type no_rodekors_docs_BlockAccordion {
 type no_rodekors_docs_BlockCard {
   title: String
   kicker: String
-  imageAlt: String
   text: String
-  imageUrl(scale: String!): String
+  image: Content
   theme: String
   url: String
   contentPath: String
@@ -2224,11 +2223,9 @@ type no_rodekors_docs_BlockHeroAction {
 
 """One image in an images block"""
 type no_rodekors_docs_BlockImage {
-  imageUrl(scale: String!): String
+  image: Content
   altText: String
   caption: String
-  width: Int
-  height: Int
 }
 
 """An image gallery or an image that can be expanded"""
@@ -2246,7 +2243,7 @@ type no_rodekors_docs_BlockImages {
 type no_rodekors_docs_BlockQuote {
   text(processHtml: ProcessHtmlInput): RichText
   author: String
-  imageUrl(scale: String!): String
+  image: Content
   publicationTitle: String
   publicationUrl: String
 }

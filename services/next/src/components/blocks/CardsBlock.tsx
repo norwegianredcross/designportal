@@ -10,6 +10,27 @@ type CardsData = BlockByTypename<"no_rodekors_docs_BlockCards">;
 
 type CardItem = NonNullable<NonNullable<CardsData["items"]>[number]>;
 
+type CardImage = { src: string; srcSet?: string; alt: string };
+
+/**
+ * `image` is typed as the Content interface, so only its media_Image member carries a URL.
+ * The query selects no __typename for it, so narrow on the field itself.
+ *
+ * The card form has no alt field, so the alt comes off the image content — empty means the
+ * editor left it blank, which reads as decorative.
+ */
+function toImage(image: CardItem["image"]): CardImage | null {
+  if (!image || !("imageUrl" in image) || !image.imageUrl) return null;
+
+  return {
+    src: image.imageUrl,
+    /* Density descriptors rather than widths: the card image box is capped in CSS, so the only
+       open question is the display's pixel ratio. Left off when the 2x scale is missing. */
+    srcSet: image.imageUrl2x ? `${image.imageUrl} 1x, ${image.imageUrl2x} 2x` : undefined,
+    alt: image.data?.altText ?? "",
+  };
+}
+
 interface CardsProps {
   data: CardsData;
   meta: MetaData;
@@ -66,9 +87,9 @@ export function CardsBlock({ data, meta }: CardsProps) {
               reverse={placement === "bottom" || placement === "right"}
             />
           );
-          // imageAlt counts as text: an aria-label here would OVERRIDE the
-          // image's alt in the link's accessible name.
-          const hasText = Boolean(item.title || item.kicker || item.cardText || item.imageAlt);
+          // The image's alt counts as text: an aria-label here would OVERRIDE
+          // it in the link's accessible name.
+          const hasText = Boolean(item.title || item.kicker || item.cardText || toImage(item.image)?.alt);
           return href ? (
             <a
               // biome-ignore lint/suspicious/noArrayIndexKey: card order is stable
@@ -149,16 +170,17 @@ function Card({
     </div>
   );
 
-  if (vertical && item.imageUrl) {
+  const image = toImage(item.image);
+
+  if (vertical && image) {
     // Liten med bilde: the image sits ON TOP of the panel (rounded top
     // corners on the image, rounded bottom corners on the text panel), not
     // inside it — per the Figma masks, which are plain rounded rectangles.
-    const image = (
+    const imageEl = (
       <img
-        // Alt from the image content itself; empty (decorative) when the
-        // editor gave the media no alt text.
-        src={item.imageUrl}
-        alt={item.imageAlt ?? ""}
+        src={image.src}
+        srcSet={image.srcSet}
+        alt={image.alt}
         className={`${styles.topImage}${reverse ? ` ${styles.topImageReverse}` : ""}`}
       />
     );
@@ -169,13 +191,13 @@ function Card({
     );
     return (
       <div className={styles.stack}>
-        {reverse ? panel : image}
-        {reverse ? image : panel}
+        {reverse ? panel : imageEl}
+        {reverse ? imageEl : panel}
       </div>
     );
   }
 
-  if (!vertical && item.imageUrl) {
+  if (!vertical && image) {
     // Stor/medium med bilde: one tinted panel, image beside the text. The
     // Figma spec rounds only the stor image's top corners and leaves medium
     // square — inside a padded panel that reads as a rendering bug, so both
@@ -193,7 +215,7 @@ function Card({
         data-color={scope}
         style={padVar}
       >
-        <img src={item.imageUrl} alt={item.imageAlt ?? ""} className={styles.sideImage} style={imageVars} />
+        <img src={image.src} srcSet={image.srcSet} alt={image.alt} className={styles.sideImage} style={imageVars} />
         {text}
       </div>
     );
