@@ -37,16 +37,39 @@
 
 .image {
   width: 100%;
-  /* cover in both modes: gallery tiles crop to 2:1, and a capped single image
-     crops rather than squashing when the height cap bites first. */
+  /* cover in both modes: gallery tiles crop to 2:1, and an image whose pixel
+     size we could not read still crops rather than squashing when the height
+     cap below bites first. */
   object-fit: cover;
   display: block;
   border-radius: var(--ds-border-radius-lg);
   aspect-ratio: var(--rk-image-aspect, auto);
   height: auto;
-  /* A lone image keeps its natural shape up to this cap; beyond it the
-     cover-crop keeps the column tidy instead of towering over the article. */
-  max-height: 32rem;
+  /* A lone image keeps its natural shape up to this cap, so it accompanies the
+     article instead of towering over it. */
+  max-height: var(--rk-image-cap);
+}
+
+.image {
+  --rk-image-cap: 32rem;
+}
+
+/* Reaching the cap by narrowing the image rather than cropping it.
+ *
+ * The cap used to bite as max-height against a full-width image, and
+ * object-fit then cut the overflow away: 26 of the single images on the
+ * Design retning pages lost height that way, two of them 66% of it. These are
+ * diagrams and UI mockups on the pages whose whole job is to SHOW the design
+ * direction — half a mockup reads as a rendering bug.
+ *
+ * Same cap, different axis. Solving `width / (w/h) = cap` for width gives
+ * `cap * w / h`, so at that width the natural height lands exactly on the cap
+ * and nothing has to be cut. min() keeps it inside the column for wide images,
+ * which are unaffected and still fill it. Needs the pixel size, so it is a
+ * separate class the view only adds when it has one. */
+.imageFits {
+  width: min(100%, calc(var(--rk-image-cap) * var(--rk-image-w) / var(--rk-image-h)));
+  max-height: none;
 }
 
 .imageInGallery {

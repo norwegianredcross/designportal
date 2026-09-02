@@ -125,13 +125,30 @@ export function ImagesBlock({ data, size = "medium", alignment = "left", shape =
            column, so the only open question is the display's pixel ratio. Left off entirely
            when the 2x scale is missing, so the browser falls back to src. */
         const srcSet = image.imageUrl2x ? `${image.imageUrl} 1x, ${image.imageUrl2x} 2x` : undefined;
+        /* A lone image whose dimensions we know can have its WIDTH capped so the natural
+           height lands on the height cap — see .imageFits. Gallery tiles are excluded: their
+           2:1 crop is the point, it is what keeps the grid even. Without readable dimensions
+           there is nothing to compute from, so the old height cap still crops. */
+        const fits = !gallery && dimensions;
         const img = (
           <img
             src={image.imageUrl ?? undefined}
             srcSet={srcSet}
             alt={item.altText ?? ""}
-            className={`${styles.image}${gallery ? ` ${styles.imageInGallery}` : ""}`}
-            style={naturalRatio ? ({ "--rk-image-aspect": naturalRatio } as CSSProperties) : undefined}
+            className={`${styles.image}${gallery ? ` ${styles.imageInGallery}` : ""}${
+              fits ? ` ${styles.imageFits}` : ""
+            }`}
+            style={
+              dimensions
+                ? ({
+                    "--rk-image-aspect": naturalRatio,
+                    // The two numbers separately as well, because the width cap has to divide
+                    // them and calc() cannot take them apart again once they are one token.
+                    "--rk-image-w": dimensions.width,
+                    "--rk-image-h": dimensions.height,
+                  } as CSSProperties)
+                : undefined
+            }
           />
         );
         return (
