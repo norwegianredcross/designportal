@@ -627,7 +627,18 @@ function mediaPixelSize(imageId?: string): { width?: number; height?: number } {
   // without reserved space.
   const width = Number(info?.imageWidth);
   const height = Number(info?.imageHeight);
-  if (!Number.isFinite(width) || !Number.isFinite(height) || width <= 0 || height <= 0) return {};
+  // Plain comparisons rather than Number.isFinite or the global isFinite.
+  //
+  // XP's server-side JavaScript runtime has no ES2015 Number statics:
+  // Number.isFinite throws "is not a function" at request time and takes the
+  // entire blocks response down with it. Biome's noGlobalIsFinite rule then
+  // pushes you straight back to that broken API, and this service lints with
+  // --error-on-warnings, so the global is not an option either.
+  //
+  // `!(n > 0)` covers NaN (every comparison with NaN is false), zero and
+  // negatives in one go; Infinity is the only survivor that needs naming.
+  const usable = (n: number) => n > 0 && n !== Number.POSITIVE_INFINITY;
+  if (!usable(width) || !usable(height)) return {};
   return { width, height };
 }
 
