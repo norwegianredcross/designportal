@@ -5,6 +5,10 @@
  * data and cannot be enumerated here. Everything static lives in this file. */
 
 .wrapper {
+  /* One cap for both silhouettes. Declared here rather than on .image so the
+     notched form inherits it too — .imageFits divides by it, and against an
+     undefined variable that whole declaration drops out silently. */
+  --rk-image-cap: 32rem;
   display: grid;
   gap: var(--ds-size-5);
   grid-template-columns: 1fr;
@@ -48,10 +52,6 @@
   /* A lone image keeps its natural shape up to this cap, so it accompanies the
      article instead of towering over it. */
   max-height: var(--rk-image-cap);
-}
-
-.image {
-  --rk-image-cap: 32rem;
 }
 
 /* Reaching the cap by narrowing the image rather than cropping it.

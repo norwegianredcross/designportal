@@ -1,6 +1,7 @@
 import { RENDER_MODE, XP_REQUEST_TYPE } from "@enonic/nextjs-adapter";
 import type { MetaData } from "@enonic/nextjs-adapter/types/componentProps";
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
+import { expect, within } from "storybook/test";
 import { ImagesBlock } from "@/components/blocks/ImagesBlock";
 
 const meta: MetaData = {
@@ -172,11 +173,27 @@ export const Notch: Story = {
       ],
     },
   },
+  /* The regression this guards: the notch used to fall back to 4 / 3 for every
+     image, so picking the shape recropped the picture. This story sets no
+     aspect prop, so the 800x600 source must drive both the box and the mask. */
+  play: async ({ canvasElement }) => {
+    const img = within(canvasElement).getByAltText("Telt i skogen");
+    await expect(img.style.getPropertyValue("--rk-notch-aspect")).toBe("800 / 600");
+    await expect(getComputedStyle(img).aspectRatio).toBe("800 / 600");
+    // The mask's viewBox is generated from the same ratio: 1000 x (1000*600/800).
+    await expect(img.style.getPropertyValue("--rk-notch-mask")).toContain("0%200%201000%20750");
+  },
 };
 
 /** Same silhouette, different geometry: a wide shallow bite on a broad
  * hero — showing how the notch prop composes new variants. */
 export const NotchWide: Story = {
+  play: async ({ canvasElement }) => {
+    // The other half of the rule: an aspect the code states outright still
+    // beats the image's own shape, so a deliberate hero crop stays possible.
+    const img = within(canvasElement).getByAltText("Bredt heltebilde");
+    await expect(img.style.getPropertyValue("--rk-notch-aspect")).toBe("21 / 9");
+  },
   args: {
     size: "full",
     shape: "notch",

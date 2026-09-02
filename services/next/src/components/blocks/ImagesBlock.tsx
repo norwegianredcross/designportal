@@ -108,7 +108,6 @@ export function ImagesBlock({ data, size = "medium", alignment = "left", shape =
     offset: cornerNotch?.offset ?? notch?.offset ?? 100,
     width: data.notchWidth ?? notch?.width ?? 35,
     depth: data.notchDepth ?? notch?.depth ?? 28,
-    aspect: notch?.aspect ?? "4 / 3",
   };
   return (
     <div className={`${styles.wrapper}${gallery ? ` ${styles.gallery}` : ""}`}>
@@ -130,6 +129,15 @@ export function ImagesBlock({ data, size = "medium", alignment = "left", shape =
            2:1 crop is the point, it is what keeps the grid even. Without readable dimensions
            there is nothing to compute from, so the old height cap still crops. */
         const fits = !gallery && dimensions;
+        /* The notch used to fall back straight to 4 / 3, and since the aspect is a component
+           prop no editor can reach, that meant choosing the shape in Content Studio silently
+           recropped the picture: a 980x391 panorama lost more than half of itself to a shape
+           choice. The image's own ratio fills that gap. An explicit prop still wins — code
+           asking for a deliberate 21 / 9 hero crop means it (see the NotchWide story) — and
+           4 / 3 is now only the last resort for media whose pixel size we could not read.
+           The mask generator builds its viewBox from whatever it is handed, so the
+           silhouette follows either way. */
+        const notchAspect = notch?.aspect ?? naturalRatio ?? "4 / 3";
         const img = (
           <img
             src={image.imageUrl ?? undefined}
@@ -172,11 +180,14 @@ export function ImagesBlock({ data, size = "medium", alignment = "left", shape =
                 src={image.imageUrl ?? undefined}
                 srcSet={srcSet}
                 alt={item.altText ?? ""}
-                className={styles.imageNotched}
+                className={`${styles.imageNotched}${fits ? ` ${styles.imageFits}` : ""}`}
                 style={
                   {
-                    "--rk-notch-aspect": effectiveNotch.aspect,
-                    "--rk-notch-mask": notchMaskDataUri(effectiveNotch),
+                    "--rk-notch-aspect": notchAspect,
+                    "--rk-notch-mask": notchMaskDataUri({ ...effectiveNotch, aspect: notchAspect }),
+                    // Same width cap the plain form gets, so a notched portrait
+                    // cannot tower over the article either.
+                    ...(dimensions ? { "--rk-image-w": dimensions.width, "--rk-image-h": dimensions.height } : {}),
                   } as CSSProperties
                 }
               />
