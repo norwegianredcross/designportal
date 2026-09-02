@@ -1,0 +1,31 @@
+/*
+  Per-child override for the flow rhythm below.
+
+  The syntax is universal rather than <length-percentage> because a typed
+  syntax requires an initial-value, and an initial-value must be
+  computationally independent — which 1lh is not, since it resolves against
+  line-height. Registering one would also stop --flow-space from being
+  guaranteed-invalid when unset, so the 1lh fallback would never apply.
+
+  inherits is false so a value set on one child stays on that child instead of
+  leaking into its descendants or a nested .rk-prose. The trade-off is that
+  setting --flow-space on the wrapper no longer retunes every gap at once.
+*/
+@property --flow-space {
+  syntax: "*";
+  inherits: false;
+}
+
+/**
+ * Gives every sibling in the flow a consistent vertical rhythm of one line
+ * height, which individual children can override by setting --flow-space.
+ *
+ * This is what replaces the browser's default margins, which reset.css strips
+ * from every element. One line height beats a fixed token here: the gap scales
+ * with whatever type size the context sets, so prose inside the 21px ingress
+ * breathes proportionally more than prose in the 18px body.
+ */
+.flow > * + *,
+.rk-prose > * + * {
+  margin-block-start: var(--flow-space, 1lh);
+}

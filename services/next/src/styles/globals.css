@@ -1,0 +1,46 @@
+/* App frame only — page scaffolding, not component styling. Component looks
+   come from rk-designsystem/styles.css (imported in layout.tsx); this file
+   may use its tokens (--ds-*) but must not restyle ds-* classes. One
+   deliberate exception: the site-wide maroon heading identity below, which
+   colors heading ELEMENTS (the library's headings set no color of their
+   own). The element RESET lives in reset.css and the rich-text wrapper in
+   rk-prose.css, so this file stays about the frame. */
+
+html {
+  min-height: 100%;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+  width: min(1090px, calc(100% - (var(--ds-size-8) * 2)));
+  margin-inline: auto;
+  padding-block: var(--ds-size-12);
+}
+
+/* The Design retning's typographic identity via the GENERIC text token:
+ * the token resolves per data-color scope, so headings are the deep
+ * maroon on the page (the html element carries
+ * data-color="primary-color-red") and automatically re-tint inside any
+ * themed surface — an ocean card gets ocean-dark headings, letting the
+ * redaktør mix palettes per card/faktaboks/trekkspill without any
+ * per-component color code. One rule covers every block title AND
+ * headings editors write in rich text; the library's .ds-heading sets no
+ * color of its own, so this rule applies uncontested (being unlayered it
+ * also outranks the library's layered rules, e.g. ErrorSummary's danger
+ * heading — unused here today). The component demos are the one
+ * deliberate exception (DemoBlock.module.css) so they show the library's
+ * out-of-the-box look. */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--ds-color-text-default);
+}

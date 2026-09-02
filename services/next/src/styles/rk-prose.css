@@ -1,0 +1,60 @@
+/*
+  Wrapper for rich text coming out of Enonic's HtmlArea input. The CMS emits
+  bare elements with no classes, so this is the one place bare-element styling
+  is legitimate — everywhere else the design system components own their look.
+
+  (The reference project calls this wrapper .html-area; ours is .rk-prose,
+  applied by the RichTextView className.)
+*/
+.rk-prose {
+  /*
+   * This has been copied in from .ds-link
+   * @see https://github.com/digdir/designsystemet/blob/main/packages/css/src/link.css
+   *
+   * Digdir deliberately styles no bare elements, so a CMS anchor would
+   * otherwise fall back to the browser's default blue. prose.test.ts reads
+   * Digdir's own link.css and fails if a Digdir bump changes these values,
+   * so the duplicate cannot drift silently.
+   */
+  a {
+    --dsc-link-color: var(--ds-color-text-subtle);
+    --dsc-link-color--hover: var(--ds-color-text-default);
+    --dsc-link-color--active: var(--ds-color-text-default);
+    --dsc-link-color--visited: var(--dsc-link-color);
+    --dsc-link-background--active: transparent;
+    --dsc-link-text-decoration-thickness--hover: 0.125em; /* 2px ish */
+    --dsc-link-text-decoration-thickness: 0.0625em; /* 1px ish */
+
+    color: var(--dsc-link-color);
+    text-decoration-line: underline;
+    text-decoration-style: solid;
+    text-decoration-thickness: var(--dsc-link-text-decoration-thickness);
+    text-underline-offset: 0.27em; /* 5px ish */
+
+    /**
+     * States (using :where to allow all components to easily overwrite)
+     */
+    &:where(:visited) {
+      color: var(--dsc-link-color--visited);
+    }
+
+    /* Only use hover for non-touch devices to prevent sticky-hovering */
+    @media (hover: hover) and (pointer: fine) {
+      &:where(:hover) {
+        color: var(--dsc-link-color--hover);
+        text-decoration-thickness: var(--dsc-link-text-decoration-thickness--hover);
+      }
+    }
+
+    &:focus-visible {
+      box-shadow: var(--dsc-focus-boxShadow);
+      outline: var(--dsc-focus-outline);
+      outline-offset: var(--ds-border-width-focus);
+    }
+
+    &:where(:active) {
+      background: var(--dsc-link-background--active);
+      color: var(--dsc-link-color--active);
+    }
+  }
+}

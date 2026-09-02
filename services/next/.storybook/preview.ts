@@ -1,5 +1,11 @@
+// Same stylesheets in the same order as the app's layout.tsx. Storybook that
+// loads a different set renders a different page than production, which is how
+// a defect hides in a green story.
+import "../src/styles/reset.css";
 import "rk-designsystem/styles.css";
-import "../src/app/globals.css";
+import "../src/styles/globals.css";
+import "../src/styles/rk-prose.css";
+import "../src/styles/flow.css";
 
 import type { Preview } from "@storybook/nextjs-vite";
 

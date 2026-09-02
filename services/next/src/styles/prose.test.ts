@@ -2,13 +2,13 @@ import fs from "node:fs";
 import { describe, expect, it } from "vitest";
 
 /**
- * Driftvakt for prose-stilene: .rk-prose a i globals.css speiler Digdirs
+ * Driftvakt for prose-stilene: a-blokken i rk-prose.css speiler Digdirs
  * .ds-link, og dette er testen som håndhever det. En Digdir-bump som
  * endrer lenkedeklarasjonene blir rød her i stedet for at prose driver
  * stille fra komponentens utseende.
  */
 const digdirCss = fs.readFileSync("node_modules/@digdir/designsystemet-css/dist/src/link.css", "utf8");
-const proseCss = fs.readFileSync("src/app/globals.css", "utf8");
+const proseCss = fs.readFileSync("src/styles/rk-prose.css", "utf8");
 
 /** Trekker ut --dsc-*-deklarasjonene fra første blokk som matcher selektoren. */
 function customProps(css: string, selector: string): Record<string, string> {
@@ -22,7 +22,7 @@ function customProps(css: string, selector: string): Record<string, string> {
   return props;
 }
 
-describe("globals.css", () => {
+describe("rk-prose.css", () => {
   it("er syntaktisk balansert (en manglende klamme sluker alle regler etter seg)", () => {
     // Regresjonsvakt: en tapt } i en merge gjorde at parseren slukte hele
     // prose-seksjonen som ugyldige deklarasjoner — lenkene falt stille
@@ -34,7 +34,9 @@ describe("globals.css", () => {
 describe("rk-prose", () => {
   it("speiler Digdirs .ds-link-variabler eksakt", () => {
     const digdir = customProps(digdirCss, ".ds-link");
-    const prose = customProps(proseCss, ".rk-prose a");
+    // Nestet syntaks etter oppsplittingen: a-blokken ligger inne i
+    // .rk-prose, så selektoren vi leter etter er selve "a {"-blokken.
+    const prose = customProps(proseCss, "\n  a {");
     // Prose trenger ikke alle Digdirs variabler, men alt prose DEFINERER
     // må matche Digdir.
     for (const [prop, value] of Object.entries(prose)) {

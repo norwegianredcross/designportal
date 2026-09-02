@@ -1,15 +1,23 @@
 import { PORTAL_COMPONENT_ATTRIBUTE } from "@enonic/nextjs-adapter";
 import { Source_Sans_3 } from "next/font/google";
-// The ONLY visual stylesheet in the app: design tokens (--ds-* variables,
-// color scopes), the Digdir base component CSS and the RK theme, in one
-// import. Block views never write visual CSS — they render design system
-// components whose class names this stylesheet targets, and colors come
-// from data-color scopes swapping token values.
+// Import ORDER is the cascade order, so it is load bearing — same sequence
+// as the CMS100002-web project:
+//
+//   reset      strips browser defaults (including every margin)
+//   library    design tokens (--ds-* variables, color scopes), the Digdir
+//              base component CSS and the RK theme, in one import. Block
+//              views never write visual CSS — they render design system
+//              components whose class names this stylesheet targets, and
+//              colors come from data-color scopes swapping token values.
+//   globals    the app frame: body layout and the centered main column
+//   rk-prose   the CMS rich-text wrapper
+//   flow       puts vertical rhythm back where the reset removed it, so it
+//              has to come after everything that lays elements out
+import "@/styles/reset.css";
 import "rk-designsystem/styles.css";
-// App frame only: body layout and the centered main column. Anything about
-// how things LOOK belongs to the design system import above (one
-// exception: the maroon heading identity in globals.css).
-import "./globals.css";
+import "@/styles/globals.css";
+import "@/styles/rk-prose.css";
+import "@/styles/flow.css";
 
 const sourceSans3 = Source_Sans_3({
   subsets: ["latin"],
