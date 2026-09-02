@@ -8,6 +8,71 @@
 */
 .rk-prose {
   /*
+   * Type scale for the bare elements the CMS emits. Digdir deliberately styles
+   * no bare elements, so without this a rich-text heading falls back to the
+   * BROWSER's defaults: h2 at 27px/700 and h3 at 21px/700, against the design
+   * system's 500 weight — an h3 that is indistinguishable from body text, and
+   * two different type systems on one page.
+   *
+   * Scoped to .rk-prose rather than declared globally the way CMS100002-web
+   * does it. That project writes bare <h2> everywhere; we render the library's
+   * <Heading> component. A global `h3 {font-size}` rule would resize every card
+   * title from 21px to 30px, because Digdir's sizing lives in a cascade layer
+   * and an unlayered rule beats a layered one at ANY specificity. Inside this
+   * wrapper there are no components to collide with — the CMS emits class-less
+   * elements and the app has no macros that render into rich text.
+   *
+   * The steps sit one below CMS100002-web's mapping (they start h2 at
+   * heading-lg). Their article column is 640px and ours is 1090px, but what
+   * decides it is that our block titles render at heading-sm: a rich-text h2 is
+   * the same rank as a block title, so it gets the same size instead of
+   * towering over the ones on either side of it. One line each to retune.
+   *
+   * `p` is deliberately absent. It already inherits correctly — 18px in the
+   * article, 21px inside the ingress, which is the ds-paragraph[data-size=lg]
+   * that wraps it. Pinning it to body-md would flatten the ingress.
+   */
+  h1 {
+    font-size: var(--ds-heading-md-font-size);
+    font-weight: var(--ds-heading-md-font-weight);
+    line-height: var(--ds-heading-md-line-height);
+    letter-spacing: var(--ds-heading-md-letter-spacing);
+  }
+
+  h2 {
+    font-size: var(--ds-heading-sm-font-size);
+    font-weight: var(--ds-heading-sm-font-weight);
+    line-height: var(--ds-heading-sm-line-height);
+    letter-spacing: var(--ds-heading-sm-letter-spacing);
+  }
+
+  h3 {
+    font-size: var(--ds-heading-xs-font-size);
+    font-weight: var(--ds-heading-xs-font-weight);
+    line-height: var(--ds-heading-xs-line-height);
+    letter-spacing: var(--ds-heading-xs-letter-spacing);
+  }
+
+  /* The scale bottoms out here, so h4 and anything deeper share it rather
+     than shrinking below the surrounding body text. */
+  h4,
+  h5,
+  h6 {
+    font-size: var(--ds-heading-2xs-font-size);
+    font-weight: var(--ds-heading-2xs-font-weight);
+    line-height: var(--ds-heading-2xs-line-height);
+    letter-spacing: var(--ds-heading-2xs-letter-spacing);
+  }
+
+  small,
+  figcaption {
+    font-size: var(--ds-body-sm-font-size);
+    font-weight: var(--ds-body-sm-font-weight);
+    line-height: var(--ds-body-sm-line-height);
+    letter-spacing: var(--ds-body-sm-letter-spacing);
+  }
+
+  /*
    * This has been copied in from .ds-link
    * @see https://github.com/digdir/designsystemet/blob/main/packages/css/src/link.css
    *
