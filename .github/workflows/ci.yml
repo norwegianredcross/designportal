@@ -1,0 +1,114 @@
+# Quality gate for pull requests.
+#
+# The rk.no CMS (CMS100002-webpage) runs the same checks through Azure
+# Pipelines; this repo is on GitHub, so the mechanism differs but the gate is
+# the same: nothing reaches main without lint, types, tests and a build passing
+# on both services.
+#
+# Why this exists: the block refactors that brought this repo in line with the
+# reference each shipped a regression that only a test run catches — a CSS
+# module that silently lost three properties, a selector keyed on an attribute
+# nothing set any more, and block spacing leaking inside a block. Stories
+# existed for all three; nothing ran them.
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+# A new push to a PR makes the previous run pointless — cancel it. main is left
+# alone so its history keeps a result per commit.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  next:
+    name: Next — lint, types, tests, build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: services/next
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          # The version the service pins; keeps CI and developers on one runtime.
+          node-version-file: services/next/.nvmrc
+          cache: npm
+          cache-dependency-path: services/next/package-lock.json
+
+      - run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Type check
+        run: npx tsc --noEmit
+
+      # The story suite runs in a real browser through vitest's browser mode,
+      # so the runner needs the browser and its system libraries.
+      - name: Install Chromium
+        run: npx playwright install chromium --with-deps
+
+      - name: Test
+        run: npx vitest run --project storybook
+
+      # No XP instance here, and none is needed: every route is force-dynamic,
+      # so nothing is fetched at build time. Pointed at a dead address so a
+      # build-time fetch would fail loudly rather than reach a real server.
+      - name: Build
+        run: npm run build
+        env:
+          ENONIC_API: http://127.0.0.1:9/site
+          NEXT_PUBLIC_ENONIC_API: http://127.0.0.1:9/site
+
+  xp:
+    name: XP — lint, types, build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: services/xp
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: services/xp/.nvmrc
+          cache: npm
+          cache-dependency-path: services/xp/package-lock.json
+
+      # XP 7.16 runs on JDK 21, the same version the local sandbox ships.
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Type check
+        run: npm run check:types
+
+      # `build` also regenerates the .xp-codegen types and runs the jest suite.
+      - name: Build
+        run: ./gradlew build --no-daemon
+
+      # The generated types are committed, so a form change that was not
+      # regenerated shows up here instead of as a mystery type error later.
+      - name: Generated types are up to date
+        run: |
+          # --rerun-tasks: the task is incremental and will happily report
+          # success without regenerating, which would make this check pass on
+          # stale output.
+          ./gradlew generateTypeScript --no-daemon --rerun-tasks
+          git diff --exit-code .xp-codegen || {
+            echo "::error::.xp-codegen is stale — run ./gradlew generateTypeScript and commit the result"
+            exit 1
+          }

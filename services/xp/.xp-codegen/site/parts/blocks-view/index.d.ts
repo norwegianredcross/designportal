@@ -122,11 +122,6 @@ export type BlocksView = {
                   none: Record<string, unknown>;
                 };
           }>;
-
-          /**
-           * Show component shelf
-           */
-          showSpecimen: boolean;
         };
       }
     | {

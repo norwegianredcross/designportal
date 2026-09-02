@@ -137,11 +137,6 @@ export type Page = {
                   none: Record<string, unknown>;
                 };
           }>;
-
-          /**
-           * Show component shelf
-           */
-          showSpecimen: boolean;
         };
       }
     | {

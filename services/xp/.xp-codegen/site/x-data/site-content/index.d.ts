@@ -137,11 +137,6 @@ export type SiteContent = {
                   none: Record<string, unknown>;
                 };
           }>;
-
-          /**
-           * Show component shelf
-           */
-          showSpecimen: boolean;
         };
       }
     | {

@@ -54,6 +54,11 @@ export function CardsBlock({ data, meta }: CardsProps) {
           // internal contentPaths are mapped into this app's URL space.
           const href = item.url ?? (item.contentPath ? getUrl(item.contentPath, meta) : undefined);
           const card = (
+            // The key belongs on the wrapping <a>/<div> below — that is what
+            // actually lands in the iterable; this element is only held in a
+            // variable until then. (The directive has to be the line directly
+            // above the node, so the reason goes here rather than after it.)
+            // biome-ignore lint/correctness/useJsxKeyInIterable: key is on the wrapper
             <Card
               item={item}
               columns={columns}

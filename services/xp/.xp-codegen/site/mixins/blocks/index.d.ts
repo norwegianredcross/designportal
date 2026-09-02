@@ -117,11 +117,6 @@ export type Blocks = {
                   none: Record<string, unknown>;
                 };
           }>;
-
-          /**
-           * Show component shelf
-           */
-          showSpecimen: boolean;
         };
       }
     | {
