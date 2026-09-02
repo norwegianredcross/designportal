@@ -45,9 +45,16 @@
 
 /* The figure itself: display scale, maroon via the generic text token — set
    explicitly because a number is not a heading element, so the global heading
-   rule does not reach it. */
+   rule does not reach it.
+ 
+   font-size-10 rather than -9. The block exists to make numbers land, and -9
+   is 48px — the exact size of the page's own h1, so the statistic and the
+   headline carried identical weight and neither led. -10 is 60px, the top of
+   the scale and the only step that reads as display type next to a 48px
+   heading. The hero keeps the eye first through its panel, notch and colour
+   rather than through matching type size. */
 .value {
-  font-size: var(--ds-font-size-9);
+  font-size: var(--ds-font-size-10);
   font-weight: var(--ds-font-weight-medium);
   /* Raw value: the line-height token scale has no display-tight step for a
      big standalone figure. */
