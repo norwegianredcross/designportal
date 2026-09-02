@@ -1,0 +1,119 @@
+/* Everything that draws a single card. The few values the editor's size choice
+ * decides — padding and the side image's box — arrive as custom properties set
+ * in Card.tsx, because they cannot be enumerated here. The grid that arranges
+ * cards, and the link that makes one clickable, belong to the block instead
+ * (CardsBlock.module.css). */
+
+.row {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  height: 100%;
+}
+
+.rowReverse {
+  composes: row;
+  flex-direction: row-reverse;
+}
+
+.sideImage {
+  width: var(--card-image-width);
+  aspect-ratio: var(--card-image-ratio);
+  object-fit: cover;
+  flex-shrink: 0;
+  border-radius: var(--ds-border-radius-md);
+}
+
+/* The Figma mobile variant stacks every card vertically: below the breakpoint
+ * the horizontal (stor/medium) cards become image-on-top, mirroring liten. */
+@media (max-width: 640px) {
+  .row {
+    flex-direction: column;
+  }
+
+  .rowReverse {
+    flex-direction: column-reverse;
+  }
+
+  .sideImage {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+  }
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+/* The "stikktittel": uppercase micro-heading. The 0.05em tracking is a raw
+   value on purpose — the token scale tops out at 0.015em, and untracked
+   uppercase reads cramped. */
+.kicker {
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0;
+}
+
+/* No explicit colour on the title: the global heading rule uses the generic
+   text token, which resolves inside the card's data-color scope, so the tone
+   follows the editor's theme by itself. */
+.cardTitle,
+.cardText {
+  margin: 0;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.topImage {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  display: block;
+  border-radius: var(--ds-border-radius-lg) var(--ds-border-radius-lg) 0 0;
+}
+
+.topImageReverse {
+  border-radius: 0 0 var(--ds-border-radius-lg) var(--ds-border-radius-lg);
+}
+
+/* Surface and radius are constants, not editor choices; only the padding
+   varies, and it arrives as --card-pad. */
+.panel {
+  background-color: var(--ds-color-background-tinted, var(--ds-color-neutral-background-tinted));
+  color: var(--ds-color-text-default);
+  padding: var(--card-pad);
+  /* The spec's extra 40px sits on the panel edge FACING AWAY from the image,
+     so it mirrors when the image moves below the text. */
+  padding-bottom: var(--ds-size-10);
+  border-radius: 0 0 var(--ds-border-radius-lg) var(--ds-border-radius-lg);
+  flex-grow: 1;
+}
+
+.panelReverse {
+  padding-top: var(--ds-size-10);
+  padding-bottom: var(--card-pad);
+  border-radius: var(--ds-border-radius-lg) var(--ds-border-radius-lg) 0 0;
+}
+
+.sidePanel {
+  background-color: var(--ds-color-background-tinted, var(--ds-color-neutral-background-tinted));
+  color: var(--ds-color-text-default);
+  border-radius: var(--ds-border-radius-lg);
+  padding: var(--card-pad);
+  gap: var(--card-pad);
+}
+
+.plainPanel {
+  background-color: var(--ds-color-background-tinted, var(--ds-color-neutral-background-tinted));
+  color: var(--ds-color-text-default);
+  border-radius: var(--ds-border-radius-lg);
+  padding: var(--card-pad);
+  height: 100%;
+}
