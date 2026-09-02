@@ -65,6 +65,19 @@
   margin: 0;
 }
 
+/* The card text is a TextArea in the editor form (lib-xp-item-blocks
+   blocks-card), so it can contain the line breaks a redaktør typed — and HTML
+   collapses those into spaces unless told otherwise. Same treatment the hero
+   lead gets, which is the other TextArea field in the app.
+
+   CMS100002-web solves this with a toTextLines() helper that splits on \n and
+   interleaves <br/>. One CSS declaration does the same job here without the
+   extra DOM nodes, and it is already how this codebase handles the identical
+   problem, so the two stay consistent with each other. */
+.cardText {
+  white-space: pre-line;
+}
+
 .stack {
   display: flex;
   flex-direction: column;

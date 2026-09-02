@@ -62,6 +62,16 @@ export const Tema: Story = {
   args: { size: "liten", theme: "additional-color-ocean", image: null },
 };
 
+/** The card text is a TextArea, so a redaktør can press Enter. Those breaks
+ * survive instead of collapsing into spaces — three lines here, not one. */
+export const FlerelinjetTekst: Story = {
+  args: {
+    size: "liten",
+    image: null,
+    text: "Første linje.\nAndre linje.\nTredje linje.",
+  },
+};
+
 /** Every text field is optional: a card with only a title still renders. */
 export const BareTittel: Story = {
   args: { kicker: null, text: null, size: "liten", image: null },
