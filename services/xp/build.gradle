@@ -19,6 +19,9 @@ dependencies {
   include "com.enonic.xp:lib-content:${xpVersion}"
   include "com.enonic.xp:lib-context:${xpVersion}"
   include "com.enonic.xp:lib-i18n:${xpVersion}"
+  // Multipart form parsing (getMultipartStream & co.) for the media path
+  // of the import-docs service.
+  include "com.enonic.xp:lib-portal:${xpVersion}"
 
   include 'com.enonic.lib:lib-http-client:3.2.2'
 
