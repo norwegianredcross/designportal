@@ -1,7 +1,8 @@
 import { getUrl } from "@enonic/nextjs-adapter";
 import type { MetaData } from "@enonic/nextjs-adapter/types/componentProps";
+import { ArrowRightIcon } from "@navikt/aksel-icons";
 import type { CSSProperties } from "react";
-import { Heading } from "rk-designsystem";
+import { Heading, Link, Paragraph } from "rk-designsystem";
 import { Card, type CardImage, type CardPlacement, type CardSize } from "@/components/partials/Card";
 import type { BlockByTypename } from "@/types/blocks";
 import { forceArray, notNullOrUndefined } from "@/utils";
@@ -45,9 +46,14 @@ interface CardsProps {
 }
 
 /**
- * The cardsblokk: a heading and a grid of cards, with the editor's column
- * choice deciding both how many fit per row and which of the three Figma card
- * sizes they render at.
+ * The cardsblokk: a heading, an optional ingress, and a grid of cards, with
+ * the editor's column choice deciding both how many fit per row and which of
+ * the three Figma card sizes they render at. An optional "see more" link sits
+ * bottom right.
+ *
+ * Title -> ingress -> content -> link is the section shape every page in the
+ * "forside generisk" block template repeats; the summary block already had
+ * it, and the cards block is the one a landing page is mostly built from.
  *
  * This view owns everything ABOUT THE SET — the grid, the per-card link, and
  * turning stored CMS values into finished strings. Drawing a single card is
@@ -61,13 +67,21 @@ export function CardsBlock({ data, meta }: CardsProps) {
   // beside the text) with the Figma default per size: liten stacks the image
   // on top, stor/medium put it beside the text.
   const placement = (data.imagePlacement as CardPlacement | null | undefined) ?? (size === "liten" ? "top" : "left");
+  // Exactly one of url/contentPath is set (or neither); internal paths are
+  // mapped into this app's URL space, same as the cards' own links below.
+  const sectionHref = data.url ?? (data.contentPath ? getUrl(data.contentPath, meta) : undefined);
 
   return (
     <section>
       {data.title ? (
-        <Heading level={2} data-size="sm" className={styles.title}>
+        <Heading level={2} data-size="sm" className={data.intro ? styles.titleWithIntro : styles.title}>
           {data.title}
         </Heading>
+      ) : null}
+      {data.intro ? (
+        <Paragraph data-size="md" className={styles.intro}>
+          {data.intro}
+        </Paragraph>
       ) : null}
       <div className={styles.grid} style={{ "--card-columns": columns } as CSSProperties}>
         {items.map((item, index) => {
@@ -116,6 +130,16 @@ export function CardsBlock({ data, meta }: CardsProps) {
           );
         })}
       </div>
+      {data.linkText && sectionHref ? (
+        <div className={styles.linkRow}>
+          <Link href={sectionHref} className={styles.link}>
+            {data.linkText}
+            {/* Decorative; the link text carries the meaning. Same tertiary
+                link-with-arrow the summary block ends on. */}
+            <ArrowRightIcon aria-hidden />
+          </Link>
+        </div>
+      ) : null}
     </section>
   );
 }

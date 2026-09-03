@@ -1,6 +1,7 @@
 import { RENDER_MODE, XP_REQUEST_TYPE } from "@enonic/nextjs-adapter";
 import type { MetaData } from "@enonic/nextjs-adapter/types/componentProps";
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
+import { expect, within } from "storybook/test";
 import { CardsBlock } from "@/components/blocks/CardsBlock";
 
 const meta: MetaData = {
@@ -40,6 +41,10 @@ export const Liten: Story = {
     data: {
       __typename: "no_rodekors_docs_BlockCards",
       title: "Liten (3 kolonner, bilde over)",
+      intro: null,
+      linkText: null,
+      url: null,
+      contentPath: null,
       columns: 3,
       imagePlacement: "top",
       items: [
@@ -96,6 +101,10 @@ export const Medium: Story = {
     data: {
       __typename: "no_rodekors_docs_BlockCards",
       title: "Medium (2 kolonner, bilde ved siden av)",
+      intro: null,
+      linkText: null,
+      url: null,
+      contentPath: null,
       columns: 2,
       imagePlacement: "left",
       items: [
@@ -138,6 +147,10 @@ export const Stor: Story = {
     data: {
       __typename: "no_rodekors_docs_BlockCards",
       title: "Stor (1 kolonne)",
+      intro: null,
+      linkText: null,
+      url: null,
+      contentPath: null,
       columns: 1,
       imagePlacement: "left",
       items: [
@@ -181,6 +194,10 @@ export const UtenBilde: Story = {
     data: {
       __typename: "no_rodekors_docs_BlockCards",
       title: "Uten bilde",
+      intro: null,
+      linkText: null,
+      url: null,
+      contentPath: null,
       columns: 3,
       imagePlacement: null,
       items: [
@@ -224,6 +241,10 @@ export const Speilvendt: Story = {
     data: {
       __typename: "no_rodekors_docs_BlockCards",
       title: "Speilvendt (bilde under / til høyre)",
+      intro: null,
+      linkText: null,
+      url: null,
+      contentPath: null,
       columns: 2,
       imagePlacement: "right",
       items: [
@@ -257,6 +278,74 @@ export const Speilvendt: Story = {
           contentPath: null,
         },
       ],
+    },
+  },
+};
+
+/** The section shape the "forside generisk" block template repeats: title,
+ * ingress, content, and a "see more" link parked bottom right. The link needs
+ * BOTH a text and a target — the story below it proves the half-filled case
+ * renders nothing rather than an empty link. */
+export const MedIngressOgLenke: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvas.getByText("Slik kommer du i gang med designsystemet.")).toBeVisible();
+    const link = canvas.getByRole("link", { name: /Se alle snarveier/ });
+    await expect(link).toHaveAttribute("href", "/kom-i-gang");
+  },
+  args: {
+    data: {
+      __typename: "no_rodekors_docs_BlockCards",
+      title: "Snarveier",
+      intro: "Slik kommer du i gang med designsystemet.",
+      linkText: "Se alle snarveier",
+      url: null,
+      contentPath: "/docs/kom-i-gang",
+      columns: 3,
+      imagePlacement: null,
+      items: [
+        {
+          title: "Komponenter",
+          kicker: null,
+          cardText: "Alle komponentene med kode og retningslinjer.",
+          image: null,
+          theme: null,
+          url: null,
+          contentPath: "/docs/komponenter",
+        },
+        {
+          title: "Design tokens",
+          kicker: null,
+          cardText: "Farger, typografi og avstander som verdier.",
+          image: null,
+          theme: null,
+          url: null,
+          contentPath: "/docs/tokens",
+        },
+        {
+          title: "Design retning",
+          kicker: null,
+          cardText: "Formspråket bak systemet.",
+          image: null,
+          theme: null,
+          url: null,
+          contentPath: "/docs/designretning",
+        },
+      ],
+    },
+  },
+};
+
+/** Half a link is no link: a linkText without a target (or the other way
+ * round) must not render an empty affordance. */
+export const LenkeUtenMal: Story = {
+  play: async ({ canvasElement }) => {
+    await expect(within(canvasElement).queryByRole("link", { name: /Se alle/ })).toBeNull();
+  },
+  args: {
+    data: {
+      ...(MedIngressOgLenke.args?.data as NonNullable<Story["args"]>["data"]),
+      contentPath: null,
     },
   },
 };

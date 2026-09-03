@@ -674,9 +674,12 @@ type Part_no_rodekors_docs_blocks_view_BlocksAccordion {
 """Cards"""
 type Part_no_rodekors_docs_blocks_view_BlocksCards {
   title: String
+  intro: String
   imageClass: String
   columnsClass: String
   items(offset: Int, first: Int): [Part_no_rodekors_docs_blocks_view_Items_3]
+  linkText: String
+  link: Part_no_rodekors_docs_blocks_view_Link_3
 }
 
 """Code"""
@@ -733,7 +736,7 @@ type Part_no_rodekors_docs_blocks_view_BlocksSummary {
   items(offset: Int, first: Int): [Part_no_rodekors_docs_blocks_view_Items_4]
   alignment: String
   linkText: String
-  link: Part_no_rodekors_docs_blocks_view_Link_3
+  link: Part_no_rodekors_docs_blocks_view_Link_4
 }
 
 """Table"""
@@ -778,6 +781,11 @@ type Part_no_rodekors_docs_blocks_view_External_3 {
   externalLink: String
 }
 
+"""External"""
+type Part_no_rodekors_docs_blocks_view_External_4 {
+  externalLink: String
+}
+
 """Shape"""
 type Part_no_rodekors_docs_blocks_view_Form {
   _selected: Part_no_rodekors_docs_blocks_view_Form_OptionEnum
@@ -803,6 +811,11 @@ type Part_no_rodekors_docs_blocks_view_Internal_2 {
 
 """Internal"""
 type Part_no_rodekors_docs_blocks_view_Internal_3 {
+  internalLink: Content
+}
+
+"""Internal"""
+type Part_no_rodekors_docs_blocks_view_Internal_4 {
   internalLink: Content
 }
 
@@ -860,6 +873,14 @@ type Part_no_rodekors_docs_blocks_view_Link_3 {
   none: String
 }
 
+"""Link"""
+type Part_no_rodekors_docs_blocks_view_Link_4 {
+  _selected: Part_no_rodekors_docs_blocks_view_Link_OptionEnum_4
+  internal: Part_no_rodekors_docs_blocks_view_Internal_4
+  external: Part_no_rodekors_docs_blocks_view_External_4
+  none: String
+}
+
 """Link option enum."""
 enum Part_no_rodekors_docs_blocks_view_Link_OptionEnum {
   internal
@@ -876,6 +897,13 @@ enum Part_no_rodekors_docs_blocks_view_Link_OptionEnum_2 {
 
 """Link option enum."""
 enum Part_no_rodekors_docs_blocks_view_Link_OptionEnum_3 {
+  internal
+  external
+  none
+}
+
+"""Link option enum."""
+enum Part_no_rodekors_docs_blocks_view_Link_OptionEnum_4 {
   internal
   external
   none
@@ -1203,9 +1231,12 @@ type XData_no_rodekors_docs_site_content_DataConfig_BlocksAccordion {
 """Cards"""
 type XData_no_rodekors_docs_site_content_DataConfig_BlocksCards {
   title: String
+  intro: String
   imageClass: String
   columnsClass: String
   items(offset: Int, first: Int): [XData_no_rodekors_docs_site_content_DataConfig_Items_3]
+  linkText: String
+  link: XData_no_rodekors_docs_site_content_DataConfig_Link_3
 }
 
 """Code"""
@@ -1262,7 +1293,7 @@ type XData_no_rodekors_docs_site_content_DataConfig_BlocksSummary {
   items(offset: Int, first: Int): [XData_no_rodekors_docs_site_content_DataConfig_Items_4]
   alignment: String
   linkText: String
-  link: XData_no_rodekors_docs_site_content_DataConfig_Link_3
+  link: XData_no_rodekors_docs_site_content_DataConfig_Link_4
 }
 
 """Table"""
@@ -1307,6 +1338,11 @@ type XData_no_rodekors_docs_site_content_DataConfig_External_3 {
   externalLink: String
 }
 
+"""External"""
+type XData_no_rodekors_docs_site_content_DataConfig_External_4 {
+  externalLink: String
+}
+
 """Shape"""
 type XData_no_rodekors_docs_site_content_DataConfig_Form {
   _selected: XData_no_rodekors_docs_site_content_DataConfig_Form_OptionEnum
@@ -1332,6 +1368,11 @@ type XData_no_rodekors_docs_site_content_DataConfig_Internal_2 {
 
 """Internal"""
 type XData_no_rodekors_docs_site_content_DataConfig_Internal_3 {
+  internalLink: Content
+}
+
+"""Internal"""
+type XData_no_rodekors_docs_site_content_DataConfig_Internal_4 {
   internalLink: Content
 }
 
@@ -1389,6 +1430,14 @@ type XData_no_rodekors_docs_site_content_DataConfig_Link_3 {
   none: String
 }
 
+"""Link"""
+type XData_no_rodekors_docs_site_content_DataConfig_Link_4 {
+  _selected: XData_no_rodekors_docs_site_content_DataConfig_Link_OptionEnum_4
+  internal: XData_no_rodekors_docs_site_content_DataConfig_Internal_4
+  external: XData_no_rodekors_docs_site_content_DataConfig_External_4
+  none: String
+}
+
 """Link option enum."""
 enum XData_no_rodekors_docs_site_content_DataConfig_Link_OptionEnum {
   internal
@@ -1405,6 +1454,13 @@ enum XData_no_rodekors_docs_site_content_DataConfig_Link_OptionEnum_2 {
 
 """Link option enum."""
 enum XData_no_rodekors_docs_site_content_DataConfig_Link_OptionEnum_3 {
+  internal
+  external
+  none
+}
+
+"""Link option enum."""
+enum XData_no_rodekors_docs_site_content_DataConfig_Link_OptionEnum_4 {
   internal
   external
   none
@@ -2179,9 +2235,13 @@ type no_rodekors_docs_BlockCard {
 """Cards can have a title, text, image and can link to content"""
 type no_rodekors_docs_BlockCards {
   title: String
+  intro: String
+  linkText: String
   columns: Int
   imagePlacement: String
   items: [no_rodekors_docs_BlockCard]
+  url: String
+  contentPath: String
 }
 
 """A copyable block of code with a language label"""
@@ -2345,9 +2405,12 @@ type no_rodekors_docs_Page_BlocksAccordion {
 """Cards"""
 type no_rodekors_docs_Page_BlocksCards {
   title: String
+  intro: String
   imageClass: String
   columnsClass: String
   items(offset: Int, first: Int): [no_rodekors_docs_Page_Items_3]
+  linkText: String
+  link: no_rodekors_docs_Page_Link_3
 }
 
 """Code"""
@@ -2404,7 +2467,7 @@ type no_rodekors_docs_Page_BlocksSummary {
   items(offset: Int, first: Int): [no_rodekors_docs_Page_Items_4]
   alignment: String
   linkText: String
-  link: no_rodekors_docs_Page_Link_3
+  link: no_rodekors_docs_Page_Link_4
 }
 
 """Table"""
@@ -2458,6 +2521,11 @@ type no_rodekors_docs_Page_External_3 {
   externalLink: String
 }
 
+"""External"""
+type no_rodekors_docs_Page_External_4 {
+  externalLink: String
+}
+
 """Shape"""
 type no_rodekors_docs_Page_Form {
   _selected: no_rodekors_docs_Page_Form_OptionEnum
@@ -2483,6 +2551,11 @@ type no_rodekors_docs_Page_Internal_2 {
 
 """Internal"""
 type no_rodekors_docs_Page_Internal_3 {
+  internalLink: Content
+}
+
+"""Internal"""
+type no_rodekors_docs_Page_Internal_4 {
   internalLink: Content
 }
 
@@ -2540,6 +2613,14 @@ type no_rodekors_docs_Page_Link_3 {
   none: String
 }
 
+"""Link"""
+type no_rodekors_docs_Page_Link_4 {
+  _selected: no_rodekors_docs_Page_Link_OptionEnum_4
+  internal: no_rodekors_docs_Page_Internal_4
+  external: no_rodekors_docs_Page_External_4
+  none: String
+}
+
 """Link option enum."""
 enum no_rodekors_docs_Page_Link_OptionEnum {
   internal
@@ -2556,6 +2637,13 @@ enum no_rodekors_docs_Page_Link_OptionEnum_2 {
 
 """Link option enum."""
 enum no_rodekors_docs_Page_Link_OptionEnum_3 {
+  internal
+  external
+  none
+}
+
+"""Link option enum."""
+enum no_rodekors_docs_Page_Link_OptionEnum_4 {
   internal
   external
   none

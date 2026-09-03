@@ -98,6 +98,14 @@ export default () =>
           ...on no_rodekors_docs_BlockCards {
             __typename
             title
+            # The section ingress and the "see more" link are app additions to
+            # the lib's cards form (see the shadowing mixin in services/xp);
+            # the link arrives pre-resolved as url XOR contentPath, like the
+            # summary's.
+            intro
+            linkText
+            url
+            contentPath
             columns
             imagePlacement
             items {

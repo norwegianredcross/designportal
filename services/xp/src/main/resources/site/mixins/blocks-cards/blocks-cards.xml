@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- SHADOWS the same-named mixin in lib-xp-item-blocks (app resources win
+     over included libs' resources, the same mechanism as blocks-images):
+     the lib's form is kept verbatim so the editorial experience matches
+     rodekors.no, with two app additions taken from the "forside generisk"
+     block template, where every section is title -> optional ingress ->
+     content -> a link parked bottom right:
+
+       intro     - one line of context under the title
+       linkText  - the section's "see more", with the same target picker
+                   (and the same show-only-when-both-are-set rule) as the
+                   local blocks-summary block.
+
+     The card grid was the one block that could only ever say its title, so
+     a page built from cards alone had no room to explain any section. -->
+<mixin xmlns="urn:enonic:xp:model:1.0">
+  <display-name i18n="mixin.blocks-cards.displayName">Cards</display-name>
+  <description i18n="mixin.blocks-cards.description">Cards can have a title, text, image and can link to content</description>
+
+  <form>
+    <input name="title" type="TextLine">
+      <label i18n="mixin.blocks-cards.title">Title</label>
+      <occurrences minimum="0" maximum="1"/>
+    </input>
+
+    <!-- App addition. -->
+    <input name="intro" type="TextLine">
+      <label i18n="mixin.blocks-cards.intro">Intro</label>
+      <occurrences minimum="0" maximum="1"/>
+    </input>
+
+    <mixin name="blocks-image-placement" />
+
+    <input name="columnsClass" type="RadioButton">
+      <label i18n="mixin.blocks-cards.columnsClass">Column count</label>
+      <occurrences minimum="1" maximum="1"/>
+      <default>blocks-card--cols-3</default>
+      <config>
+        <option value="blocks-card--cols-1">1</option>
+        <option value="blocks-card--cols-2">2</option>
+        <option value="blocks-card--cols-3">3</option>
+      </config>
+    </input>
+
+    <item-set name="items">
+      <label i18n="mixin.blocks-cards.cards">Cards</label>
+      <occurrences minimum="1" maximum="0"/>
+      <items>
+        <mixin name="blocks-card" />
+        <mixin name="blocks-theme" />
+      </items>
+    </item-set>
+
+    <!-- App addition: the section link. Last in the form because it is last
+         in the rendered block. -->
+    <input name="linkText" type="TextLine">
+      <label i18n="mixin.blocks-cards.linkText">Link text</label>
+      <help-text i18n="mixin.blocks-cards.linkText.helpText">The link only shows when both text and target are set</help-text>
+      <occurrences minimum="0" maximum="1"/>
+    </input>
+
+    <!-- The link target is spelled out here instead of composing the lib's
+         blocks-link mixin, for one reason: that mixin's option-set is
+         occurrences minimum="1", i.e. REQUIRED. Composing it would have made
+         every cards block already stored in the CMS invalid, because none of
+         them carries a block-level link — the same trap as imageClass, but
+         retroactive. The options are the lib's, verbatim; only the
+         occurrences differ. -->
+    <option-set name="link">
+      <label i18n="mixin.blocks-link.link">Link</label>
+      <occurrences minimum="0" maximum="1"/>
+      <options minimum="1" maximum="1">
+        <option name="internal">
+          <label i18n="mixin.blocks-link.internal">Internal</label>
+          <items>
+            <input type="contentSelector" name="internalLink">
+              <label i18n="mixin.blocks-link.internalLink">Internal link</label>
+              <occurrences minimum="1" maximum="1"/>
+            </input>
+          </items>
+          <default>true</default>
+        </option>
+
+        <option name="external">
+          <label i18n="mixin.blocks-link.external">External</label>
+          <items>
+            <input type="TextLine" name="externalLink">
+              <label i18n="mixin.blocks-link.externalLink">External link</label>
+              <occurrences minimum="1" maximum="1"/>
+            </input>
+          </items>
+        </option>
+
+        <option name="none">
+          <label i18n="mixin.blocks-link.none">None</label>
+        </option>
+      </options>
+    </option-set>
+  </form>
+</mixin>

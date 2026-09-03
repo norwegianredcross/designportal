@@ -226,6 +226,14 @@ export function extensions(graphQL: GraphQL): Extensions {
           title: {
             type: graphQL.GraphQLString,
           },
+          // App additions to the lib's form (see the shadowing mixin): the
+          // section ingress, and the "see more" link parked bottom right.
+          intro: {
+            type: graphQL.GraphQLString,
+          },
+          linkText: {
+            type: graphQL.GraphQLString,
+          },
           // Derived from the stored CSS-class radio values
           // (blocks-card--cols-3 -> 3, blocks-card--image-left -> "left"):
           // the frontend gets intent, not the lib's class names.
@@ -237,6 +245,14 @@ export function extensions(graphQL: GraphQL): Extensions {
           },
           items: {
             type: graphQL.list(graphQL.reference(OBJECT_TYPE_BLOCK_CARD)),
+          },
+          // The section link's target, resolved the same way a card's own is:
+          // url XOR contentPath.
+          url: {
+            type: graphQL.GraphQLString,
+          },
+          contentPath: {
+            type: graphQL.GraphQLString,
           },
         },
       },
@@ -507,9 +523,13 @@ type ResolvedCardItem = {
 type ResolvedCardsBlock = {
   __typename: typeof OBJECT_TYPE_BLOCK_CARDS;
   title?: string;
+  intro?: string;
   columns?: number;
   imagePlacement?: string;
   items: ResolvedCardItem[];
+  linkText?: string;
+  url?: string;
+  contentPath?: string;
 };
 
 type ResolvedCodeBlock = {
@@ -647,9 +667,14 @@ function resolveBlocks(
     }
     case "blocks-cards": {
       const cards = block["blocks-cards"];
+      // The block's own "see more" link, resolved once — the same shape the
+      // summary uses. Per-card links are resolved inside the map below.
+      const cardsTarget =
+        cards.link?._selected === "internal" ? getOne({ key: cards.link.internal.internalLink }) : null;
       return {
         __typename: OBJECT_TYPE_BLOCK_CARDS,
         title: cards.title,
+        intro: cards.intro,
         // The lib stores presentation choices as its own CSS class names;
         // parse out the intent so the frontend never sees them.
         columns: Number(cards.columnsClass?.replace("blocks-card--cols-", "")) || undefined,
@@ -672,6 +697,9 @@ function resolveBlocks(
             contentPath: target?._path ?? undefined,
           };
         }),
+        linkText: cards.linkText,
+        url: cards.link?._selected === "external" ? cards.link.external.externalLink : undefined,
+        contentPath: cardsTarget?._path ?? undefined,
       };
     }
     case "blocks-code":

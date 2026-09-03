@@ -27,6 +27,33 @@
   margin-bottom: var(--ds-size-5);
 }
 
+/* Tight above an ingress; the siblings' full gap when the grid follows the
+ * title directly. Same pairing as the summary block. */
+.titleWithIntro {
+  margin-bottom: var(--ds-size-2);
+}
+
+.intro {
+  margin: 0 0 var(--ds-size-6);
+  /* The ingress is context, not a second heading: it stops well short of the
+     column so the eye still falls to the cards. */
+  max-width: 60ch;
+}
+
+/* The section's "see more", parked bottom right the way the block template
+ * draws it — and the way the summary block already ends. */
+.linkRow {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: var(--ds-size-6);
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-size-1);
+}
+
 /* Exactly `--card-columns` tracks when they fit: the minimum is each track's
    exact share of the row (gaps subtracted, so the math adds up), and the 240px
    floor collapses the count on narrow screens instead of overflowing.

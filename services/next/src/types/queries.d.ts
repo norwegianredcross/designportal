@@ -79,6 +79,10 @@ export type GetBlocksQuery = {
         } & { __typename: "no_rodekors_docs_BlockAccordion" })
       | ({
           title: string | null;
+          intro: string | null;
+          linkText: string | null;
+          url: string | null;
+          contentPath: string | null;
           columns: number | null;
           imagePlacement: string | null;
           items: Array<{
@@ -400,6 +404,10 @@ export type GetSidePageQuery = {
         } & { __typename: "no_rodekors_docs_BlockAccordion" })
       | ({
           title: string | null;
+          intro: string | null;
+          linkText: string | null;
+          url: string | null;
+          contentPath: string | null;
           columns: number | null;
           imagePlacement: string | null;
           items: Array<{
