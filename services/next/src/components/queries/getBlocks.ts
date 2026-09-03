@@ -191,6 +191,14 @@ export default () =>
             demo
             title
           }
+          # Wording only; the component list is fetched from the library's
+          # published manifest on the Next side (server/designsystem-context).
+          ...on no_rodekors_docs_BlockComponents {
+            __typename
+            title
+            intro
+            showSearch
+          }
         }
       }
     }`);

@@ -132,6 +132,17 @@
             <mixin name="blocks-table"/>
           </items>
         </option>
+
+        <!-- LOCAL block (site/mixins/blocks-components): the component
+             catalogue, generated from the library's published manifest.
+             See the mixin file for why editors never type the list. -->
+        <option name="blocks-components">
+          <label i18n="mixin.blocks-components.displayName">Component catalogue</label>
+          <help-text i18n="mixin.blocks-components.description">Every component in the library, linked to its Storybook documentation</help-text>
+          <items>
+            <mixin name="blocks-components"/>
+          </items>
+        </option>
       </options>
     </option-set>
   </form>
