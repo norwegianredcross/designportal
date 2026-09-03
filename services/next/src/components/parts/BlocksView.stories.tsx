@@ -77,3 +77,44 @@ export const Mixed: Story = {
     await expect(canvas.getByText(/hvordan blir jeg frivillig\?/i)).toBeVisible();
   },
 };
+
+/** A wide block against a column block. The wrapper is what widens, so the
+ * assertion is on the wrapper's own class — the rendered width itself depends
+ * on the viewport, and Storybook's canvas is not the page frame. */
+export const FullBredde: Story = {
+  args: {
+    data: [
+      {
+        __typename: "no_rodekors_docs_BlockSummary",
+        title: "I innholdskolonnen",
+        intro: null,
+        alignment: null,
+        width: "column",
+        linkText: null,
+        url: null,
+        contentPath: null,
+        items: [{ label: "Komponenter", value: "42", description: null }],
+      },
+      {
+        __typename: "no_rodekors_docs_BlockSummary",
+        title: "I full bredde",
+        intro: null,
+        alignment: null,
+        width: "wide",
+        linkText: null,
+        url: null,
+        contentPath: null,
+        items: [{ label: "Tokens", value: "300+", description: null }],
+      },
+    ],
+  },
+  play: async ({ canvas, canvasElement }) => {
+    await expect(canvas.getByRole("heading", { level: 2, name: /i full bredde/i })).toBeVisible();
+    const wrappers = canvasElement.querySelectorAll("[data-block]");
+    await expect(wrappers).toHaveLength(2);
+    // Only the second one breaks out: "column" is the default, and an unset
+    // width must behave like it (see the Mixed story's blocks, which set none).
+    await expect(wrappers[0].className).not.toMatch(/blockWide/);
+    await expect(wrappers[1].className).toMatch(/blockWide/);
+  },
+};

@@ -179,6 +179,11 @@ export function extensions(graphQL: GraphQL): Extensions {
           notchDepth: {
             type: graphQL.GraphQLInt,
           },
+          // From the composed blocks-width mixin: "column" (the default) or
+          // "wide". The frontend decides how much wider; see BlocksView.
+          width: {
+            type: graphQL.GraphQLString,
+          },
         },
       },
       // One card in a cards block. Lives outside the Block union — it only
@@ -241,6 +246,11 @@ export function extensions(graphQL: GraphQL): Extensions {
             type: graphQL.GraphQLInt,
           },
           imagePlacement: {
+            type: graphQL.GraphQLString,
+          },
+          // From the composed blocks-width mixin: "column" (the default) or
+          // "wide". The frontend decides how much wider; see BlocksView.
+          width: {
             type: graphQL.GraphQLString,
           },
           items: {
@@ -377,6 +387,11 @@ export function extensions(graphQL: GraphQL): Extensions {
           alignment: {
             type: graphQL.GraphQLString,
           },
+          // From the composed blocks-width mixin: "column" (the default) or
+          // "wide". The frontend decides how much wider; see BlocksView.
+          width: {
+            type: graphQL.GraphQLString,
+          },
           linkText: {
             type: graphQL.GraphQLString,
           },
@@ -508,6 +523,7 @@ type ResolvedImagesBlock = {
   notchCorner?: string;
   notchWidth?: number;
   notchDepth?: number;
+  width?: string;
 };
 
 type ResolvedCardItem = {
@@ -526,6 +542,7 @@ type ResolvedCardsBlock = {
   intro?: string;
   columns?: number;
   imagePlacement?: string;
+  width?: string;
   items: ResolvedCardItem[];
   linkText?: string;
   url?: string;
@@ -574,6 +591,7 @@ type ResolvedSummaryBlock = {
   intro?: string;
   items: ResolvedSummaryItem[];
   alignment?: string;
+  width?: string;
   linkText?: string;
   url?: string;
   contentPath?: string;
@@ -663,6 +681,9 @@ function resolveBlocks(
         notchCorner: imagesNotch?.corner,
         notchWidth: imagesNotch?.width,
         notchDepth: imagesNotch?.depth,
+        // From the composed blocks-width mixin; lands on the same option
+        // object as the block's own fields, the way blocks-theme does.
+        width: block["blocks-images"].width,
       };
     }
     case "blocks-cards": {
@@ -679,6 +700,9 @@ function resolveBlocks(
         // parse out the intent so the frontend never sees them.
         columns: Number(cards.columnsClass?.replace("blocks-card--cols-", "")) || undefined,
         imagePlacement: cards.imageClass?.replace("blocks-card--image-", ""),
+        // From the composed blocks-width mixin; lands on the same option
+        // object as the block's own fields, the way blocks-theme does.
+        width: cards.width,
         items: forceArray(cards.items).map((item) => {
           // The link option-set stores which choice the editor made in
           // _selected; internal targets are fetched once here, both for
@@ -756,6 +780,9 @@ function resolveBlocks(
           description: item.description,
         })),
         alignment: summary.alignment,
+        // From the composed blocks-width mixin; lands on the same option
+        // object as the block's own fields, the way blocks-theme does.
+        width: summary.width,
         linkText: summary.linkText,
         url: summary.link?._selected === "external" ? summary.link.external.externalLink : undefined,
         contentPath: target?._path ?? undefined,

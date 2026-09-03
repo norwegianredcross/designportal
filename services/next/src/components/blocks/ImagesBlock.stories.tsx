@@ -61,6 +61,7 @@ export const Default: Story = {
   args: {
     data: {
       __typename: "no_rodekors_docs_BlockImages",
+      width: null,
       // The CMS fields are null in stories so the component props (the
       // Storybook controls) drive size, alignment and shape.
       size: null,
@@ -91,6 +92,7 @@ export const Gallery: Story = {
   args: {
     data: {
       __typename: "no_rodekors_docs_BlockImages",
+      width: null,
       // The CMS fields are null in stories so the component props (the
       // Storybook controls) drive size, alignment and shape.
       size: null,
@@ -150,6 +152,7 @@ export const Notch: Story = {
     notch: { edge: "bottom", offset: 100 },
     data: {
       __typename: "no_rodekors_docs_BlockImages",
+      width: null,
       // The CMS fields are null in stories so the component props (the
       // Storybook controls) drive size, alignment and shape.
       size: null,
@@ -200,6 +203,7 @@ export const NotchWide: Story = {
     notch: { edge: "bottom", offset: 0, width: 55, depth: 18, aspect: "21 / 9" },
     data: {
       __typename: "no_rodekors_docs_BlockImages",
+      width: null,
       // The CMS fields are null in stories so the component props (the
       // Storybook controls) drive size, alignment and shape.
       size: null,

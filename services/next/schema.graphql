@@ -680,6 +680,7 @@ type Part_no_rodekors_docs_blocks_view_BlocksCards {
   items(offset: Int, first: Int): [Part_no_rodekors_docs_blocks_view_Items_3]
   linkText: String
   link: Part_no_rodekors_docs_blocks_view_Link_3
+  width: String
 }
 
 """Code"""
@@ -718,6 +719,7 @@ type Part_no_rodekors_docs_blocks_view_BlocksImages {
   size: String
   alignment: String
   form: Part_no_rodekors_docs_blocks_view_Form
+  width: String
 }
 
 """Quote"""
@@ -737,6 +739,7 @@ type Part_no_rodekors_docs_blocks_view_BlocksSummary {
   alignment: String
   linkText: String
   link: Part_no_rodekors_docs_blocks_view_Link_4
+  width: String
 }
 
 """Table"""
@@ -1237,6 +1240,7 @@ type XData_no_rodekors_docs_site_content_DataConfig_BlocksCards {
   items(offset: Int, first: Int): [XData_no_rodekors_docs_site_content_DataConfig_Items_3]
   linkText: String
   link: XData_no_rodekors_docs_site_content_DataConfig_Link_3
+  width: String
 }
 
 """Code"""
@@ -1275,6 +1279,7 @@ type XData_no_rodekors_docs_site_content_DataConfig_BlocksImages {
   size: String
   alignment: String
   form: XData_no_rodekors_docs_site_content_DataConfig_Form
+  width: String
 }
 
 """Quote"""
@@ -1294,6 +1299,7 @@ type XData_no_rodekors_docs_site_content_DataConfig_BlocksSummary {
   alignment: String
   linkText: String
   link: XData_no_rodekors_docs_site_content_DataConfig_Link_4
+  width: String
 }
 
 """Table"""
@@ -2239,6 +2245,7 @@ type no_rodekors_docs_BlockCards {
   linkText: String
   columns: Int
   imagePlacement: String
+  width: String
   items: [no_rodekors_docs_BlockCard]
   url: String
   contentPath: String
@@ -2297,6 +2304,7 @@ type no_rodekors_docs_BlockImages {
   notchCorner: String
   notchWidth: Int
   notchDepth: Int
+  width: String
 }
 
 """A stylized quote with the image of the author"""
@@ -2314,6 +2322,7 @@ type no_rodekors_docs_BlockSummary {
   intro: String
   items: [no_rodekors_docs_BlockSummaryItem]
   alignment: String
+  width: String
   linkText: String
   url: String
   contentPath: String
@@ -2411,6 +2420,7 @@ type no_rodekors_docs_Page_BlocksCards {
   items(offset: Int, first: Int): [no_rodekors_docs_Page_Items_3]
   linkText: String
   link: no_rodekors_docs_Page_Link_3
+  width: String
 }
 
 """Code"""
@@ -2449,6 +2459,7 @@ type no_rodekors_docs_Page_BlocksImages {
   size: String
   alignment: String
   form: no_rodekors_docs_Page_Form
+  width: String
 }
 
 """Quote"""
@@ -2468,6 +2479,7 @@ type no_rodekors_docs_Page_BlocksSummary {
   alignment: String
   linkText: String
   link: no_rodekors_docs_Page_Link_4
+  width: String
 }
 
 """Table"""

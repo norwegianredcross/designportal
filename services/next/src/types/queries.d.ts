@@ -85,6 +85,7 @@ export type GetBlocksQuery = {
           contentPath: string | null;
           columns: number | null;
           imagePlacement: string | null;
+          width: string | null;
           items: Array<{
             title: string | null;
             kicker: string | null;
@@ -144,6 +145,7 @@ export type GetBlocksQuery = {
           notchCorner: string | null;
           notchWidth: number | null;
           notchDepth: number | null;
+          width: string | null;
           items: Array<{
             altText: string | null;
             caption: string | null;
@@ -192,6 +194,7 @@ export type GetBlocksQuery = {
           title: string | null;
           intro: string | null;
           alignment: string | null;
+          width: string | null;
           linkText: string | null;
           url: string | null;
           contentPath: string | null;
@@ -410,6 +413,7 @@ export type GetSidePageQuery = {
           contentPath: string | null;
           columns: number | null;
           imagePlacement: string | null;
+          width: string | null;
           items: Array<{
             title: string | null;
             kicker: string | null;
@@ -469,6 +473,7 @@ export type GetSidePageQuery = {
           notchCorner: string | null;
           notchWidth: number | null;
           notchDepth: number | null;
+          width: string | null;
           items: Array<{
             altText: string | null;
             caption: string | null;
@@ -517,6 +522,7 @@ export type GetSidePageQuery = {
           title: string | null;
           intro: string | null;
           alignment: string | null;
+          width: string | null;
           linkText: string | null;
           url: string | null;
           contentPath: string | null;

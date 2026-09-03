@@ -318,6 +318,11 @@ export type SiteContent = {
                   depth?: number;
                 };
               };
+
+          /**
+           * Width
+           */
+          width?: "column" | "wide";
         };
       }
     | {
@@ -480,6 +485,11 @@ export type SiteContent = {
                  */
                 none: Record<string, unknown>;
               };
+
+          /**
+           * Width
+           */
+          width?: "column" | "wide";
         };
       }
     | {
@@ -626,6 +636,11 @@ export type SiteContent = {
                  */
                 none: Record<string, unknown>;
               };
+
+          /**
+           * Width
+           */
+          width?: "column" | "wide";
         };
       }
     | {

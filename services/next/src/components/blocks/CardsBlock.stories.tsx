@@ -40,6 +40,7 @@ export const Liten: Story = {
   args: {
     data: {
       __typename: "no_rodekors_docs_BlockCards",
+      width: null,
       title: "Liten (3 kolonner, bilde over)",
       intro: null,
       linkText: null,
@@ -100,6 +101,7 @@ export const Medium: Story = {
   args: {
     data: {
       __typename: "no_rodekors_docs_BlockCards",
+      width: null,
       title: "Medium (2 kolonner, bilde ved siden av)",
       intro: null,
       linkText: null,
@@ -146,6 +148,7 @@ export const Stor: Story = {
   args: {
     data: {
       __typename: "no_rodekors_docs_BlockCards",
+      width: null,
       title: "Stor (1 kolonne)",
       intro: null,
       linkText: null,
@@ -193,6 +196,7 @@ export const UtenBilde: Story = {
   args: {
     data: {
       __typename: "no_rodekors_docs_BlockCards",
+      width: null,
       title: "Uten bilde",
       intro: null,
       linkText: null,
@@ -240,6 +244,7 @@ export const Speilvendt: Story = {
   args: {
     data: {
       __typename: "no_rodekors_docs_BlockCards",
+      width: null,
       title: "Speilvendt (bilde under / til høyre)",
       intro: null,
       linkText: null,
@@ -303,6 +308,7 @@ export const MedIngressOgLenke: Story = {
       contentPath: "/docs/kom-i-gang",
       columns: 3,
       imagePlacement: null,
+      width: null,
       items: [
         {
           title: "Komponenter",

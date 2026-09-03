@@ -112,6 +112,7 @@ export default () =>
             notchCorner
             notchWidth
             notchDepth
+            width
             items {
               image {
                 _id
@@ -154,6 +155,9 @@ export default () =>
             contentPath
             columns
             imagePlacement
+            # "column" (default) or "wide" — see BlocksView, which owns how
+            # much wider a wide row actually runs.
+            width
             items {
               title
               kicker
@@ -214,6 +218,7 @@ export default () =>
               description
             }
             alignment
+            width
             linkText
             url
             contentPath

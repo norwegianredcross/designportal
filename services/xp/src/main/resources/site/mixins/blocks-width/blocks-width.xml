@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- LOCAL mixin (docs-specific; not from lib-xp-item-blocks). Composed into
+     a block option the same way blocks-theme is: the field lands on the same
+     option object as the block's own fields, so one small mixin gives several
+     blocks the same choice without touching any of their forms.
+
+     Why it exists: in the "forside generisk" block template every section but
+     one sits in the 1080px content column; the closing list runs at 1300,
+     wider than the column. That single wider row is what keeps a landing page
+     from reading as one stack of equal-width strips. The frontend owns how
+     much wider (services/next .../BlocksView.module.css) - the editor only
+     says whether this section is a column section or a full-width one. -->
+<mixin xmlns="urn:enonic:xp:model:1.0">
+  <display-name i18n="mixin.blocks-width.displayName">Width</display-name>
+  <description i18n="mixin.blocks-width.description">Whether the block follows the content column or runs full width</description>
+
+  <form>
+    <input name="width" type="RadioButton">
+      <label i18n="mixin.blocks-width.width">Width</label>
+      <help-text i18n="mixin.blocks-width.width.helpText">Use full width sparingly — one section per page is what gives the page its rhythm</help-text>
+      <occurrences minimum="0" maximum="1"/>
+      <default>column</default>
+      <config>
+        <option value="column" i18n="mixin.blocks-width.width.column">Content column</option>
+        <option value="wide" i18n="mixin.blocks-width.width.wide">Full width</option>
+      </config>
+    </input>
+  </form>
+</mixin>

@@ -30,3 +30,32 @@
 .block + .block[data-block$="BlockImages"] {
   margin-top: var(--ds-size-5);
 }
+
+/* One section per page may leave the article column.
+ *
+ * In the "forside generisk" block template every section sits in the 1080px
+ * content column except the closing list, which runs at 1300. That single
+ * wider row is most of what stops a landing page reading as one stack of
+ * equal-width strips — the blocks themselves were never the flat part.
+ *
+ * The breakout is symmetric negative margin on the block wrapper, so the
+ * block component never learns that a page frame exists. `main` is
+ * min(1090px, …) in globals.css and the wide row is 1300, so each side gives
+ * back (1300 - 1090) / 2 = 105px.
+ *
+ * It only applies where it fits: 1300px of row plus the frame's two
+ * --ds-size-8 (32px) gutters is 1364px. Below that the column already IS the
+ * viewport minus its gutters, so a wide block is simply the column and
+ * nothing can overflow. The media query has to spell 1364 out — media
+ * features cannot read custom properties. */
+.blockWide {
+  /* The default the media query overrides; stated so the class is readable
+     on its own rather than looking like it does nothing off-desktop. */
+  margin-inline: 0;
+}
+
+@media (min-width: 1364px) {
+  .blockWide {
+    margin-inline: -105px;
+  }
+}

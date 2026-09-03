@@ -71,6 +71,7 @@
           <help-text i18n="mixin.blocks-images.description">An image gallery or an image that can be expanded</help-text>
           <items>
             <mixin name="blocks-images"/>
+            <mixin name="blocks-width"/>
           </items>
         </option>
 
@@ -83,6 +84,9 @@
           <help-text i18n="mixin.blocks-cards.description">Cards can have a title, text, image and can link to content</help-text>
           <items>
             <mixin name="blocks-cards"/>
+            <!-- blocks-width lets this one section run wider than the content
+                 column, the way the block template's closing list does. -->
+            <mixin name="blocks-width"/>
           </items>
         </option>
 
@@ -115,6 +119,7 @@
           <help-text i18n="mixin.blocks-summary.description">Key figures with an optional link</help-text>
           <items>
             <mixin name="blocks-summary"/>
+            <mixin name="blocks-width"/>
           </items>
         </option>
 

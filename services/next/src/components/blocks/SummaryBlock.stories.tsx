@@ -41,6 +41,7 @@ export const Default: Story = {
   args: {
     data: {
       __typename: "no_rodekors_docs_BlockSummary",
+      width: null,
       title: "Designsystemet i tall",
       intro: "En rask oversikt over hva biblioteket inneholder i dag.",
       alignment: null,
@@ -61,6 +62,7 @@ export const KunTall: Story = {
   args: {
     data: {
       __typename: "no_rodekors_docs_BlockSummary",
+      width: null,
       title: null,
       intro: null,
       alignment: "center",
@@ -80,6 +82,7 @@ export const SeksTall: Story = {
   args: {
     data: {
       __typename: "no_rodekors_docs_BlockSummary",
+      width: null,
       title: "Full bredde",
       intro: null,
       alignment: "spread",

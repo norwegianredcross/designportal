@@ -298,6 +298,11 @@ export type Blocks = {
                   depth?: number;
                 };
               };
+
+          /**
+           * Width
+           */
+          width?: "column" | "wide";
         };
       }
     | {
@@ -460,6 +465,11 @@ export type Blocks = {
                  */
                 none: Record<string, unknown>;
               };
+
+          /**
+           * Width
+           */
+          width?: "column" | "wide";
         };
       }
     | {
@@ -606,6 +616,11 @@ export type Blocks = {
                  */
                 none: Record<string, unknown>;
               };
+
+          /**
+           * Width
+           */
+          width?: "column" | "wide";
         };
       }
     | {

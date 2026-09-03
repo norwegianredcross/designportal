@@ -6,6 +6,7 @@ import { Heading, Paragraph } from "rk-designsystem";
 import { blockComponents } from "@/components/blocks/registry";
 import type { Block } from "@/types/blocks";
 import { forceArray, isRichTextData, notNullOrUndefined } from "@/utils";
+import { blockWrapperClass } from "../parts/BlocksView";
 import blockStyles from "../parts/BlocksView.module.css";
 import styles from "./SidePage.module.css";
 
@@ -128,9 +129,10 @@ const SidePage = ({ data, meta }: SidePageProps) => {
             if (!BlockView) return null;
             return (
               // Same wrapper as BlocksView — see its module for why blocks
-              // need their own boundary element.
+              // need their own boundary element, and blockWrapperClass for why
+              // the class is decided there rather than in each render path.
               // biome-ignore lint/suspicious/noArrayIndexKey: block order is stable
-              <div key={`block-${index}`} className={blockStyles.block} data-block={block.__typename}>
+              <div key={`block-${index}`} className={blockWrapperClass(block)} data-block={block.__typename}>
                 <BlockView data={block} meta={meta} />
               </div>
             );
