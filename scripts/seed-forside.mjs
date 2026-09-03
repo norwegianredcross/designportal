@@ -27,6 +27,20 @@ const card = (title, textStr, internalLink) => ({
   link: { _selected: "internal", internal: { internalLink } },
 });
 
+/** A "cardsblokk stor": the full-width feature band from the block template
+ * (Figma blokk-templates 417:28136) — picture on one side, kicker, heading,
+ * text and a call to action on the other. One card in a one-column block is
+ * exactly that shape, which is why this takes the same fields as `card` plus
+ * an image, a kicker and an optional palette scope. */
+const featureCard = ({ kicker, title, text: textStr, imageId, theme, internalLink }) => ({
+  kicker,
+  title,
+  text: textStr,
+  imageId,
+  ...(theme ? { theme } : {}),
+  link: { _selected: "internal", internal: { internalLink } },
+});
+
 // The hero's buttons point at the same sections the cards do; resolved once
 // up front so the block literal below stays readable.
 const kodeId = await contentId("/docs/kode");
@@ -35,6 +49,12 @@ const komponenterId = await contentId("/docs/komponenter");
 // every other media item is a UI mockup or a diagram — so the front page and
 // Design retning share it until there is more photography to draw on.
 const heroFotoId = await contentId("/docs/designretning/DesignretningHeroFoto.png");
+const paletteId = await contentId("/docs/designretning/DesignretningVarmPalette.png");
+const varmId = await contentId("/docs/designretning/DesignretningVarmPalette.png");
+const korsId = await contentId("/docs/designretning/DesignretningRodTradKors.png");
+const menneskerId = await contentId("/docs/designretning/DesignretningMenneskerIFokus.png");
+const designretningId = await contentId("/docs/designretning");
+const tokensId = await contentId("/docs/tokens");
 
 await postArticle({
   parentPath: "/docs",
@@ -62,22 +82,50 @@ await postArticle({
           ],
         },
       },
-      // Ekte mennesker, ekte bilder. The Design retning names this a bærende
-      // element ("Mennesker i fokus") and says outright that "bilder og tekst
-      // er de viktigste — de bærer historiene og menneskene som gjør
-      // merkevaren ekte". The front page had neither a person nor a picture on
-      // it, which is most of why it read as generic: everything below the hero
-      // was text on tint. Full width and directly under the hero, so the first
-      // thing after the promise is who the promise is for.
+      // The page now follows the block template's "forside generisk"
+      // (Figma blokk-templates 403:25051), which alternates plain sections
+      // with tinted feature bands instead of stacking identical strips:
+      //   head → kort (små) → BAND → statistikk → BAND (tonet) → kort (bilde)
+      // Each section carries a title, and the bands are what break the rhythm.
+      //
+      // Snarveiene first, as the template does: six small cards straight after
+      // the hero, so someone who knows where they are going leaves immediately.
       {
-        _selected: "blocks-images",
-        "blocks-images": {
-          size: "full",
+        _selected: "blocks-cards",
+        "blocks-cards": {
+          title: "Snarveier",
+          columnsClass: "blocks-card--cols-3",
+          // Required by the lib's form (blocks-image-placement, minimum 1) even
+          // though these cards carry no picture — leaving it out fails
+          // validation with a bare ContentDataValidationException.
+          imageClass: "blocks-card--image-top",
           items: [
-            {
+            card("Designretning", "Den visuelle retningen — form, farger og prinsipper.", designretningId),
+            card("Design", "Retningslinjer for design i Røde Kors sine digitale produkter.", await contentId("/docs/design")),
+            card("Komponenter", "Komponentbiblioteket, generert fra bibliotekets metadata.", komponenterId),
+            card("Kode", "Installasjon, designtokens, ikoner og hvordan du bidrar.", kodeId),
+            card("Tokens", "Designtokens-referansen, generert fra token-pakken.", tokensId),
+          ],
+        },
+      },
+      // First band. The photograph now has a job instead of sitting alone:
+      // "Mennesker i fokus" is a bærende virkemiddel, and the direction says
+      // outright that "bilder og tekst er de viktigste — de bærer historiene og
+      // menneskene som gjør merkevaren ekte". One column renders the template's
+      // cardsblokk stor: picture beside kicker, heading, text and a CTA.
+      {
+        _selected: "blocks-cards",
+        "blocks-cards": {
+          columnsClass: "blocks-card--cols-1",
+          imageClass: "blocks-card--image-left",
+          items: [
+            featureCard({
+              kicker: "Designretning",
+              title: "Systemet begynner med menneskene det er laget for",
+              text: "Seks virkemidler oversetter Røde Kors sin identitet til digitale flater — varme former, tydelig skala, den røde tråden fra korset, og ekte mennesker i ekte situasjoner.",
               imageId: heroFotoId,
-              altText: "Frivillige fra Røde Kors Hjelpekorps i aksjon i fjellet",
-            },
+              internalLink: designretningId,
+            }),
           ],
         },
       },
@@ -111,6 +159,27 @@ await postArticle({
           link: { _selected: "internal", internal: { internalLink: komponenterId } },
         },
       },
+      // Second band, tinted — the template puts a green panel here to break
+      // the run of plain sections (403:26035). additional-color-jungle is one
+      // of the four scopes the editor can pick, and the palette diagram is the
+      // subject, so the panel demonstrates the thing it is talking about.
+      {
+        _selected: "blocks-cards",
+        "blocks-cards": {
+          columnsClass: "blocks-card--cols-1",
+          imageClass: "blocks-card--image-right",
+          items: [
+            featureCard({
+              kicker: "Farger",
+              title: "Én palett, fire skalaer, konsekvent bruk",
+              text: "Fargene er utvidet med varme nøytrale toner som komplementerer rød uten å konkurrere med den. Farge brukes med tilbakeholdenhet — jo mer hvitt som omgir den, jo sterkere fremstår merkevarefargen.",
+              imageId: varmId,
+              theme: "additional-color-jungle",
+              internalLink: tokensId,
+            }),
+          ],
+        },
+      },
       // Still ONE live component, not a gallery — a wall of demos would just
       // be the specimen shelf again with more pixels. But the button variants
       // occupied 290px of a 1090px panel, so three quarters of it was empty
@@ -127,37 +196,38 @@ await postArticle({
           title: "Én komponent, fire fargeskalaer",
         },
       },
+      // The template closes with a row of picture cards rather than another
+      // link list (403:25841). Three of the six virkemidler, each with the
+      // diagram that already illustrates it inside Design retning — the thesis
+      // of the system, shown instead of linked.
       {
         _selected: "blocks-cards",
         "blocks-cards": {
+          title: "Virkemidlene",
           columnsClass: "blocks-card--cols-3",
           imageClass: "blocks-card--image-top",
           items: [
-            card(
-              "Designretning",
-              "Den visuelle retningen — form, farger og prinsipper.",
-              await contentId("/docs/designretning"),
-            ),
-            card(
-              "Design",
-              "Retningslinjer for design i Røde Kors sine digitale produkter.",
-              await contentId("/docs/design"),
-            ),
-            card(
-              "Komponenter",
-              "Komponentbiblioteket, generert fra bibliotekets metadata.",
-              await contentId("/docs/komponenter"),
-            ),
-            card(
-              "Kode",
-              "Installasjon, designtokens, ikoner og hvordan du bidrar.",
-              await contentId("/docs/kode"),
-            ),
-            card(
-              "Tokens",
-              "Designtokens-referansen, generert fra token-pakken.",
-              await contentId("/docs/tokens"),
-            ),
+            featureCard({
+              kicker: "Varm",
+              title: "Avrundede former og varme farger",
+              text: "Et uttrykk som oppleves nært, menneskelig og trygt.",
+              imageId: varmId,
+              internalLink: await contentId("/docs/designretning/varm"),
+            }),
+            featureCard({
+              kicker: "Rød tråd",
+              title: "Korsets ytterpunkter som formspråk",
+              text: "Grafiske fragmenter binder flatene sammen uten å konkurrere med logoen.",
+              imageId: korsId,
+              internalLink: await contentId("/docs/designretning/rod-trad"),
+            }),
+            featureCard({
+              kicker: "Mennesker i fokus",
+              title: "Ekte historier, ekte mennesker",
+              text: "Bilder og tekst bærer historiene som gjør merkevaren ekte.",
+              imageId: menneskerId,
+              internalLink: await contentId("/docs/designretning/mennesker-i-fokus"),
+            }),
           ],
         },
       },
