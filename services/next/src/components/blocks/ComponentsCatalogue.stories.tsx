@@ -6,6 +6,9 @@ import { storybookDocsUrl } from "@/utils";
 // A fixture in the exact shape fetchCatalogue() produces, so the stories
 // exercise the grid without the network the server block needs.
 const storybookUrl = "https://norwegianredcross.github.io/DesignSystem/storybook";
+// Seven names over three type groups: five Skjema (Button, DatePicker,
+// Suggestion, ToggleGroup, ValidationMessage), one Tilbakemelding (Alert),
+// one Innhold (Card), so the grouping story sees headings and counts.
 const names = ["Alert", "Button", "Card", "DatePicker", "Suggestion", "ToggleGroup", "ValidationMessage"];
 const components = names.map((name) => ({ name, docsUrl: storybookDocsUrl(storybookUrl, name) }));
 
@@ -25,6 +28,7 @@ type Story = StoryObj<typeof storyMeta>;
 export const Default: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
+    // Seven fixtures across four groups; every tile is present and linked.
     await expect(canvas.getAllByRole("listitem")).toHaveLength(names.length);
     const toggleGroup = canvas.getByRole("link", { name: /ToggleGroup/ });
     await expect(toggleGroup).toHaveAttribute("href", `${storybookUrl}/?path=/docs/components-togglegroup--docs`);
@@ -45,6 +49,22 @@ export const Filtering: Story = {
     await expect(canvas.getByRole("status")).toHaveTextContent(`1 av ${names.length} komponenter`);
     await userEvent.click(canvas.getByRole("button", { name: /tøm/i }));
     await expect(canvas.getAllByRole("listitem")).toHaveLength(names.length);
+  },
+};
+
+/** At rest the grid is grouped by type; a chip narrows it to one type. */
+export const Grupper: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvas.getAllByRole("heading", { level: 3 }).map((h) => h.textContent)).toEqual([
+      "Skjema · 5",
+      "Tilbakemelding · 1",
+      "Innhold · 1",
+    ]);
+    await userEvent.click(canvas.getByRole("radio", { name: "Skjema" }));
+    await expect(canvas.queryByRole("heading", { level: 3 })).not.toBeInTheDocument();
+    await expect(canvas.getAllByRole("listitem")).toHaveLength(5);
+    await expect(canvas.getByRole("status")).toHaveTextContent(`5 av ${names.length} komponenter`);
   },
 };
 
