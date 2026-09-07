@@ -727,6 +727,7 @@ type Part_no_rodekors_docs_blocks_view_BlocksHero {
   kicker: String
   title: String
   lead: String
+  image: Content
   actions(offset: Int, first: Int): [Part_no_rodekors_docs_blocks_view_Actions]
 }
 
@@ -1313,6 +1314,7 @@ type XData_no_rodekors_docs_site_content_DataConfig_BlocksHero {
   kicker: String
   title: String
   lead: String
+  image: Content
   actions(offset: Int, first: Int): [XData_no_rodekors_docs_site_content_DataConfig_Actions]
 }
 
@@ -2348,6 +2350,7 @@ type no_rodekors_docs_BlockHero {
   kicker: String
   title: String
   lead: String
+  image: Content
   actions: [no_rodekors_docs_BlockHeroAction]
 }
 
@@ -2543,6 +2546,7 @@ type no_rodekors_docs_Page_BlocksHero {
   kicker: String
   title: String
   lead: String
+  image: Content
   actions(offset: Int, first: Int): [no_rodekors_docs_Page_Actions]
 }
 

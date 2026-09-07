@@ -61,6 +61,11 @@ export type Blocks = {
           lead?: string;
 
           /**
+           * Photo
+           */
+          image?: string;
+
+          /**
            * Call to action
            */
           actions?: Array<{

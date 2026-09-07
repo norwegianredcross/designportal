@@ -401,6 +401,10 @@ export function extensions(graphQL: GraphQL): Extensions {
           lead: {
             type: graphQL.GraphQLString,
           },
+          // Resolved lazily from the stored id, like the card image.
+          image: {
+            type: graphQL.reference(ObjectTypeName.Content),
+          },
           actions: {
             type: graphQL.list(graphQL.reference(OBJECT_TYPE_BLOCK_HERO_ACTION)),
           },
@@ -525,6 +529,10 @@ export function extensions(graphQL: GraphQL): Extensions {
         image: (env: DataFetchingEnvironment<Record<string, unknown>, LocalContextRecord, ResolvedCardItem>) =>
           env.source.imageId ? getOne({ key: env.source.imageId }) : null,
       },
+      [OBJECT_TYPE_BLOCK_HERO]: {
+        image: (env: DataFetchingEnvironment<Record<string, unknown>, LocalContextRecord, ResolvedHeroBlock>) =>
+          env.source.imageId ? getOne({ key: env.source.imageId }) : null,
+      },
       HeadlessCms: {
         [FIELD_BLOCKS]: (env): unknown[] => {
           const content = getOne<Content<Blocks>>({
@@ -631,6 +639,7 @@ type ResolvedHeroBlock = {
   kicker?: string;
   title?: string;
   lead?: string;
+  imageId?: string;
   actions: ResolvedHeroAction[];
 };
 
@@ -825,6 +834,7 @@ function resolveBlocks(
         kicker: hero.kicker,
         title: hero.title,
         lead: hero.lead,
+        imageId: hero.image,
         // forceArray: XP stores a single repeatable entry as a bare
         // object. Each action resolves its own link the way the cards
         // and the summary do — internal fetched once for its path,

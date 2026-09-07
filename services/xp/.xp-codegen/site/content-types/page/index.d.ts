@@ -81,6 +81,11 @@ export type Page = {
           lead?: string;
 
           /**
+           * Photo
+           */
+          image?: string;
+
+          /**
            * Call to action
            */
           actions?: Array<{

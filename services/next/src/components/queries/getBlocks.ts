@@ -156,6 +156,18 @@ export default () =>
             kicker
             title
             lead
+            # Optional photo; sized for the panel's picture column (about
+            # half of the 1090px article column, 2x for retina).
+            image {
+              _id
+              ... on media_Image {
+                imageUrl(scale: "width(720)", type: absolute)
+                imageUrl2x: imageUrl(scale: "width(1440)", type: absolute)
+                data {
+                  altText
+                }
+              }
+            }
             actions {
               linkText
               url
