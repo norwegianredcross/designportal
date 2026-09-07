@@ -12,6 +12,7 @@ import { QuoteBlock } from "./QuoteBlock";
 import { SummaryBlock } from "./SummaryBlock";
 import { TableBlock } from "./TableBlock";
 import { TextBlock } from "./TextBlock";
+import { TokensBlock } from "./TokensBlock";
 
 /**
  * The single source of truth for "which React component renders which
@@ -51,4 +52,7 @@ export const blockComponents: BlockRegistry = {
   no_rodekors_docs_BlockSummary: SummaryBlock,
   // Landing panel with the notched corner (local block).
   no_rodekors_docs_BlockHero: HeroBlock,
+  // Design-token browser, read from the theme in the reader's browser
+  // (local block; see TokensBrowser).
+  no_rodekors_docs_BlockTokens: TokensBlock,
 };

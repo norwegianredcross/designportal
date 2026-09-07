@@ -649,5 +649,26 @@ export type BlocksView = {
           table: string;
         };
       }
+    | {
+        /**
+         * Selected
+         */
+        _selected: "blocks-tokens";
+
+        /**
+         * Token browser
+         */
+        "blocks-tokens": {
+          /**
+           * Title
+           */
+          title?: string;
+
+          /**
+           * Intro
+           */
+          intro?: string;
+        };
+      }
   >;
 };

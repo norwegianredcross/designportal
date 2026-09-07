@@ -240,6 +240,7 @@ export type GetBlocksQuery = {
             } | null> | null;
           } | null;
         } & { __typename: "no_rodekors_docs_BlockText" })
+      | ({ title: string | null; intro: string | null } & { __typename: "no_rodekors_docs_BlockTokens" })
       | null
     > | null;
   } | null;
@@ -568,6 +569,7 @@ export type GetSidePageQuery = {
             } | null> | null;
           } | null;
         } & { __typename: "no_rodekors_docs_BlockText" })
+      | ({ title: string | null; intro: string | null } & { __typename: "no_rodekors_docs_BlockTokens" })
       | null
     > | null;
   } | null;

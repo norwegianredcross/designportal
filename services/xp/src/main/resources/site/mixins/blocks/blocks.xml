@@ -132,6 +132,16 @@
             <mixin name="blocks-table"/>
           </items>
         </option>
+
+        <!-- LOCAL block (site/mixins/blocks-tokens): the design-token
+             browser, read from the theme in the reader's browser. -->
+        <option name="blocks-tokens">
+          <label i18n="mixin.blocks-tokens.displayName">Token browser</label>
+          <help-text i18n="mixin.blocks-tokens.description">Every design token in the theme, with previews and copy buttons</help-text>
+          <items>
+            <mixin name="blocks-tokens"/>
+          </items>
+        </option>
       </options>
     </option-set>
   </form>

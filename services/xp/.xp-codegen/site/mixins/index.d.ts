@@ -17,5 +17,6 @@ export type BlocksSummary = import("./blocks-summary").BlocksSummary;
 export type BlocksTable = import("./blocks-table").BlocksTable;
 export type BlocksText = import("./blocks-text").BlocksText;
 export type BlocksTheme = import("./blocks-theme").BlocksTheme;
+export type BlocksTokens = import("./blocks-tokens").BlocksTokens;
 export type BlocksWidth = import("./blocks-width").BlocksWidth;
 export type ContentHeader = import("./content-header").ContentHeader;
