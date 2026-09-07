@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- LOCAL mixin (docs-specific): the design-token browser. Like the
+     component catalogue, the content is not typed in: the block reads every
+     ds-prefixed custom property the library's theme.css defines, in the
+     reader's browser, and lists them by category with a preview and a copy
+     button. The list therefore always matches the token package the site
+     itself is running on. The form only holds the wording around it.
+     (No double hyphen in this comment on purpose: XML forbids it inside
+     comments, and the codegen then silently reads the form as empty.) -->
+<mixin xmlns="urn:enonic:xp:model:1.0">
+  <display-name i18n="mixin.blocks-tokens.displayName">Token browser</display-name>
+  <description i18n="mixin.blocks-tokens.description">Every design token in the theme, with previews and copy buttons</description>
+
+  <form>
+    <input name="title" type="TextLine">
+      <label i18n="mixin.blocks-tokens.title">Title</label>
+      <occurrences minimum="0" maximum="1"/>
+    </input>
+
+    <input name="intro" type="TextLine">
+      <label i18n="mixin.blocks-tokens.intro">Intro</label>
+      <help-text i18n="mixin.blocks-tokens.intro.helpText">One sentence above the browser, e.g. where the tokens come from</help-text>
+      <occurrences minimum="0" maximum="1"/>
+    </input>
+  </form>
+</mixin>

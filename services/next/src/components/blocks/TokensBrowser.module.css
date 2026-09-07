@@ -1,0 +1,178 @@
+/* Token browser, tokens only. The rows and swatches are layout glue like
+ * the code block's surface, not a design system component. */
+
+.browser {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-size-6);
+}
+
+.muted {
+  color: var(--ds-color-neutral-text-subtle);
+}
+
+.category {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-size-6);
+}
+
+.count {
+  font-weight: var(--ds-font-weight-regular);
+  color: var(--ds-color-neutral-text-subtle);
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-size-3);
+}
+
+.groupPrefix {
+  font-weight: var(--ds-font-weight-regular);
+  font-size: var(--ds-font-size-2);
+  color: var(--ds-color-neutral-text-subtle);
+}
+
+/* --- colours: a grid of swatches ------------------------------------ */
+
+.swatches {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--ds-size-3);
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+}
+
+.swatch {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-areas:
+    "color name copy"
+    "color value copy";
+  column-gap: var(--ds-size-3);
+  align-items: center;
+  padding: var(--ds-size-2) var(--ds-size-3);
+  border: 1px solid var(--ds-color-neutral-border-subtle);
+  border-radius: var(--ds-border-radius-md);
+  background: var(--ds-color-neutral-background-default);
+}
+
+.swatchColor {
+  grid-area: color;
+  inline-size: var(--ds-size-10);
+  block-size: var(--ds-size-10);
+  border-radius: var(--ds-border-radius-full);
+  /* Inset ring so white and near-white swatches still read as a circle. */
+  box-shadow: inset 0 0 0 1px var(--ds-color-neutral-border-subtle);
+}
+
+.swatch .name {
+  grid-area: name;
+}
+
+.swatch .value {
+  grid-area: value;
+}
+
+.swatch .copy {
+  grid-area: copy;
+}
+
+/* --- everything else: one row per token ---------------------------- */
+
+.rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--ds-color-neutral-border-subtle);
+  border-radius: var(--ds-border-radius-md);
+  overflow: hidden;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: minmax(12rem, 1.5fr) minmax(6rem, 1fr) auto auto;
+  align-items: center;
+  gap: var(--ds-size-4);
+  padding: var(--ds-size-2) var(--ds-size-4);
+  background: var(--ds-color-neutral-background-default);
+}
+
+.row:nth-child(even) {
+  background: var(--ds-color-neutral-background-tinted);
+}
+
+@media (max-width: 40rem) {
+  .row {
+    grid-template-columns: 1fr auto;
+  }
+  .preview {
+    display: none;
+  }
+}
+
+.name {
+  font-size: var(--ds-font-size-2);
+  overflow-wrap: anywhere;
+}
+
+.value {
+  font-size: var(--ds-font-size-1);
+  color: var(--ds-color-neutral-text-subtle);
+  overflow-wrap: anywhere;
+}
+
+/* --- previews -------------------------------------------------------- */
+
+.preview {
+  display: flex;
+  align-items: center;
+  min-block-size: var(--ds-size-8);
+}
+
+.sizeTrack {
+  display: block;
+  inline-size: 100%;
+}
+
+.sizeBar {
+  display: block;
+  block-size: var(--ds-size-3);
+  max-inline-size: 100%;
+  border-radius: var(--ds-border-radius-full);
+  background: var(--ds-color-primary-color-red-base-default);
+}
+
+.radiusBox {
+  display: block;
+  inline-size: var(--ds-size-12);
+  block-size: var(--ds-size-12);
+  background: var(--ds-color-primary-color-red-surface-tinted);
+  border: 1px solid var(--ds-color-primary-color-red-border-subtle);
+}
+
+.borderLine {
+  display: block;
+  inline-size: var(--ds-size-18);
+  border-top: 0 solid var(--ds-color-neutral-border-strong);
+}
+
+.shadowBox {
+  display: block;
+  inline-size: var(--ds-size-18);
+  block-size: var(--ds-size-12);
+  border-radius: var(--ds-border-radius-md);
+  background: var(--ds-color-neutral-background-default);
+}
+
+.opacityBox {
+  display: block;
+  inline-size: var(--ds-size-12);
+  block-size: var(--ds-size-12);
+  border-radius: var(--ds-border-radius-md);
+  background: var(--ds-color-primary-color-red-base-default);
+}

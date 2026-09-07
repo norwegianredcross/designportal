@@ -40,6 +40,7 @@ const OBJECT_TYPE_BLOCK_CARDS = "no_rodekors_docs_BlockCards";
 const OBJECT_TYPE_BLOCK_CODE = "no_rodekors_docs_BlockCode";
 const OBJECT_TYPE_BLOCK_DEMO = "no_rodekors_docs_BlockDemo";
 const OBJECT_TYPE_BLOCK_COMPONENTS = "no_rodekors_docs_BlockComponents";
+const OBJECT_TYPE_BLOCK_TOKENS = "no_rodekors_docs_BlockTokens";
 const OBJECT_TYPE_BLOCK_CHANGELOG = "no_rodekors_docs_BlockChangelog";
 const OBJECT_TYPE_BLOCK_TABLE = "no_rodekors_docs_BlockTable";
 const OBJECT_TYPE_BLOCK_HERO = "no_rodekors_docs_BlockHero";
@@ -302,6 +303,20 @@ export function extensions(graphQL: GraphQL): Extensions {
           },
         },
       },
+      // Wording only: the tokens themselves are read from the theme's CSS
+      // in the reader's browser (see the Next side's TokensBrowser), never
+      // stored as content, so nothing here needs a resolver.
+      [OBJECT_TYPE_BLOCK_TOKENS]: {
+        description: "The design-token browser, read from the theme in the reader's browser",
+        fields: {
+          title: {
+            type: graphQL.GraphQLString,
+          },
+          intro: {
+            type: graphQL.GraphQLString,
+          },
+        },
+      },
       // Wording and a limit; the release notes themselves are fetched from
       // the library's published CHANGELOG.md on the Next side
       // (services/next/src/server/changelog.ts), never stored as content.
@@ -454,6 +469,7 @@ export function extensions(graphQL: GraphQL): Extensions {
           graphQL.reference(OBJECT_TYPE_BLOCK_CODE),
           graphQL.reference(OBJECT_TYPE_BLOCK_DEMO),
           graphQL.reference(OBJECT_TYPE_BLOCK_COMPONENTS),
+          graphQL.reference(OBJECT_TYPE_BLOCK_TOKENS),
           graphQL.reference(OBJECT_TYPE_BLOCK_CHANGELOG),
           graphQL.reference(OBJECT_TYPE_BLOCK_TABLE),
           graphQL.reference(OBJECT_TYPE_BLOCK_SUMMARY),
@@ -648,6 +664,11 @@ type ResolvedComponentsBlock = {
   intro?: string;
   showSearch?: boolean;
 };
+type ResolvedTokensBlock = {
+  __typename: typeof OBJECT_TYPE_BLOCK_TOKENS;
+  title?: string;
+  intro?: string;
+};
 
 type ResolvedChangelogBlock = {
   __typename: typeof OBJECT_TYPE_BLOCK_CHANGELOG;
@@ -675,6 +696,7 @@ function resolveBlocks(
   | ResolvedCodeBlock
   | ResolvedDemoBlock
   | ResolvedComponentsBlock
+  | ResolvedTokensBlock
   | ResolvedChangelogBlock
   | ResolvedTableBlock
   | ResolvedSummaryBlock
@@ -855,6 +877,12 @@ function resolveBlocks(
         title: block["blocks-components"].title,
         intro: block["blocks-components"].intro,
         showSearch: block["blocks-components"].showSearch,
+      };
+    case "blocks-tokens":
+      return {
+        __typename: OBJECT_TYPE_BLOCK_TOKENS,
+        title: block["blocks-tokens"].title,
+        intro: block["blocks-tokens"].intro,
       };
     case "blocks-changelog":
       return {

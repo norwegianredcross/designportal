@@ -245,6 +245,13 @@ export default () =>
             intro
             showSearch
           }
+          # Wording only; the tokens are read from the theme in the browser
+          # (components/blocks/TokensBrowser).
+          ...on no_rodekors_docs_BlockTokens {
+            __typename
+            title
+            intro
+          }
           # Wording and a limit; the releases are fetched from the library's
           # published CHANGELOG.md on the Next side (server/changelog).
           ...on no_rodekors_docs_BlockChangelog {
