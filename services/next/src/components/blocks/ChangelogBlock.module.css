@@ -1,0 +1,10 @@
+/* The block's own stack: heading, intro, releases. */
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-size-5);
+}
+
+.section > * {
+  margin: 0;
+}

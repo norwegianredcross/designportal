@@ -199,6 +199,14 @@ export default () =>
             intro
             showSearch
           }
+          # Wording and a limit; the releases are fetched from the library's
+          # published CHANGELOG.md on the Next side (server/changelog).
+          ...on no_rodekors_docs_BlockChangelog {
+            __typename
+            title
+            intro
+            maxReleases
+          }
         }
       }
     }`);

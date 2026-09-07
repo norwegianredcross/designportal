@@ -143,6 +143,16 @@
             <mixin name="blocks-components"/>
           </items>
         </option>
+
+        <!-- LOCAL block (site/mixins/blocks-changelog): the library's
+             release notes, fetched from its published CHANGELOG.md. -->
+        <option name="blocks-changelog">
+          <label i18n="mixin.blocks-changelog.displayName">Release notes</label>
+          <help-text i18n="mixin.blocks-changelog.description">The component library's release history, read from its published changelog</help-text>
+          <items>
+            <mixin name="blocks-changelog"/>
+          </items>
+        </option>
       </options>
     </option-set>
   </form>

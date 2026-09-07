@@ -675,5 +675,31 @@ export type BlocksView = {
           showSearch: boolean;
         };
       }
+    | {
+        /**
+         * Selected
+         */
+        _selected: "blocks-changelog";
+
+        /**
+         * Release notes
+         */
+        "blocks-changelog": {
+          /**
+           * Title
+           */
+          title?: string;
+
+          /**
+           * Intro
+           */
+          intro?: string;
+
+          /**
+           * Number of releases
+           */
+          maxReleases?: number;
+        };
+      }
   >;
 };
