@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- LOCAL mixin (docs-specific): "what's new" for the component library.
+     The release notes are not typed in: the library publishes its
+     CHANGELOG.md next to Storybook on every release, and the block fetches
+     and renders it (cached for an hour on the Next side, so a new release
+     shows up within the hour without anyone editing content). The form
+     only holds the wording around the list and how far back it goes. -->
+<mixin xmlns="urn:enonic:xp:model:1.0">
+  <display-name i18n="mixin.blocks-changelog.displayName">Release notes</display-name>
+  <description i18n="mixin.blocks-changelog.description">The component library's release history, read from its published changelog</description>
+
+  <form>
+    <input name="title" type="TextLine">
+      <label i18n="mixin.blocks-changelog.title">Title</label>
+      <occurrences minimum="0" maximum="1"/>
+    </input>
+
+    <input name="intro" type="TextLine">
+      <label i18n="mixin.blocks-changelog.intro">Intro</label>
+      <occurrences minimum="0" maximum="1"/>
+    </input>
+
+    <!-- Empty means every release. The library has 40+ of them already,
+         so a landing page will typically want the last handful. -->
+    <input name="maxReleases" type="Long">
+      <label i18n="mixin.blocks-changelog.maxReleases">Number of releases</label>
+      <help-text i18n="mixin.blocks-changelog.maxReleases.helpText">Leave empty to show the full history</help-text>
+      <occurrences minimum="0" maximum="1"/>
+      <config>
+        <min>1</min>
+      </config>
+    </input>
+  </form>
+</mixin>

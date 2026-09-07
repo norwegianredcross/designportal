@@ -3,6 +3,7 @@ import type { FunctionComponent } from "react";
 import type { Block, BlockByTypename } from "@/types/blocks";
 import { AccordionBlock } from "./AccordionBlock";
 import { CardsBlock } from "./CardsBlock";
+import { ChangelogBlock } from "./ChangelogBlock";
 import { CodeBlock } from "./CodeBlock";
 import { ComponentsBlock } from "./ComponentsBlock";
 import { DemoBlock } from "./DemoBlock";
@@ -46,6 +47,9 @@ export const blockComponents: BlockRegistry = {
   // Component catalogue generated from the library's published manifest
   // (local block; async server component, see ComponentsBlock).
   no_rodekors_docs_BlockComponents: ComponentsBlock,
+  // Release notes fetched from the library's published CHANGELOG.md
+  // (local block; async server component, see ChangelogBlock).
+  no_rodekors_docs_BlockChangelog: ChangelogBlock,
   // Link-card grid; links pre-resolved by XP (see CardsBlock).
   no_rodekors_docs_BlockCards: CardsBlock,
   // Gallery of figures; images arrive pre-scaled from XP (see ImagesBlock).

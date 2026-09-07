@@ -41,6 +41,7 @@ const OBJECT_TYPE_BLOCK_CODE = "no_rodekors_docs_BlockCode";
 const OBJECT_TYPE_BLOCK_DEMO = "no_rodekors_docs_BlockDemo";
 const OBJECT_TYPE_BLOCK_COMPONENTS = "no_rodekors_docs_BlockComponents";
 const OBJECT_TYPE_BLOCK_TOKENS = "no_rodekors_docs_BlockTokens";
+const OBJECT_TYPE_BLOCK_CHANGELOG = "no_rodekors_docs_BlockChangelog";
 const OBJECT_TYPE_BLOCK_TABLE = "no_rodekors_docs_BlockTable";
 const OBJECT_TYPE_BLOCK_HERO = "no_rodekors_docs_BlockHero";
 // Not a union member: one call-to-action nested inside BlockHero.
@@ -316,6 +317,23 @@ export function extensions(graphQL: GraphQL): Extensions {
           },
         },
       },
+      // Wording and a limit; the release notes themselves are fetched from
+      // the library's published CHANGELOG.md on the Next side
+      // (services/next/src/server/changelog.ts), never stored as content.
+      [OBJECT_TYPE_BLOCK_CHANGELOG]: {
+        description: "The component library's release notes, read from its published changelog",
+        fields: {
+          title: {
+            type: graphQL.GraphQLString,
+          },
+          intro: {
+            type: graphQL.GraphQLString,
+          },
+          maxReleases: {
+            type: graphQL.GraphQLInt,
+          },
+        },
+      },
       // Plain strings; the demo id is only meaningful to the frontend's
       // curated demo registry.
       [OBJECT_TYPE_BLOCK_DEMO]: {
@@ -452,6 +470,7 @@ export function extensions(graphQL: GraphQL): Extensions {
           graphQL.reference(OBJECT_TYPE_BLOCK_DEMO),
           graphQL.reference(OBJECT_TYPE_BLOCK_COMPONENTS),
           graphQL.reference(OBJECT_TYPE_BLOCK_TOKENS),
+          graphQL.reference(OBJECT_TYPE_BLOCK_CHANGELOG),
           graphQL.reference(OBJECT_TYPE_BLOCK_TABLE),
           graphQL.reference(OBJECT_TYPE_BLOCK_SUMMARY),
           graphQL.reference(OBJECT_TYPE_BLOCK_HERO),
@@ -651,6 +670,13 @@ type ResolvedTokensBlock = {
   intro?: string;
 };
 
+type ResolvedChangelogBlock = {
+  __typename: typeof OBJECT_TYPE_BLOCK_CHANGELOG;
+  title?: string;
+  intro?: string;
+  maxReleases?: number;
+};
+
 type ResolvedAccordionBlock = {
   __typename: typeof OBJECT_TYPE_BLOCK_ACCORDION;
   title?: string;
@@ -671,6 +697,7 @@ function resolveBlocks(
   | ResolvedDemoBlock
   | ResolvedComponentsBlock
   | ResolvedTokensBlock
+  | ResolvedChangelogBlock
   | ResolvedTableBlock
   | ResolvedSummaryBlock
   | ResolvedHeroBlock
@@ -856,6 +883,15 @@ function resolveBlocks(
         __typename: OBJECT_TYPE_BLOCK_TOKENS,
         title: block["blocks-tokens"].title,
         intro: block["blocks-tokens"].intro,
+      };
+    case "blocks-changelog":
+      return {
+        __typename: OBJECT_TYPE_BLOCK_CHANGELOG,
+        title: block["blocks-changelog"].title,
+        intro: block["blocks-changelog"].intro,
+        // The Long input stores a number; undefined when the editor left
+        // it empty, which the block reads as "no limit".
+        maxReleases: block["blocks-changelog"].maxReleases,
       };
   }
 

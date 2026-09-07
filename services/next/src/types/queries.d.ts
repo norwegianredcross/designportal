@@ -105,6 +105,9 @@ export type GetBlocksQuery = {
               | null;
           } | null> | null;
         } & { __typename: "no_rodekors_docs_BlockCards" })
+      | ({ title: string | null; intro: string | null; maxReleases: number | null } & {
+          __typename: "no_rodekors_docs_BlockChangelog";
+        })
       | ({ code: string | null; language: string | null; label: string | null } & {
           __typename: "no_rodekors_docs_BlockCode";
         })
@@ -437,6 +440,9 @@ export type GetSidePageQuery = {
               | null;
           } | null> | null;
         } & { __typename: "no_rodekors_docs_BlockCards" })
+      | ({ title: string | null; intro: string | null; maxReleases: number | null } & {
+          __typename: "no_rodekors_docs_BlockChangelog";
+        })
       | ({ code: string | null; language: string | null; label: string | null } & {
           __typename: "no_rodekors_docs_BlockCode";
         })
