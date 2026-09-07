@@ -199,6 +199,13 @@ export default () =>
             intro
             showSearch
           }
+          # Wording only; the tokens are read from the theme in the browser
+          # (components/blocks/TokensBrowser).
+          ...on no_rodekors_docs_BlockTokens {
+            __typename
+            title
+            intro
+          }
         }
       }
     }`);

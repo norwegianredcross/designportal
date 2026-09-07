@@ -1,0 +1,11 @@
+/* The block's own stack: heading, intro, browser. Without the gap the intro
+ * sits flush on the category toggle. */
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-size-5);
+}
+
+.section > * {
+  margin: 0;
+}

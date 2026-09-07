@@ -670,5 +670,26 @@ export type Blocks = {
           showSearch: boolean;
         };
       }
+    | {
+        /**
+         * Selected
+         */
+        _selected: "blocks-tokens";
+
+        /**
+         * Token browser
+         */
+        "blocks-tokens": {
+          /**
+           * Title
+           */
+          title?: string;
+
+          /**
+           * Intro
+           */
+          intro?: string;
+        };
+      }
   >;
 };
