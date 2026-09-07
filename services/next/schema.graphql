@@ -662,6 +662,7 @@ type Part_no_rodekors_docs_blocks_view_Blocks {
   blocks_demo: Part_no_rodekors_docs_blocks_view_BlocksDemo
   blocks_summary: Part_no_rodekors_docs_blocks_view_BlocksSummary
   blocks_table: Part_no_rodekors_docs_blocks_view_BlocksTable
+  blocks_components: Part_no_rodekors_docs_blocks_view_BlocksComponents
   blocks_tokens: Part_no_rodekors_docs_blocks_view_BlocksTokens
 }
 
@@ -689,6 +690,13 @@ type Part_no_rodekors_docs_blocks_view_BlocksCode {
   code: String
   language: String
   label: String
+}
+
+"""Component catalogue"""
+type Part_no_rodekors_docs_blocks_view_BlocksComponents {
+  title: String
+  intro: String
+  showSearch: Boolean
 }
 
 """Component demo"""
@@ -774,6 +782,7 @@ enum Part_no_rodekors_docs_blocks_view_Blocks_OptionEnum {
   blocks_demo
   blocks_summary
   blocks_table
+  blocks_components
   blocks_tokens
 }
 
@@ -1230,6 +1239,7 @@ type XData_no_rodekors_docs_site_content_DataConfig_Blocks {
   blocks_demo: XData_no_rodekors_docs_site_content_DataConfig_BlocksDemo
   blocks_summary: XData_no_rodekors_docs_site_content_DataConfig_BlocksSummary
   blocks_table: XData_no_rodekors_docs_site_content_DataConfig_BlocksTable
+  blocks_components: XData_no_rodekors_docs_site_content_DataConfig_BlocksComponents
   blocks_tokens: XData_no_rodekors_docs_site_content_DataConfig_BlocksTokens
 }
 
@@ -1257,6 +1267,13 @@ type XData_no_rodekors_docs_site_content_DataConfig_BlocksCode {
   code: String
   language: String
   label: String
+}
+
+"""Component catalogue"""
+type XData_no_rodekors_docs_site_content_DataConfig_BlocksComponents {
+  title: String
+  intro: String
+  showSearch: Boolean
 }
 
 """Component demo"""
@@ -1342,6 +1359,7 @@ enum XData_no_rodekors_docs_site_content_DataConfig_Blocks_OptionEnum {
   blocks_demo
   blocks_summary
   blocks_table
+  blocks_components
   blocks_tokens
 }
 
@@ -2234,7 +2252,7 @@ type media_Video_Data {
 }
 
 """Your page content is build by a sequence of blocks."""
-union no_rodekors_docs_Block = no_rodekors_docs_BlockText | no_rodekors_docs_BlockAccordion | no_rodekors_docs_BlockQuote | no_rodekors_docs_BlockFactbox | no_rodekors_docs_BlockImages | no_rodekors_docs_BlockCards | no_rodekors_docs_BlockCode | no_rodekors_docs_BlockDemo | no_rodekors_docs_BlockTokens | no_rodekors_docs_BlockTable | no_rodekors_docs_BlockSummary | no_rodekors_docs_BlockHero
+union no_rodekors_docs_Block = no_rodekors_docs_BlockText | no_rodekors_docs_BlockAccordion | no_rodekors_docs_BlockQuote | no_rodekors_docs_BlockFactbox | no_rodekors_docs_BlockImages | no_rodekors_docs_BlockCards | no_rodekors_docs_BlockCode | no_rodekors_docs_BlockDemo | no_rodekors_docs_BlockComponents | no_rodekors_docs_BlockTokens | no_rodekors_docs_BlockTable | no_rodekors_docs_BlockSummary | no_rodekors_docs_BlockHero
 
 """A list of expandable sections"""
 type no_rodekors_docs_BlockAccordion {
@@ -2272,6 +2290,15 @@ type no_rodekors_docs_BlockCode {
   code: String
   language: String
   label: String
+}
+
+"""
+The component catalogue, generated from the library's published manifest
+"""
+type no_rodekors_docs_BlockComponents {
+  title: String
+  intro: String
+  showSearch: Boolean
 }
 
 """A live example of a design system component"""
@@ -2424,6 +2451,7 @@ type no_rodekors_docs_Page_Blocks {
   blocks_demo: no_rodekors_docs_Page_BlocksDemo
   blocks_summary: no_rodekors_docs_Page_BlocksSummary
   blocks_table: no_rodekors_docs_Page_BlocksTable
+  blocks_components: no_rodekors_docs_Page_BlocksComponents
   blocks_tokens: no_rodekors_docs_Page_BlocksTokens
 }
 
@@ -2451,6 +2479,13 @@ type no_rodekors_docs_Page_BlocksCode {
   code: String
   language: String
   label: String
+}
+
+"""Component catalogue"""
+type no_rodekors_docs_Page_BlocksComponents {
+  title: String
+  intro: String
+  showSearch: Boolean
 }
 
 """Component demo"""
@@ -2536,6 +2571,7 @@ enum no_rodekors_docs_Page_Blocks_OptionEnum {
   blocks_demo
   blocks_summary
   blocks_table
+  blocks_components
   blocks_tokens
 }
 

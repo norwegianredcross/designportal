@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- LOCAL mixin (docs-specific, like blocks-code): the component catalogue.
+     Editors do NOT list components by hand. The block renders the library's
+     published manifest (ai-context.manifest.json, summary.primaryComponents)
+     at request time, so a component released in rk-designsystem appears
+     here on its own and one removed disappears - the catalogue can never
+     drift from what the npm package actually ships. The form only holds
+     the wording around the grid. -->
+<mixin xmlns="urn:enonic:xp:model:1.0">
+  <display-name i18n="mixin.blocks-components.displayName">Component catalogue</display-name>
+  <description i18n="mixin.blocks-components.description">Every component in the library, linked to its Storybook documentation</description>
+
+  <form>
+    <input name="title" type="TextLine">
+      <label i18n="mixin.blocks-components.title">Title</label>
+      <occurrences minimum="0" maximum="1"/>
+    </input>
+
+    <input name="intro" type="TextLine">
+      <label i18n="mixin.blocks-components.intro">Intro</label>
+      <help-text i18n="mixin.blocks-components.intro.helpText">One sentence above the grid, e.g. what Storybook is</help-text>
+      <occurrences minimum="0" maximum="1"/>
+    </input>
+
+    <!-- Checked by default: the grid holds ~46 entries, and filtering by
+         name is how the old docs site made it usable. -->
+    <input name="showSearch" type="CheckBox">
+      <label i18n="mixin.blocks-components.showSearch">Show search field</label>
+      <default>checked</default>
+      <occurrences minimum="0" maximum="1"/>
+    </input>
+  </form>
+</mixin>

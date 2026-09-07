@@ -39,6 +39,7 @@ const OBJECT_TYPE_BLOCK_IMAGE = "no_rodekors_docs_BlockImage";
 const OBJECT_TYPE_BLOCK_CARDS = "no_rodekors_docs_BlockCards";
 const OBJECT_TYPE_BLOCK_CODE = "no_rodekors_docs_BlockCode";
 const OBJECT_TYPE_BLOCK_DEMO = "no_rodekors_docs_BlockDemo";
+const OBJECT_TYPE_BLOCK_COMPONENTS = "no_rodekors_docs_BlockComponents";
 const OBJECT_TYPE_BLOCK_TOKENS = "no_rodekors_docs_BlockTokens";
 const OBJECT_TYPE_BLOCK_TABLE = "no_rodekors_docs_BlockTable";
 const OBJECT_TYPE_BLOCK_HERO = "no_rodekors_docs_BlockHero";
@@ -283,6 +284,24 @@ export function extensions(graphQL: GraphQL): Extensions {
           },
         },
       },
+      // Only the wording around the grid. The component list itself is
+      // NOT content: the Next side fetches it from the library's published
+      // manifest when rendering (services/next/src/server/designsystem-context.ts),
+      // so nothing here needs a resolver.
+      [OBJECT_TYPE_BLOCK_COMPONENTS]: {
+        description: "The component catalogue, generated from the library's published manifest",
+        fields: {
+          title: {
+            type: graphQL.GraphQLString,
+          },
+          intro: {
+            type: graphQL.GraphQLString,
+          },
+          showSearch: {
+            type: graphQL.GraphQLBoolean,
+          },
+        },
+      },
       // Wording only: the tokens themselves are read from the theme's CSS
       // in the reader's browser (see the Next side's TokensBrowser), never
       // stored as content, so nothing here needs a resolver.
@@ -431,6 +450,7 @@ export function extensions(graphQL: GraphQL): Extensions {
           graphQL.reference(OBJECT_TYPE_BLOCK_CARDS),
           graphQL.reference(OBJECT_TYPE_BLOCK_CODE),
           graphQL.reference(OBJECT_TYPE_BLOCK_DEMO),
+          graphQL.reference(OBJECT_TYPE_BLOCK_COMPONENTS),
           graphQL.reference(OBJECT_TYPE_BLOCK_TOKENS),
           graphQL.reference(OBJECT_TYPE_BLOCK_TABLE),
           graphQL.reference(OBJECT_TYPE_BLOCK_SUMMARY),
@@ -619,6 +639,12 @@ type ResolvedDemoBlock = {
   title?: string;
 };
 
+type ResolvedComponentsBlock = {
+  __typename: typeof OBJECT_TYPE_BLOCK_COMPONENTS;
+  title?: string;
+  intro?: string;
+  showSearch?: boolean;
+};
 type ResolvedTokensBlock = {
   __typename: typeof OBJECT_TYPE_BLOCK_TOKENS;
   title?: string;
@@ -643,6 +669,7 @@ function resolveBlocks(
   | ResolvedCardsBlock
   | ResolvedCodeBlock
   | ResolvedDemoBlock
+  | ResolvedComponentsBlock
   | ResolvedTokensBlock
   | ResolvedTableBlock
   | ResolvedSummaryBlock
@@ -816,6 +843,13 @@ function resolveBlocks(
         __typename: OBJECT_TYPE_BLOCK_DEMO,
         demo: block["blocks-demo"].demo,
         title: block["blocks-demo"].title,
+      };
+    case "blocks-components":
+      return {
+        __typename: OBJECT_TYPE_BLOCK_COMPONENTS,
+        title: block["blocks-components"].title,
+        intro: block["blocks-components"].intro,
+        showSearch: block["blocks-components"].showSearch,
       };
     case "blocks-tokens":
       return {

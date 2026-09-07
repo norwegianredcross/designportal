@@ -653,6 +653,32 @@ export type BlocksView = {
         /**
          * Selected
          */
+        _selected: "blocks-components";
+
+        /**
+         * Component catalogue
+         */
+        "blocks-components": {
+          /**
+           * Title
+           */
+          title?: string;
+
+          /**
+           * Intro
+           */
+          intro?: string;
+
+          /**
+           * Show search field
+           */
+          showSearch: boolean;
+        };
+      }
+    | {
+        /**
+         * Selected
+         */
         _selected: "blocks-tokens";
 
         /**

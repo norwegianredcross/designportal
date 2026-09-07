@@ -133,6 +133,16 @@
           </items>
         </option>
 
+        <!-- LOCAL block (site/mixins/blocks-components): the component
+             catalogue, generated from the library's published manifest.
+             See the mixin file for why editors never type the list. -->
+        <option name="blocks-components">
+          <label i18n="mixin.blocks-components.displayName">Component catalogue</label>
+          <help-text i18n="mixin.blocks-components.description">Every component in the library, linked to its Storybook documentation</help-text>
+          <items>
+            <mixin name="blocks-components"/>
+          </items>
+        </option>
         <!-- LOCAL block (site/mixins/blocks-tokens): the design-token
              browser, read from the theme in the reader's browser. -->
         <option name="blocks-tokens">
