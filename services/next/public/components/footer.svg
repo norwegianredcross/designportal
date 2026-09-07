@@ -1,22 +1,3 @@
-<svg viewBox="11.2 -2.8 201.6 111.6" xmlns="http://www.w3.org/2000/svg" fill="none">
-  <g clip-path="url(#clip0_footer)">
-    <rect width="180" height="90" transform="translate(22 8)" fill="#fae4e2"/>
-    <!-- link columns -->
-    <rect x="34" y="20" width="40" height="5" rx="2.5" fill="#D52B1E"/>
-    <rect x="34" y="32" width="30" height="4" rx="2" fill="#f6d2cf"/>
-    <rect x="34" y="41" width="34" height="4" rx="2" fill="#f6d2cf"/>
-    <rect x="34" y="50" width="26" height="4" rx="2" fill="#f6d2cf"/>
-    <rect x="94" y="20" width="40" height="5" rx="2.5" fill="#D52B1E"/>
-    <rect x="94" y="32" width="28" height="4" rx="2" fill="#f6d2cf"/>
-    <rect x="94" y="41" width="34" height="4" rx="2" fill="#f6d2cf"/>
-    <rect x="154" y="20" width="34" height="5" rx="2.5" fill="#D52B1E"/>
-    <rect x="154" y="32" width="30" height="4" rx="2" fill="#f6d2cf"/>
-    <!-- white logo band -->
-    <rect x="22" y="72" width="180" height="26" fill="#ffffff"/>
-    <rect x="34" y="79" width="12" height="12" fill="#D52B1E"/>
-    <rect x="52" y="82" width="44" height="6" rx="3" fill="#57110C"/>
-  </g>
-  <defs>
-    <clipPath id="clip0_footer"><rect width="180" height="90" fill="white" transform="translate(22 8)"/></clipPath>
-  </defs>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 120" role="img" aria-hidden="true">
+<rect x="10" y="30" width="140" height="82" rx="14" fill="#FAE4E2"/><rect x="24" y="44" width="30" height="8" rx="4" fill="#D52B1E"/><rect x="24" y="58" width="22" height="6" rx="3" fill="#EEABA6"/><rect x="24" y="70" width="26" height="6" rx="3" fill="#EEABA6"/><rect x="68" y="44" width="30" height="8" rx="4" fill="#D52B1E"/><rect x="68" y="58" width="22" height="6" rx="3" fill="#EEABA6"/><rect x="68" y="70" width="26" height="6" rx="3" fill="#EEABA6"/><rect x="112" y="44" width="30" height="8" rx="4" fill="#D52B1E"/><rect x="112" y="58" width="22" height="6" rx="3" fill="#EEABA6"/><rect x="112" y="70" width="26" height="6" rx="3" fill="#EEABA6"/><path d="M24 96 h6 v-6 h6 v6 h6 v6 h-6 v6 h-6 v-6 h-6 z" fill="#D52B1E" stroke="none" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><rect x="48" y="96" width="40" height="6" rx="3" fill="#EEABA6"/>
 </svg>
