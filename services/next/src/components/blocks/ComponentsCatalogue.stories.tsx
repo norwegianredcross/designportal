@@ -32,26 +32,30 @@ export const Default: Story = {
   },
 };
 
-/** Typing filters by name, case-insensitively, and clearing restores all. */
+/** Typing filters by name, case-insensitively; the count follows; the
+ * clear button restores everything. */
 export const Filtering: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
+    await expect(canvas.getByRole("status")).toHaveTextContent(`${names.length} komponenter`);
     const search = canvas.getByRole("searchbox", { name: "Søk etter komponent" });
     await userEvent.type(search, "date");
     await expect(canvas.getAllByRole("listitem")).toHaveLength(1);
     await expect(canvas.getByRole("link", { name: /DatePicker/ })).toBeVisible();
-    await userEvent.clear(search);
+    await expect(canvas.getByRole("status")).toHaveTextContent(`1 av ${names.length} komponenter`);
+    await userEvent.click(canvas.getByRole("button", { name: /tøm/i }));
     await expect(canvas.getAllByRole("listitem")).toHaveLength(names.length);
   },
 };
 
-/** No match: a status message instead of an empty grid. */
+/** No match: a message instead of an empty grid, and the count says 0. */
 export const NoMatch: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await userEvent.type(canvas.getByRole("searchbox"), "xyz");
     await expect(canvas.queryByRole("list")).not.toBeInTheDocument();
-    await expect(canvas.getByRole("status")).toHaveTextContent("Ingen komponenter matcher «xyz».");
+    await expect(canvas.getByText("Ingen komponenter matcher «xyz».")).toBeVisible();
+    await expect(canvas.getAllByRole("status")[0]).toHaveTextContent(`0 av ${names.length} komponenter`);
   },
 };
 

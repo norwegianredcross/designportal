@@ -2,7 +2,7 @@
 
 import { ArrowRightIcon } from "@navikt/aksel-icons";
 import { useId, useState } from "react";
-import { Field, Heading, Input, Label, Paragraph } from "rk-designsystem";
+import { Heading, Paragraph, Search } from "rk-designsystem";
 import type { CatalogueEntry } from "@/server/designsystem-context";
 import styles from "./ComponentsCatalogue.module.css";
 import { componentIcons } from "./componentIcons";
@@ -22,26 +22,37 @@ interface ComponentsCatalogueProps {
  * Whole tile is the link (one clickable surface, no nested interactive
  * elements), opening in a new tab because Storybook is a separate app the
  * reader will want to keep the docs open next to.
+ *
+ * The filter is the library's own Search field (input + clear button), and
+ * the result count next to it is a live region, so a screen-reader user
+ * hears "3 av 46 komponenter" as they type instead of guessing whether the
+ * grid changed.
  */
 export function ComponentsCatalogue({ components, showSearch }: ComponentsCatalogueProps) {
   const [query, setQuery] = useState("");
-  const inputId = useId();
+  const countId = useId();
   const needle = query.trim().toLowerCase();
   const visible = needle ? components.filter((c) => c.name.toLowerCase().includes(needle)) : components;
+  const count = needle ? `${visible.length} av ${components.length} komponenter` : `${components.length} komponenter`;
 
   return (
     <div className={styles.catalogue}>
       {showSearch ? (
-        <Field className={styles.search}>
-          <Label htmlFor={inputId}>Søk etter komponent</Label>
-          <Input
-            id={inputId}
-            type="search"
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-            placeholder="For eksempel Button"
-          />
-        </Field>
+        <div className={styles.toolbar}>
+          <Search className={styles.search} data-size="md">
+            <Search.Input
+              aria-label="Søk etter komponent"
+              aria-describedby={countId}
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              placeholder="Søk etter komponent, f.eks. Button"
+            />
+            <Search.ClearButton onClick={() => setQuery("")} />
+          </Search>
+          <Paragraph data-size="sm" id={countId} className={styles.count} role="status">
+            {count}
+          </Paragraph>
+        </div>
       ) : null}
 
       {visible.length > 0 ? (
