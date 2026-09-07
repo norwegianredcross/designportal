@@ -142,6 +142,16 @@ export type GetBlocksQuery = {
           kicker: string | null;
           title: string | null;
           lead: string | null;
+          image:
+            | { _id: string }
+            | { _id: string }
+            | {
+                imageUrl: string | null;
+                _id: string;
+                imageUrl2x: string | null;
+                data: { altText: string | null } | null;
+              }
+            | null;
           actions: Array<{ linkText: string | null; url: string | null; contentPath: string | null } | null> | null;
         } & { __typename: "no_rodekors_docs_BlockHero" })
       | ({
@@ -477,6 +487,16 @@ export type GetSidePageQuery = {
           kicker: string | null;
           title: string | null;
           lead: string | null;
+          image:
+            | { _id: string }
+            | { _id: string }
+            | {
+                imageUrl: string | null;
+                _id: string;
+                imageUrl2x: string | null;
+                data: { altText: string | null } | null;
+              }
+            | null;
           actions: Array<{ linkText: string | null; url: string | null; contentPath: string | null } | null> | null;
         } & { __typename: "no_rodekors_docs_BlockHero" })
       | ({
