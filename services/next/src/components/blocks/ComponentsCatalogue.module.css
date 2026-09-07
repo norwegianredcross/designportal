@@ -2,13 +2,17 @@
  * a neutral tinted panel with the pictogram on top and the name below, the
  * same treatment the old docs site gave its component cards. */
 
-/* The block's own stack: heading, intro and the catalogue below it. The
- * intro belongs to the toolbar it introduces, so the gap is a text gap,
- * not a section gap. */
+/* The block's own stack: the section's title and ingress, then the
+ * catalogue. Title and ingress are a text pair; the catalogue below them
+ * gets a section gap. */
 .section {
   display: flex;
   flex-direction: column;
   gap: var(--ds-size-3);
+}
+
+.section > .catalogue {
+  margin-top: var(--ds-size-5);
 }
 
 .section > * {
@@ -23,17 +27,15 @@
   gap: var(--ds-size-8);
 }
 
-/* The toolbar is a tinted panel in the direction's language (the same
- * cream as the hero and the feature bands), so the ways into the catalogue
- * read as one object above the grid: search and count on the first line,
- * the type chips on the second. */
+/* The ways into the catalogue, as one object above the grid: search and
+ * count on the first line, the type chips on the second. Plain, not a
+ * tinted panel: the page recipe alternates plain sections with tinted
+ * bands, and this section sits right under the tinted hero. */
 .toolbar {
   display: flex;
   flex-direction: column;
   gap: var(--ds-size-4);
-  padding: var(--ds-size-6);
-  border-radius: var(--ds-border-radius-lg);
-  background: var(--ds-color-neutral-background-tinted);
+  padding-block: var(--ds-size-2) var(--ds-size-2);
 }
 
 .searchRow {
