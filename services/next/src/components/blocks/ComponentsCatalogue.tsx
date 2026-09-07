@@ -46,8 +46,11 @@ export function ComponentsCatalogue({ components, showSearch }: ComponentsCatalo
 
       {visible.length > 0 ? (
         // A list, so screen readers announce "list, 46 items" and can jump
-        // between tiles; the grid is only presentation.
-        <ul className={styles.grid}>
+        // between tiles; the grid is only presentation. The explicit role is
+        // for Safari/VoiceOver, which drop list semantics from a list styled
+        // without markers.
+        // biome-ignore lint/a11y/noRedundantRoles: needed for WebKit
+        <ul className={styles.grid} role="list">
           {visible.map((component) => {
             const icon = componentIcons[component.name];
             return (

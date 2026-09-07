@@ -88,7 +88,10 @@ function ColorGroup({ group }: { group: TokenGroup }) {
         {formatGroupName(group.name)}
         <code className={styles.groupPrefix}> {prefix}…</code>
       </Heading>
-      <ul className={styles.swatches}>
+      {/* Explicit role: Safari/VoiceOver drop list semantics from a list
+          styled without markers. */}
+      {/* biome-ignore lint/a11y/noRedundantRoles: needed for WebKit */}
+      <ul className={styles.swatches} role="list">
         {group.tokens.map((token) => (
           <li key={token.name} className={styles.swatch}>
             <span
@@ -118,7 +121,8 @@ function ValueGroup({ group, category }: { group: TokenGroup; category: TokenCat
       <Heading level={4} data-size="xs">
         {formatGroupName(group.name)}
       </Heading>
-      <ul className={styles.rows}>
+      {/* biome-ignore lint/a11y/noRedundantRoles: needed for WebKit, see above */}
+      <ul className={styles.rows} role="list">
         {group.tokens.map((token) => (
           <li key={token.name} className={styles.row}>
             <code className={styles.name} title={token.name}>
