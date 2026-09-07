@@ -4,8 +4,11 @@
  * component exposes. Everything else is tokens.
  *
  * Proportions from the board, on a 1442 x 756 panel: text inset 56px, the
- * cut 240 x 185 in the bottom-right corner. The cut's floor is 9rem, so
- * every bottom padding below clears at least that. */
+ * cut 240 x 185 in the bottom-right corner. The panel is sized by its
+ * content; the cut scales with it. On desktop the text column (title 22ch,
+ * lead 56ch) never reaches the cut's column, so no padding is spent on
+ * clearing it; on narrow screens it can, and the media query reserves the
+ * room. */
 
 .panel {
   position: relative;
@@ -16,8 +19,6 @@
   overflow: hidden;
   margin-block: var(--ds-size-10);
   padding: var(--ds-size-14);
-  /* Clears the cut (floor 9rem) plus the panel's inset. */
-  padding-bottom: calc(var(--ds-size-14) + 9rem);
 }
 
 /* With a photo the panel splits: text left, picture right. The picture
@@ -41,7 +42,7 @@
 }
 
 .panelWithPhoto .text {
-  padding-bottom: calc(var(--ds-size-14) + 9rem);
+  padding-bottom: var(--ds-size-14);
 }
 
 /* The picture column. The frame is what the grid sizes (at least the
@@ -121,8 +122,8 @@
   inset-inline-end: 0;
   inset-block-end: 0;
   z-index: 1;
-  inline-size: clamp(11rem, 17%, 15rem);
-  block-size: clamp(9rem, 25%, 12rem);
+  inline-size: clamp(10rem, 17%, 15rem);
+  block-size: clamp(5rem, 28%, 11rem);
   background-color: var(--ds-color-neutral-background-default);
   border-start-start-radius: var(--ds-border-radius-lg);
 }
@@ -157,8 +158,8 @@
   .panelWithPhoto {
     grid-template-columns: 1fr;
     padding: var(--ds-size-8);
-    /* Clears the 7rem mobile cut plus the inset. */
-    padding-bottom: calc(var(--ds-size-8) + 7rem);
+    /* Text can reach the cut's column here, so clear its 5rem height. */
+    padding-bottom: calc(var(--ds-size-8) + 5rem);
   }
   /* With a photo the picture is the last row and bleeds to the panel's
      right and bottom edges as on desktop, so the cut bites its corner the
@@ -178,7 +179,7 @@
     font-size: var(--ds-font-size-7);
   }
   .cut {
-    inline-size: 8rem;
-    block-size: 7rem;
+    inline-size: 7rem;
+    block-size: 5rem;
   }
 }
