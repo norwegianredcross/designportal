@@ -17,7 +17,8 @@
   background-color: var(--ds-color-neutral-background-tinted);
   border-radius: var(--ds-border-radius-lg);
   overflow: hidden;
-  margin-block: var(--ds-size-10);
+  /* No outer margin: BlocksView owns the rhythm between blocks, and a
+     margin here doubled the gap under the hero. */
   padding: var(--ds-size-14);
 }
 

@@ -2,22 +2,25 @@
  * a neutral tinted panel with the pictogram on top and the name below, the
  * same treatment the old docs site gave its component cards. */
 
-/* The block's own stack: heading, intro and the catalogue below it. Without
- * a gap the intro sits flush on the search label and reads as its caption. */
+/* The block's own stack: heading, intro and the catalogue below it. The
+ * intro belongs to the toolbar it introduces, so the gap is a text gap,
+ * not a section gap. */
 .section {
   display: flex;
   flex-direction: column;
-  gap: var(--ds-size-5);
+  gap: var(--ds-size-3);
 }
 
 .section > * {
   margin: 0;
 }
 
+/* Toolbar, then the type sections: a section gap between them, so the
+ * panel reads as the head of the catalogue and each group as a chapter. */
 .catalogue {
   display: flex;
   flex-direction: column;
-  gap: var(--ds-size-6);
+  gap: var(--ds-size-8);
 }
 
 /* The toolbar is a tinted panel in the direction's language (the same
