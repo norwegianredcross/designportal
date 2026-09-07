@@ -41,6 +41,8 @@ export const componentIcons: Record<string, string> = {
   Select: "selectdropdown.svg",
   SkeletonLoader: "loader.svg",
   SkipLink: "skiplink.svg",
+  // The manifest names it Spinner; the old docs' map still said SpinnerLoader.
+  Spinner: "loader.svg",
   SpinnerLoader: "loader.svg",
   Suggestion: "suggestion.svg",
   Switch: "switch.svg",
