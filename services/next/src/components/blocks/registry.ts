@@ -4,6 +4,7 @@ import type { Block, BlockByTypename } from "@/types/blocks";
 import { AccordionBlock } from "./AccordionBlock";
 import { CardsBlock } from "./CardsBlock";
 import { CodeBlock } from "./CodeBlock";
+import { ComponentsBlock } from "./ComponentsBlock";
 import { DemoBlock } from "./DemoBlock";
 import { FactboxBlock } from "./FactboxBlock";
 import { HeroBlock } from "./HeroBlock";
@@ -41,6 +42,9 @@ export const blockComponents: BlockRegistry = {
   no_rodekors_docs_BlockDemo: DemoBlock,
   // Copyable code snippet — the first LOCAL block (docs-specific mixin).
   no_rodekors_docs_BlockCode: CodeBlock,
+  // Component catalogue generated from the library's published manifest
+  // (local block; async server component, see ComponentsBlock).
+  no_rodekors_docs_BlockComponents: ComponentsBlock,
   // Link-card grid; links pre-resolved by XP (see CardsBlock).
   no_rodekors_docs_BlockCards: CardsBlock,
   // Gallery of figures; images arrive pre-scaled from XP (see ImagesBlock).

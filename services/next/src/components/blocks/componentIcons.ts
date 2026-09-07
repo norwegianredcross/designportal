@@ -1,0 +1,55 @@
+/**
+ * Pictogram per component, files under public/components/. The pictograms
+ * came with the old docs site and are UI chrome of the catalogue, not
+ * editorial images, which is why they ship with the app rather than as
+ * Enonic media: they only make sense next to the component name the
+ * library exports, and a new component needs a new drawing from a designer
+ * anyway. A component without an entry gets a neutral placeholder tile.
+ */
+export const componentIcons: Record<string, string> = {
+  Alert: "alert.svg",
+  Avatar: "avatar.svg",
+  Badge: "badge.svg",
+  Breadcrumbs: "breadcrumb.svg",
+  Button: "button.svg",
+  Card: "card.svg",
+  Carousel: "carousel.svg",
+  Checkbox: "checkbox.svg",
+  Chip: "chip.svg",
+  DateInput: "dateinput.svg",
+  DatePicker: "datepicker.svg",
+  Details: "details.svg",
+  Dialog: "dialog.svg",
+  Divider: "divider.svg",
+  Donor: "donor.svg",
+  Dropdown: "dropdown.svg",
+  ErrorSummary: "errorsummary.svg",
+  Field: "field.svg",
+  Fieldset: "fieldset.svg",
+  Footer: "footer.svg",
+  GraphicElement: "graphicelement.svg",
+  Heading: "typography.svg",
+  Input: "textfield.svg",
+  Label: "typography.svg",
+  Link: "link.svg",
+  List: "list.svg",
+  Pagination: "pagination.svg",
+  Paragraph: "typography.svg",
+  Popover: "popover.svg",
+  Radio: "radio.svg",
+  Search: "search.svg",
+  Select: "selectdropdown.svg",
+  SkeletonLoader: "loader.svg",
+  SkipLink: "skiplink.svg",
+  SpinnerLoader: "loader.svg",
+  Suggestion: "suggestion.svg",
+  Switch: "switch.svg",
+  Table: "table.svg",
+  Tabs: "tabs.svg",
+  Tag: "tag.svg",
+  Textarea: "textarea.svg",
+  Textfield: "textfield.svg",
+  ToggleGroup: "togglegroup.svg",
+  Tooltip: "tooltip.svg",
+  ValidationMessage: "validationmessage.svg",
+};

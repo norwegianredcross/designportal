@@ -108,6 +108,9 @@ export type GetBlocksQuery = {
       | ({ code: string | null; language: string | null; label: string | null } & {
           __typename: "no_rodekors_docs_BlockCode";
         })
+      | ({ title: string | null; intro: string | null; showSearch: boolean | null } & {
+          __typename: "no_rodekors_docs_BlockComponents";
+        })
       | ({ demo: string | null; title: string | null } & { __typename: "no_rodekors_docs_BlockDemo" })
       | ({
           title: string | null;
@@ -435,6 +438,9 @@ export type GetSidePageQuery = {
         } & { __typename: "no_rodekors_docs_BlockCards" })
       | ({ code: string | null; language: string | null; label: string | null } & {
           __typename: "no_rodekors_docs_BlockCode";
+        })
+      | ({ title: string | null; intro: string | null; showSearch: boolean | null } & {
+          __typename: "no_rodekors_docs_BlockComponents";
         })
       | ({ demo: string | null; title: string | null } & { __typename: "no_rodekors_docs_BlockDemo" })
       | ({

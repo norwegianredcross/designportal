@@ -31,3 +31,20 @@ export function notNullOrUndefined<T>(val: T | null | undefined): val is T {
 export function stripOperationName(query: string): string {
   return query.replace(/^\s*(query|mutation|subscription)\s+\w+/, "$1");
 }
+
+/**
+ * Storybook derives a docs page id from the story title: "Components/Button"
+ * becomes `components-button--docs`. Its sanitiser lower-cases the title and
+ * turns every run of characters outside a-z 0-9 into a single "-", so
+ * "ToggleGroup" is `components-togglegroup`. Every library component's
+ * stories carry the "Components/<Name>" title, which is what makes the link
+ * predictable without asking Storybook. The replace below mirrors that
+ * sanitiser so a future name with a dot or space still lands right.
+ */
+export function storybookDocsUrl(storybookUrl: string, componentName: string): string {
+  const id = componentName
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+  return `${storybookUrl}/?path=/docs/components-${id}--docs`;
+}
