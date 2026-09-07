@@ -71,17 +71,28 @@
   }
 }
 
+/* A fixed-height panel rather than an aspect ratio: the tile is a flex
+ * column stretched to the grid row, and a stretched child does not keep an
+ * aspect ratio, so panels ended up as tall as their picture. */
 .media {
-  display: grid;
-  place-items: center;
-  aspect-ratio: 4 / 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  block-size: 10rem;
+  padding: var(--ds-size-5);
   background: var(--ds-color-neutral-background-default);
   border-block-end: 1px solid var(--ds-color-neutral-border-subtle);
 }
 
+/* Every pictogram in the same square box, scaled to fit. The SVGs come with
+ * wildly different viewBoxes (a 58-unit avatar next to an 800-unit
+ * carousel), so sizing by width alone made them jump in scale and let the
+ * tallest ones touch the panel edge; a fixed box with object-fit: contain
+ * gives one visual size and breathing room for all of them. */
 .icon {
-  inline-size: 60%;
-  block-size: auto;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: contain;
 }
 
 .placeholder {
