@@ -20,10 +20,25 @@
   gap: var(--ds-size-6);
 }
 
-/* Half the column on desktop; a full-width search box over a grid of small
- * tiles reads as a page header, not a filter. */
+/* Search field and result count on one line, the count riding the field's
+ * baseline. The field takes about half the column: a full-width search box
+ * over a grid of small tiles reads as a page header, not a filter. */
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ds-size-3) var(--ds-size-5);
+}
+
 .search {
+  flex: 1 1 18rem;
   max-inline-size: 28rem;
+}
+
+.count {
+  margin: 0;
+  color: var(--ds-color-neutral-text-subtle);
+  font-variant-numeric: tabular-nums;
 }
 
 .grid {
