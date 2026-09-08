@@ -2,28 +2,96 @@
  * a neutral tinted panel with the pictogram on top and the name below, the
  * same treatment the old docs site gave its component cards. */
 
-/* The block's own stack: heading, intro and the catalogue below it. Without
- * a gap the intro sits flush on the search label and reads as its caption. */
+/* The block's own stack: the section's title and ingress, then the
+ * catalogue. Title and ingress are a text pair; the catalogue below them
+ * gets a section gap. */
 .section {
   display: flex;
   flex-direction: column;
-  gap: var(--ds-size-5);
+  gap: var(--ds-size-3);
+}
+
+.section > .catalogue {
+  margin-top: var(--ds-size-5);
 }
 
 .section > * {
   margin: 0;
 }
 
+/* Toolbar, then the type sections: a section gap between them, so the
+ * panel reads as the head of the catalogue and each group as a chapter. */
 .catalogue {
   display: flex;
   flex-direction: column;
-  gap: var(--ds-size-6);
+  gap: var(--ds-size-8);
 }
 
-/* Half the column on desktop; a full-width search box over a grid of small
- * tiles reads as a page header, not a filter. */
+/* The ways into the catalogue, as one object above the grid: search and
+ * count on the first line, the type chips on the second. Plain, not a
+ * tinted panel: the page recipe alternates plain sections with tinted
+ * bands, and this section sits right under the tinted hero. */
+.toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-size-4);
+  padding-block: var(--ds-size-2) var(--ds-size-2);
+}
+
+.searchRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ds-size-3) var(--ds-size-5);
+}
+
+/* The field takes most of the row but not all of it: a full-width search
+   box reads as a page header, not a filter. */
 .search {
-  max-inline-size: 28rem;
+  flex: 1 1 20rem;
+  max-inline-size: 36rem;
+}
+
+.count {
+  margin: 0;
+  color: var(--ds-color-neutral-text-subtle);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Native fieldset chrome removed; the chips are the group's whole look. */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ds-size-2);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-inline-size: 0;
+}
+
+.srOnly {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* A type section at rest: heading with its count, then the grid. */
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-size-4);
+}
+
+.groupTitle {
+  margin: 0;
+}
+
+.groupCount {
+  font-weight: var(--ds-font-weight-regular);
+  color: var(--ds-color-neutral-text-subtle);
 }
 
 .grid {
