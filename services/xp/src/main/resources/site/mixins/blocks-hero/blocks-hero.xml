@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<!-- LOCAL block (not from lib-xp-item-blocks): the docs landing hero — the
-     typography-led cream panel with the "krysset" step cut out of its
-     top-left corner, carried over from the docs SPA's Home page.
-
-     The notch is the brand-mark slot: it holds a small stamp (the release
-     tag in the SPA) plus a quiet meta word. Both are editorial here rather
-     than derived, because the CMS has no view of package.json.
-
+<!-- LOCAL block (not from lib-xp-item-blocks): the landing hero, after the
+     Designretning board's own hero (Figma Design-retning 2436:44864): a
+     cream panel whose bottom-right corner is stepped away with the cross
+     mark sitting in the gap, kicker, display title, lead and calls to
+     action on the left, and optionally a photograph on the right.
+     The badge is a small stamp above the kicker (the release tag on the
+     front page) plus a quiet meta word; both are editorial rather than
+     derived, because the CMS has no view of package.json.
      Actions are an item-set rather than two fixed link fields so the block
-     composes blocks-link once per action — the same internal/external
-     choice the cards use — instead of duplicating its fields under
-     prefixed names. -->
+     composes blocks-link once per action, the same internal/external
+     choice the cards use. -->
 <mixin xmlns="urn:enonic:xp:model:1.0">
   <display-name i18n="mixin.blocks-hero.displayName">Hero</display-name>
-  <description i18n="mixin.blocks-hero.description">Landing panel with a notched corner, title and calls to action</description>
+  <description i18n="mixin.blocks-hero.description">Landing panel with a stepped corner, title, calls to action and an optional photo</description>
 
   <form>
     <input name="badge" type="TextLine">
@@ -40,6 +39,15 @@
 
     <input name="lead" type="TextArea">
       <label i18n="mixin.blocks-hero.lead">Lead</label>
+      <occurrences minimum="0" maximum="1"/>
+    </input>
+
+    <!-- Optional: with a photo the panel splits into text and picture, the
+         picture running to the panel's right edge the way the board's front
+         page bleeds its hero photo. Alt text comes from the media item. -->
+    <input name="image" type="ImageSelector">
+      <label i18n="mixin.blocks-hero.image">Photo</label>
+      <help-text i18n="mixin.blocks-hero.image.helpText">Shown to the right of the text; leave empty for a text-only panel</help-text>
       <occurrences minimum="0" maximum="1"/>
     </input>
 

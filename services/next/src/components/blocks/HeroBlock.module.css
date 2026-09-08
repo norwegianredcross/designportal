@@ -1,91 +1,90 @@
-/* The landing hero, ported from the docs SPA's Home page (src/pages/Home in
- * the DesignSystem repo). Lives in a module because the notched corner needs
- * real CSS — an absolutely positioned step plus two radial-gradient fillets
- * that no design system component exposes. Everything else is tokens. */
+/* The landing hero after the Designretning board's hero (Figma 2436:44864).
+ * Lives in a module because the stepped corner needs real CSS: an absolutely
+ * positioned cut plus two radial-gradient fillets that no design system
+ * component exposes. Everything else is tokens.
+ *
+ * Proportions from the board, on a 1442 x 756 panel: text inset 56px, the
+ * cut 240 x 185 in the bottom-right corner. The panel is sized by its
+ * content; the cut scales with it. On desktop the text column (title 22ch,
+ * lead 56ch) never reaches the cut's column, so no padding is spent on
+ * clearing it; on narrow screens it can, and the media query reserves the
+ * room. */
 
 .panel {
   position: relative;
+  display: grid;
+  grid-template-columns: 1fr;
   background-color: var(--ds-color-neutral-background-tinted);
   border-radius: var(--ds-border-radius-lg);
-  border-top-left-radius: 0; /* corner is cut away by the notch */
-  /* Top clears the notch (its height + one step); sides and bottom match so
-     the panel reads as one balanced block rather than text pinned to a
-     corner. Was 144/32/48 — the text sat low with a void beneath it. */
-  padding: calc(var(--ds-size-14) + var(--ds-size-12)) var(--ds-size-12) var(--ds-size-12);
+  overflow: hidden;
+  /* No outer margin: BlocksView owns the rhythm between blocks, and a
+     margin here doubled the gap under the hero. */
+  padding: var(--ds-size-14);
+}
+
+/* With a photo the panel splits: text left, picture right. The picture
+   runs to the panel's right and bottom edges, like the board's front-page
+   photo bleeding off the viewport; the top inset stays. */
+.panelWithPhoto {
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  column-gap: var(--ds-size-10);
+  padding-right: 0;
+  padding-bottom: 0;
+}
+
+.text {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  /* Above the cut: a wrapped second button on a narrow panel must never
+     disappear under the page-background rectangle. */
+  position: relative;
+  z-index: 2;
+}
+
+.panelWithPhoto .text {
+  padding-bottom: var(--ds-size-14);
+}
+
+/* The picture column. The frame is what the grid sizes (at least the
+   height of a comfortable panel); the image fills it and is cropped, so a
+   portrait or square upload never dictates the panel's height. */
+.photoFrame {
+  position: relative;
+  min-block-size: 22rem;
+  /* Rounded on the left where it meets the cream; the panel's own corners
+     and the cut shape the right side. */
+  border-start-start-radius: var(--ds-border-radius-lg);
   overflow: hidden;
-  margin-block: var(--ds-size-10);
 }
 
-/* Without a badge there is nothing to sit in the notch, so the panel keeps
-   its ordinary corner and drops the tall top padding the step reserved. */
-.panelPlain {
-  border-top-left-radius: var(--ds-border-radius-lg);
-  padding-top: var(--ds-size-12);
-}
-
-/* Notch: a substantial step cut out of the panel's top-left corner. The
-   page-background token is what sells the "cutout" illusion, in dark mode
-   as well as light. */
-.notch {
+.photo {
   position: absolute;
-  top: 0;
-  left: 0;
-  height: var(--ds-size-14);
-  min-width: calc(var(--ds-size-30) + var(--ds-size-10));
-  background-color: var(--ds-color-neutral-background-default);
-  border-bottom-right-radius: var(--ds-border-radius-lg);
-  /* Matches the panel's left padding — the badge must sit on the same
-     vertical line as the kicker and the title. */
-  padding-left: var(--ds-size-12);
-  padding-right: var(--ds-size-10);
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
+/* The stamp: release tag plus a quiet meta word, on one line. */
+.stamp {
   display: flex;
   align-items: center;
   gap: var(--ds-size-3);
+  margin-bottom: var(--ds-size-8);
 }
 
-.notchMeta {
+.stampMeta {
   font-size: var(--ds-font-size-2);
   font-weight: var(--ds-font-weight-medium);
   color: var(--ds-color-neutral-text-subtle);
 }
 
-/* Inverted fillets: concave transitions where the step meets the panel's top
-   and left edges, at the same radius as every other corner. */
-.notch::before,
-.notch::after {
-  content: "";
-  position: absolute;
-  width: var(--ds-border-radius-lg);
-  height: var(--ds-border-radius-lg);
-  background: radial-gradient(
-    circle at 100% 100%,
-    transparent calc(var(--ds-border-radius-lg) - 1px),
-    var(--ds-color-neutral-background-default) var(--ds-border-radius-lg)
-  );
-}
-
-/* On the panel's top edge, right of the step */
-.notch::before {
-  top: 0;
-  right: calc(-1 * var(--ds-border-radius-lg));
-}
-
-/* On the panel's left edge, below the step */
-.notch::after {
-  left: 0;
-  bottom: calc(-1 * var(--ds-border-radius-lg));
-}
-
-.kicker {
-  font-size: var(--ds-font-size-1);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  font-weight: var(--ds-font-weight-semibold);
-  color: var(--ds-color-primary-color-red-text-subtle);
-  margin-bottom: var(--ds-size-5);
+/* The board's kicker is sentence case in the red text colour, no tracking:
+   a line of copy above the title rather than a label. */
+.kicker.kicker {
+  margin-bottom: var(--ds-size-3);
+  color: var(--ds-color-primary-color-red-text-default);
 }
 
 /* Display statement heading. LIBRARY GAP: a display heading variant would
@@ -93,19 +92,19 @@
    from the library sheet. */
 .title.title {
   margin-bottom: var(--ds-size-6);
-  max-width: 26ch;
+  max-width: 22ch;
   font-size: var(--ds-font-size-9);
   font-weight: var(--ds-font-weight-semibold);
   letter-spacing: -0.02em;
   line-height: 1.05;
+  text-wrap: balance;
   color: var(--ds-color-primary-color-red-text-default);
 }
 
-/* LIBRARY GAP: Paragraph has no `subtle` variant. */
 .lead {
   color: var(--ds-color-neutral-text-default);
-  max-width: 62ch;
-  margin-bottom: var(--ds-size-10);
+  max-width: 56ch;
+  margin-bottom: var(--ds-size-8);
   white-space: pre-line; /* the lead is a TextArea; editors' breaks survive */
 }
 
@@ -113,32 +112,75 @@
   display: flex;
   flex-wrap: wrap;
   gap: var(--ds-size-4);
-  /* Above the mark, so a wrapped button never disappears behind it. */
-  position: relative;
-  z-index: 1;
 }
 
-/* Parked in the panel's bottom-right corner and allowed to run off the edge,
-   the way the board crops it against the step. overflow: hidden on .panel does
-   the cropping, so the mark reads as a fragment rather than a floating shape.
-   Placement only — the shape's own orientation comes from its `position` prop,
-   because the component's docs say not to rotate it with CSS. */
-.cross {
+/* The cut: a rectangle of page background over the panel's bottom-right
+   corner, rounded where it meets the panel (top-left), with concave fillets
+   where its edges meet the panel's right and bottom edges, so the panel
+   keeps one continuous rounded outline. Above the photo, below the text. */
+.cut {
   position: absolute;
-  right: calc(-1 * var(--ds-size-6));
-  bottom: calc(-1 * var(--ds-size-6));
+  inset-inline-end: 0;
+  inset-block-end: 0;
+  z-index: 1;
+  inline-size: clamp(10rem, 17%, 15rem);
+  block-size: clamp(5rem, 28%, 11rem);
+  background-color: var(--ds-color-neutral-background-default);
+  border-start-start-radius: var(--ds-border-radius-lg);
+}
+
+.cut::before,
+.cut::after {
+  content: "";
+  position: absolute;
+  inline-size: var(--ds-border-radius-lg);
+  block-size: var(--ds-border-radius-lg);
+  background: radial-gradient(
+    circle at 0 0,
+    transparent calc(var(--ds-border-radius-lg) - 1px),
+    var(--ds-color-neutral-background-default) var(--ds-border-radius-lg)
+  );
+}
+
+/* On the panel's right edge, above the cut */
+.cut::before {
+  inset-inline-end: 0;
+  inset-block-start: calc(-1 * var(--ds-border-radius-lg));
+}
+
+/* On the panel's bottom edge, left of the cut */
+.cut::after {
+  inset-block-end: 0;
+  inset-inline-start: calc(-1 * var(--ds-border-radius-lg));
 }
 
 @media (max-width: 850px) {
-  .panel {
-    padding: calc(var(--ds-size-14) + var(--ds-size-8)) var(--ds-size-6) var(--ds-size-8);
+  .panel,
+  .panelWithPhoto {
+    grid-template-columns: 1fr;
+    padding: var(--ds-size-8);
+    /* Text can reach the cut's column here, so clear its 5rem height. */
+    padding-bottom: calc(var(--ds-size-8) + 5rem);
   }
-
-  .panelPlain {
-    padding-top: var(--ds-size-8);
+  /* With a photo the picture is the last row and bleeds to the panel's
+     right and bottom edges as on desktop, so the cut bites its corner the
+     same way rather than overlapping an inset, rounded picture. */
+  .panelWithPhoto {
+    padding-bottom: 0;
   }
-
+  .panelWithPhoto .text {
+    padding-bottom: var(--ds-size-6);
+  }
+  .photoFrame {
+    min-block-size: 14rem;
+    border-start-start-radius: var(--ds-border-radius-lg);
+    border-start-end-radius: var(--ds-border-radius-lg);
+  }
   .title.title {
     font-size: var(--ds-font-size-7);
+  }
+  .cut {
+    inline-size: 7rem;
+    block-size: 5rem;
   }
 }
