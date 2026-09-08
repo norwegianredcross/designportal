@@ -64,6 +64,24 @@
     letter-spacing: var(--ds-heading-2xs-letter-spacing);
   }
 
+  /*
+   * Inline code in running text. The CMS emits a bare <code>, and the browser
+   * default is monospace at the SAME nominal size as the prose — which, next
+   * to Source Sans 3, reads visibly larger and heavier, with no surface to
+   * mark it as code. Digdir styles no bare elements, so it is set here: a
+   * step smaller (em, so it follows whatever text it sits in, ingress
+   * included), on the same tinted surface CodeBlock uses, with enough
+   * padding for the box to read as one. `pre code` is excluded because the
+   * CodeBlock component owns its own look; rich text never emits <pre>.
+   */
+  :not(pre) > code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.85em;
+    background: var(--ds-color-neutral-background-tinted);
+    border-radius: var(--ds-border-radius-sm);
+    padding: 0.1em 0.35em;
+  }
+
   small,
   figcaption {
     font-size: var(--ds-body-sm-font-size);
