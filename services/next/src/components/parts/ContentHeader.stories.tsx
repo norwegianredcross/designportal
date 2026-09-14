@@ -5,7 +5,7 @@ import { expect } from "storybook/test";
 import ContentHeader from "@/components/parts/ContentHeader";
 
 const meta: MetaData = {
-  apiUrl: "http://localhost:8080/site/designsystem-docs/master",
+  apiUrl: "http://localhost:8081/site/designsystem-docs/master",
   baseUrl: "/",
   canRender: true,
   catchAll: false,

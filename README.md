@@ -31,12 +31,33 @@ service's README for the full workflow.
 Both services run together. In two terminals:
 
 ```sh
-cd services/xp   && enonic dev    # XP sandbox + watch + redeploy on :8080
-cd services/next && npm run dev   # Next.js dev server on :3000
+cd services/xp   && enonic dev    # XP sandbox + watch + redeploy on :8081
+cd services/next && npm run dev   # Next.js dev server on :3100
 ```
 
-The Next.js app expects XP to be reachable on `http://localhost:8080`. Per-service
+The Next.js app expects XP to be reachable on `http://localhost:8081`. Per-service
 prerequisites, environment variables, and npm/Enonic CLI commands are documented in:
+
+### Why :8081 and a named sandbox
+
+XP's default ports are taken by the rodekors.no CMS repo, which most people here have
+checked out alongside this one. Two sandboxes cannot share a port, and a single sandbox
+serving both applications is worse: Guillotine builds one schema from every installed
+app, so `npm run introspect` picks up the other app's block types and `npm run generate`
+then fails on every fragment spread. Hence a dedicated sandbox on its own ports:
+
+| | designportal | rodekors.no |
+| --- | --- | --- |
+| Sandbox | `designportal` | `rodekors` |
+| XP | 8081 | 8080 |
+| Management | 4849 | 4848 |
+| Monitor | 2610 | 2609 |
+| Next.js | 3100 | 3000 |
+
+The ports live in the sandbox itself (`~/.enonic/sandboxes/designportal/home/config/com.enonic.xp.web.jetty.cfg`),
+and `services/xp/.enonic` — git-ignored, written by `enonic project sandbox designportal` —
+binds this checkout to it. Both are per-developer, so creating the sandbox is a
+one-time local step; nothing in this repo pins a machine.
 
 - [`services/xp/README.md`](./services/xp/README.md)
 - [`services/next/README.md`](./services/next/README.md)

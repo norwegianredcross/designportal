@@ -10,7 +10,7 @@ Next.js 16 frontend for rodekors.no. Pulls content from the sibling Enonic XP se
 
 - Node.js 22 (LTS); 20.9+ minimum (matches the `node:22-alpine` Docker image). With [nvm](https://github.com/nvm-sh/nvm), run `nvm use` (or `nvm install`) to pick up the version from `.nvmrc`.
 - npm
-- The Enonic XP service running locally on `http://localhost:8080` (started from `services/xp/`). Without it, `dev`, `introspect`, and any page render will fail.
+- The Enonic XP service running locally on `http://localhost:8081` (started from `services/xp/`). Without it, `dev`, `introspect`, and any page render will fail.
 
 Install dependencies:
 
@@ -30,7 +30,7 @@ These two are **git-ignored** — create them yourself before running the app. N
 
 ```bash
 MODE=development
-ENONIC_API=http://localhost:8080/site
+ENONIC_API=http://localhost:8081/site
 ENONIC_API_TOKEN=mySecretKey
 ```
 
@@ -50,7 +50,7 @@ For machine-local secrets or overrides, add `.env.local` (also git-ignored).
 
 | Command | What it does |
 | ------- | ------------ |
-| `npm run dev` | Start the Next.js dev server on port 3000. Requires XP to be running on :8080. |
+| `npm run dev` | Start the Next.js dev server on port 3100. Requires XP to be running on :8081. |
 | `npm run build` | Production build. |
 | `npm run start` | Serve the production build (run `build` first). |
 

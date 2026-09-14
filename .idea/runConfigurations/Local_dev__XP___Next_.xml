@@ -1,0 +1,7 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Local dev (XP + Next)" type="CompoundRunConfigurationType">
+    <toRun name="xp: enonic dev" type="ShConfigurationType" />
+    <toRun name="next: dev" type="js.build_tools.npm" />
+    <method v="2" />
+  </configuration>
+</component>
