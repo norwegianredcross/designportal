@@ -5,13 +5,13 @@
   "scripts": {
     "dev": "next dev -p 3100",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p 3100",
     "changeset": "changeset",
     "lint": "biome check",
     "format": "biome format --write",
     "introspect": "node scripts/introspect.mts",
     "generate": "graphql-codegen --config scripts/codegen.ts && biome format --write src/types/queries.d.ts",
-    "storybook": "storybook dev -p 6006",
+    "storybook": "storybook dev -p 6106",
     "build-storybook": "storybook build",
     "test": "vitest --project storybook --coverage",
     "version": "changeset version"

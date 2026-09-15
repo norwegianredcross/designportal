@@ -1,13 +1,14 @@
 import { stripOperationName } from "@/utils";
-import { editorialBlocksFragment } from "./getEditorialBlocksFragment";
+import { withEditorialBlocks } from "./getEditorialBlocksFragment";
 
 export default () =>
-  editorialBlocksFragment +
-  "\n" +
-  stripOperationName(/* GraphQL */ `
+  withEditorialBlocks(
+    stripOperationName(/* GraphQL */ `
   query GetBlocks($path: ID!) {
     guillotine {
       blocks(key: $path) { ...editorialBlocks }
     }
   }
-`);
+`),
+    "blocks",
+  );

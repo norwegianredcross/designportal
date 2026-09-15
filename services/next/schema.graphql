@@ -609,6 +609,12 @@ type PageComponentData {
   customized: Boolean
   template: Content
   configAsJson: JSON
+  config: PageComponentDataConfig
+}
+
+"""Page component config."""
+type PageComponentDataConfig {
+  no_rodekors_docs: Page_no_rodekors_docs_ComponentDataApplicationConfig
 }
 
 """PageInfo"""
@@ -616,6 +622,18 @@ type PageInfo {
   startCursor: String!
   endCursor: String!
   hasNext: Boolean!
+}
+
+"""Page component application config for application ['no.rodekors.docs']"""
+type Page_no_rodekors_docs_ComponentDataApplicationConfig {
+  default: Page_no_rodekors_docs_default
+}
+
+"""
+Page component application config for application ['no.rodekors.docs'] and descriptor ['default']
+"""
+type Page_no_rodekors_docs_default {
+  variant: String
 }
 
 """Part component data."""

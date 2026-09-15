@@ -31,36 +31,45 @@ service's README for the full workflow.
 Both services run together. In two terminals:
 
 ```sh
-cd services/xp   && enonic dev    # XP sandbox + watch + redeploy on :8081
+cd services/xp   && npm run dev    # XP sandbox + watch + redeploy on :8081
 cd services/next && npm run dev   # Next.js dev server on :3100
 ```
 
 The Next.js app expects XP to be reachable on `http://localhost:8081`. Per-service
 prerequisites, environment variables, and npm/Enonic CLI commands are documented in:
 
-### Why :8081 and a named sandbox
+### Independent instances
 
-XP's default ports are taken by the rodekors.no CMS repo, which most people here have
-checked out alongside this one. Two sandboxes cannot share a port, and a single sandbox
-serving both applications is worse: Guillotine builds one schema from every installed
-app, so `npm run introspect` picks up the other app's block types and `npm run generate`
-then fails on every fragment spread. Hence a dedicated sandbox on its own ports:
+Designportal uses the CMS100002-webpage architecture as a reference. It has its
+own XP application (`no.rodekors.docs`), content project (`designsystem-docs`),
+database, configuration, Next.js process and CLI lifecycle state. Both run XP
+7.16.2; neither needs the other application installed.
 
-| | designportal | rodekors.no |
+| Service | Designportal | Reference on this workstation |
 | --- | --- | --- |
-| Sandbox | `designportal` | `rodekors` |
-| XP | 8081 | 8080 |
-| Management | 4849 | 4848 |
-| Monitor | 2610 | 2609 |
-| Next.js | 3100 | 3000 |
+| XP sandbox | `docs` (new machines may use `designportal`) | `rodekors` |
+| XP HTTP | 8081 | 8090 |
+| Management | 4849 | 4858 |
+| Monitor | 2610 | 2619 |
+| Debugger, when enabled | 5006 | 5005 |
+| Next.js | 3100 | 3000 (local preview configured as 3002) |
+| Storybook | 6106 | 6006 |
 
-The ports live in the sandbox itself (`~/.enonic/sandboxes/designportal/home/config/com.enonic.xp.web.jetty.cfg`),
-and `services/xp/.enonic` — git-ignored, written by `enonic project sandbox designportal` —
-binds this checkout to it. Both are per-developer, so creating the sandbox is a
-one-time local step; nothing in this repo pins a machine.
+Open designportal at **http://127.0.0.1:3100**, and the reference frontend via
+`localhost`. Different hostnames also keep Next.js preview cookies separate;
+cookies are not isolated by port. Designportal's Content Studio session uses
+its own `DESIGNPORTAL_SESSION` cookie.
 
-- [`services/xp/README.md`](./services/xp/README.md)
-- [`services/next/README.md`](./services/next/README.md)
+Run `npm run dev` in `services/xp`. The wrapper uses the sandbox named in that
+service's git-ignored `.enonic`, stores its own CLI state under `.local/enonic-cli`,
+and directs management requests to port 4849. Its sandbox home points to the
+existing dedicated sandbox, so content stays in place. Only the SDK binaries
+are shared. Use `npm run enonic -- <command>` for other Enonic CLI operations.
+Avoid bare `enonic dev`/`stop` for designportal: the CLI otherwise uses a global
+running-sandbox record. Both checkouts must have explicit sandbox bindings.
+
+Configuration and setup: [XP README](services/xp/README.md) and
+[Next.js README](services/next/README.md).
 
 ## Editor experience
 

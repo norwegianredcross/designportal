@@ -46,5 +46,8 @@ if (errors?.length) {
 }
 
 const sdl = `${printSchema(buildClientSchema(data))}\n`;
+if (sdl.includes("no_rodekors_www_") || !sdl.includes("no_rodekors_docs_")) {
+  throw new Error("Refusing schema from another CMS; use the dedicated designportal XP instance.");
+}
 await writeFile(outPath, sdl, "utf8");
 console.log(`Wrote ${outPath} from ${endpointName} (${endpointUrl})`);

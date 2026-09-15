@@ -31,6 +31,20 @@ async function getEnonicHeaders() {
   ];
 }
 
+// Refuse a local override that would connect designportal to another CMS.
+if (process.env.NODE_ENV === "development") {
+  const api = new URL(process.env.ENONIC_API ?? "http://localhost:8081/site");
+  if (!["localhost", "127.0.0.1"].includes(api.hostname) || api.port !== "8081" || api.pathname !== "/site") {
+    throw new Error("Designportal development requires its own XP at http://localhost:8081/site");
+  }
+  if (
+    process.env.ENONIC_APP_NAME !== "no.rodekors.docs" ||
+    process.env.ENONIC_MAPPINGS !== "no:designsystem-docs/docs"
+  ) {
+    throw new Error("Designportal development requires the no.rodekors.docs app and designsystem-docs/docs mapping");
+  }
+}
+
 const nextConfig: NextConfig = {
   output: "standalone",
   reactCompiler: true,
@@ -45,6 +59,16 @@ const nextConfig: NextConfig = {
     },
   },
   headers: getEnonicHeaders,
+  async redirects() {
+    return [
+      {
+        // Preserve links to the article's path before the CMS migration.
+        source: "/kom-i-gang",
+        destination: "/kode/kom-i-gang",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;
