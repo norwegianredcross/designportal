@@ -230,6 +230,7 @@ input ExistsFilterInput {
 type ExtraData {
   no_rodekors_docs: XData_no_rodekors_docs_ApplicationConfig
   media: XData_media_ApplicationConfig
+  com_enonic_app_menu: XData_com_enonic_app_menu_ApplicationConfig
   base: XData_base_ApplicationConfig
 }
 
@@ -364,15 +365,16 @@ input HasValueFilterInput {
 """Headless CMS"""
 type HeadlessCms {
   queryDsl(query: QueryDSLInput, offset: Int, first: Int, sort: [SortDslInput]): [Content]
+  blocks(key: ID!): [no_rodekors_docs_Block]
+  getPermissions(key: ID): Permissions
+  query(query: String, offset: Int, first: Int, sort: String, contentTypes: [String], filters: [FilterInput]): [Content]
+  getChildrenConnection(key: ID, after: String, first: Int, sort: String): ContentConnection
+  menu: Menu
   getChildren(key: ID, offset: Int, first: Int, sort: String): [Content]
   queryConnection(query: String!, after: String, first: Int, sort: String, contentTypes: [String], aggregations: [AggregationInput], filters: [FilterInput]): QueryContentConnection
   getType(name: String!): ContentType
-  blocks(key: ID!): [no_rodekors_docs_Block]
   get(key: ID): Content
-  getPermissions(key: ID): Permissions
-  query(query: String, offset: Int, first: Int, sort: String, contentTypes: [String], filters: [FilterInput]): [Content]
   getSite: portal_Site
-  getChildrenConnection(key: ID, after: String, first: Int, sort: String): ContentConnection
   queryDslConnection(query: QueryDSLInput!, after: String, first: Int, aggregations: [AggregationInput], highlight: HighlightInputType, sort: [SortDslInput]): QueryDSLContentConnection
   getTypes: [ContentType]
 }
@@ -570,6 +572,20 @@ enum MediaIntentType {
 type MediaUploader {
   attachment: String
   focalPoint: MediaFocalPoint
+}
+
+"""Menu"""
+type Menu {
+  items: [MenuItem]
+}
+
+"""Menu Item"""
+type MenuItem {
+  title: String
+  path: String
+  name: String
+  items: [MenuItem]
+  content: Content
 }
 
 """MinAggregation input type"""
@@ -1166,6 +1182,19 @@ type XData_base_gpsInfo_DataConfig {
   geoPoint: GeoPoint
   altitude: String
   direction: String
+}
+
+"""XDataApplicationConfig for application ['com.enonic.app.menu']"""
+type XData_com_enonic_app_menu_ApplicationConfig {
+  menu_item: XData_com_enonic_app_menu_menu_item_DataConfig
+}
+
+"""
+Extra data config for application ['com.enonic.app.menu}'] and descriptor ['menu-item']
+"""
+type XData_com_enonic_app_menu_menu_item_DataConfig {
+  menuItem: Boolean
+  menuName: String
 }
 
 """XDataApplicationConfig for application ['media']"""

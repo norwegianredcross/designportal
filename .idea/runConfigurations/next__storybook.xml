@@ -1,0 +1,12 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="next: storybook" type="js.build_tools.npm" folderName="Next">
+    <package-json value="$PROJECT_DIR$/services/next/package.json" />
+    <command value="run" />
+    <scripts>
+      <script value="storybook" />
+    </scripts>
+    <node-interpreter value="project" />
+    <envs />
+    <method v="2" />
+  </configuration>
+</component>

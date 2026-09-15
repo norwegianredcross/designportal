@@ -16,6 +16,11 @@ desktop.ini
 *.sublime-workspace
 *.sublime-project
 
+# IntelliJ: share the run configurations, keep everything else per-developer
+# (.iml, misc.xml and modules.xml carry local JDK and module paths).
+.idea/*
+!.idea/runConfigurations/
+
 # Logs
 *.log
 logs/
