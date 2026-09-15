@@ -27,15 +27,17 @@ if (!endpoint?.url) {
 }
 
 const outPath = typeof project.schema === "string" ? project.schema : "schema.graphql";
+// Allow a developer's sandbox port without editing the shared endpoint.
+const endpointUrl = process.env.ENONIC_INTROSPECT_URL ?? endpoint.url;
 
-const response = await fetch(endpoint.url, {
+const response = await fetch(endpointUrl, {
   method: "POST",
   headers: { "Content-Type": "application/json", ...(endpoint.headers ?? {}) },
   body: JSON.stringify({ query: getIntrospectionQuery() }),
 });
 
 if (!response.ok) {
-  throw new Error(`Introspection request to ${endpoint.url} failed: ${response.status} ${response.statusText}`);
+  throw new Error(`Introspection request to ${endpointUrl} failed: ${response.status} ${response.statusText}`);
 }
 
 const { data, errors } = (await response.json()) as IntrospectionResponse;
@@ -45,4 +47,4 @@ if (errors?.length) {
 
 const sdl = `${printSchema(buildClientSchema(data))}\n`;
 await writeFile(outPath, sdl, "utf8");
-console.log(`Wrote ${outPath} from ${endpointName} (${endpoint.url})`);
+console.log(`Wrote ${outPath} from ${endpointName} (${endpointUrl})`);

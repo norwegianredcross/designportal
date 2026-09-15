@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import { expect, within } from "storybook/test";
-import { ChangelogList } from "@/components/blocks/ChangelogList";
-import { parseChangelog } from "@/components/blocks/parseChangelog";
+import { ChangelogList } from "@/components/pages/generated/ChangelogList";
+import { parseChangelog } from "@/components/pages/generated/parseChangelog";
 
 // The exact shape the library's release workflow writes, so the parser is
 // exercised on real lines rather than on an idealised fixture.
@@ -23,7 +23,7 @@ const changelog = `# Changelog
 const releases = parseChangelog(changelog);
 
 const storyMeta = {
-  title: "Blocks/ChangelogList",
+  title: "Pages/ChangelogList",
   component: ChangelogList,
   parameters: { layout: "padded" },
   tags: ["autodocs"],

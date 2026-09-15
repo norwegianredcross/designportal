@@ -31,7 +31,7 @@ const BlocksView = (props: PartProps<GetBlocksQueryBlock[]>) => {
   return <div className={styles.blocks}>{renderBlocks(props)}</div>;
 };
 
-const renderBlocks = (props: PartProps<GetBlocksQueryBlock[]>) => {
+export const renderBlocks = (props: Pick<PartProps<GetBlocksQueryBlock[]>, "data" | "meta">) => {
   return forceArray(props.data).map((data, index) => {
     // The registry is correlated per typename, but TypeScript cannot narrow the
     // lookup and the block union together, so widen to the union the

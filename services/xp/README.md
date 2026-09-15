@@ -111,7 +111,43 @@ The property is read at startup only, so stop the sandbox and start it again, th
 at <http://localhost:8081> as `su`. This is a local development sandbox; treat the
 password as throwaway and keep it out of anything shared.
 
-## Building
+## Generated documentation pages
+
+Create a **Side** as usual. Its **Sidevisning** field optionally selects
+**Komponentoversikt**, **Endringslogg**, or **Design-tokens**. Leave it empty
+for an ordinary article. The URL, sidebar and main-menu settings work as before.
+
+The page renders its title/intro, the first block area, the generated section,
+then **Innhold etter listen**. Both block areas reuse the same `blocks` mixin.
+Editors can add text, images, code and other editorial blocks around the list;
+the generated lists are no longer options in the block picker. Catalogue and
+release data still come from the published design system; tokens come from the
+running theme. Page-view settings control the section wording, catalogue search
+and release limit where relevant.
+
+### Migrating older content or a restored preview dump
+
+Deploy this version of the XP application first. From `services/xp`, set
+`DOCS_IMPORT_TOKEN` to the local `importToken` in `no.rodekors.docs.cfg`, then run:
+
+```sh
+node scripts/migrate-page-views.mjs          # list affected pages only
+node scripts/migrate-page-views.mjs --apply  # save original fields, then migrate
+```
+
+For a different XP port, set `DOCS_MIGRATION_URL` to the corresponding service
+URL. The service is disabled when the application has no `importToken` configured.
+It operates only on `designsystem-docs` pages and migrates draft and master
+separately, preserving unpublished edits, page IDs, URLs and publication metadata.
+It preserves all blocks before and after the original list and its settings.
+Pages with multiple generated sections are rejected for manual review. Re-running
+the migration makes no changes once it is complete. Older page data also has a
+read compatibility path, but migrate before editing it in Content Studio.
+
+After an XP schema change, regenerate `.xp-codegen` using
+`./gradlew generateTypeScript`, then run the Next introspection and code generation.
+
+## Building the application
 
 ```sh
 enonic project build

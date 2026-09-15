@@ -9,7 +9,7 @@ interface ChangelogListProps {
 }
 
 /**
- * The presentational half of the release-notes block: one section per
+ * The presentational half of the release-notes section: one section per
  * release with its version, date and a link to the GitHub release, and a
  * list of changes tagged by kind. No data fetching and no state, so it
  * renders on the server and the stories can hand it a parsed fixture.
