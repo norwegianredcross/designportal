@@ -64,6 +64,15 @@
     letter-spacing: var(--ds-heading-2xs-letter-spacing);
   }
 
+  /* Style inline CMS code; CodeBlock owns preformatted code. */
+  :not(pre) > code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.85em;
+    background: var(--ds-color-neutral-background-tinted);
+    border-radius: var(--ds-border-radius-sm);
+    padding: 0.1em 0.35em;
+  }
+
   small,
   figcaption {
     font-size: var(--ds-body-sm-font-size);

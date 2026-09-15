@@ -166,3 +166,9 @@ fragment editorialBlocks on no_rodekors_docs_Block {
 
 }
 `;
+
+// Scope fragment names because the adapter concatenates queries without deduplication.
+// Codegen reads the original shared names above.
+export function withEditorialBlocks(query: string, scope: "page" | "blocks") {
+  return `${editorialBlocksFragment}\n${query}`.replace(/\b(richTextFragment|editorialBlocks)\b/g, `$1_${scope}`);
+}

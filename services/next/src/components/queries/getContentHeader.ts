@@ -7,6 +7,7 @@ query GetContentHeader($path:ID!) {
     get(key:$path) {
       ... on no_rodekors_docs_Page {
         data {
+          kicker
           title
           intro {
             processedHtml
@@ -18,6 +19,7 @@ query GetContentHeader($path:ID!) {
         }
       }
     }
+    layout: pageLayout(key:$path) { before { __typename } }
   }
 }`);
 

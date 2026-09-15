@@ -51,6 +51,8 @@
     "format": "biome check --write",
     "lint": "biome check --error-on-warnings",
     "test": "jest --no-cache",
-    "version": "changeset version && npm i --package-lock-only && NEW_VERSION=$(node -p \"require('./package.json').version\") && sed -i \"s/version.*/version = ${NEW_VERSION}/\" gradle.properties"
+    "version": "changeset version && npm i --package-lock-only && NEW_VERSION=$(node -p \"require('./package.json').version\") && sed -i \"s/version.*/version = ${NEW_VERSION}/\" gradle.properties",
+    "dev": "node scripts/enonic-local.mjs dev",
+    "enonic": "node scripts/enonic-local.mjs"
   }
 }

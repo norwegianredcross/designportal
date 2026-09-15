@@ -503,11 +503,11 @@ export function extensions(graphQL: GraphQL): Extensions {
           return { ...layout, before: layout.before.map(resolveBlocks), after: layout.after.map(resolveBlocks) };
         },
         [FIELD_BLOCKS]: (env): unknown[] => {
-          const content = getOne<Content<Blocks>>({
+          const content = getOne<Content<PageLayoutData>>({
             key: env.args.key,
           });
 
-          return forceArray(content?.data.blocks).map(resolveBlocks);
+          return content ? getPageLayout(content.data).before.map(resolveBlocks) : [];
         },
       },
     },

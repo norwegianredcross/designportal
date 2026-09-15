@@ -14,7 +14,7 @@ It is a local snapshot of <https://norwegianredcross.github.io/DesignSystem/stor
 
 # Blocks
 
-The block pipeline mirrors the rk.no CMS (`CMS100002-webpage`) on purpose — same
+The block pipeline mirrors the rk.no CMS (`CMS100003-webpage`) on purpose — same
 architecture, so what is learned in one repo transfers to the other. Four rules
 come from mistakes that repo hit first.
 
@@ -36,7 +36,7 @@ takes. See `ExtractByTypename` in `types/utils.ts`.
 `blockComponents` is a mapped type over the real `__typename` union, so a
 misspelled key and a component wired to the wrong block are both compile
 errors. Adding a block means adding its entry there and nowhere else on the
-frontend; both render paths (the blocks-view part and the Side view) read it.
+frontend; both editorial render paths (the blocks-view part and the page’s after-content area) read it.
 
 ## No inline styles
 
@@ -55,11 +55,21 @@ place where it can see both neighbours.
 
 ## Adding a block, end to end
 
-1. `site/mixins/blocks-<name>/blocks-<name>.xml` — the editor form
+1. Reuse the shared block mixin from `no.item:lib-xp-item-blocks`; only docs-specific extensions define a local form.
 2. register it as an `<option>` in `site/mixins/blocks/blocks.xml`
 3. Norwegian labels in `i18n/phrases.properties`
 4. `guillotine/guillotine.ts` — type, union member, and a `resolveBlocks` case
 5. `./gradlew generateTypeScript`, then deploy and `npm run introspect && npm run generate`
-6. the fragment in `getBlocks.ts` **and** `getSidePage.ts`
+6. the shared `getEditorialBlocksFragment.ts` used by `getBlocks.ts` and `getPageDefault.ts`
 7. `<Name>Block.tsx` + `.module.css` + `.stories.tsx`
 8. the entry in `components/blocks/registry.ts`
+
+## Page composition
+
+Match `CMS100003-webpage`: the route fetches and dispatches to `MainView`;
+`addPage` registers the controller, and `Default` renders the shell and regions.
+Use `addPart` for placed components. Do not add a direct mapping for the Side
+content type: it overrides the editor's selected page controller/template.
+Generated documentation sections stay fixed in the page view, outside the block
+registry. Keep the real render mode when rendering regions so editing metadata
+is present in Content Studio without being forced on public requests.

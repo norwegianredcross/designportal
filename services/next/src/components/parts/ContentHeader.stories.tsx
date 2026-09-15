@@ -2,7 +2,7 @@ import { RENDER_MODE, XP_REQUEST_TYPE } from "@enonic/nextjs-adapter";
 import type { MetaData } from "@enonic/nextjs-adapter/types/componentProps";
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import { expect } from "storybook/test";
-import ContentHeader from "@/components/parts/ContentHeader";
+import ContentHeader, { contentHeaderProcessor } from "@/components/parts/ContentHeader";
 
 const meta: MetaData = {
   apiUrl: "http://localhost:8081/site/designsystem-docs/master",
@@ -42,6 +42,7 @@ type Story = StoryObj<typeof storyMeta>;
 export const Default: Story = {
   args: {
     data: {
+      kicker: null,
       title: "Bli frivillig i Røde Kors",
       intro: {
         processedHtml: "<p>Som frivillig i Røde Kors blir du en del av verdens største humanitære nettverk.</p>",
@@ -62,8 +63,21 @@ export const Default: Story = {
 export const TitleOnly: Story = {
   args: {
     data: {
+      kicker: null,
       title: "Kontakt oss",
       intro: null,
     },
+  },
+};
+
+export const LeadingHero: Story = {
+  args: { data: undefined },
+  play: async ({ canvasElement }) => {
+    const result = await contentHeaderProcessor({
+      get: { data: { title: "Already in the hero", kicker: null, intro: null } },
+      layout: { before: [{ __typename: "no_rodekors_docs_BlockHero" }] },
+    });
+    expect(result).toBeUndefined();
+    expect(canvasElement.querySelector("h1")).toBeNull();
   },
 };
