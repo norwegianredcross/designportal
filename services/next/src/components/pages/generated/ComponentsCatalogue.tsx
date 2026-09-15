@@ -16,7 +16,7 @@ interface ComponentsCatalogueProps {
 /**
  * The grid half of the catalogue: one tile per component linking to its
  * Storybook docs. This is a client component only because of the filter
- * state; the list itself is fetched by the server-side ComponentsBlock and
+ * state; the list itself is fetched by the server-side ComponentsSection and
  * handed in as plain data, so the same grid renders in Storybook from a
  * fixture without any network.
  *

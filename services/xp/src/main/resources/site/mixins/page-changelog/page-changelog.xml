@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mixin xmlns="urn:enonic:xp:model:1.0">
+  <display-name i18n="mixin.page-changelog.displayName">Release notes</display-name>
+  <description i18n="mixin.page-changelog.description">The component library's release history, read from its published changelog</description>
+
+  <form>
+    <input name="title" type="TextLine">
+      <label i18n="mixin.page-changelog.title">Title</label>
+      <occurrences minimum="0" maximum="1"/>
+    </input>
+
+    <input name="intro" type="TextLine">
+      <label i18n="mixin.page-changelog.intro">Intro</label>
+      <occurrences minimum="0" maximum="1"/>
+    </input>
+
+    <!-- Empty means every release. The library has 40+ of them already,
+         so a landing page will typically want the last handful. -->
+    <input name="maxReleases" type="Long">
+      <label i18n="mixin.page-changelog.maxReleases">Number of releases</label>
+      <help-text i18n="mixin.page-changelog.maxReleases.helpText">Leave empty to show the full history</help-text>
+      <occurrences minimum="0" maximum="1"/>
+      <config>
+        <min>1</min>
+      </config>
+    </input>
+  </form>
+</mixin>

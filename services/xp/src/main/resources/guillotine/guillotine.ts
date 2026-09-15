@@ -20,6 +20,7 @@
  * resolver, so a query that does not ask for it does not pay for it.
  */
 import { type Content, get as getOne } from "/lib/xp/content";
+import { getPageLayout, type PageLayoutData } from "/lib/rodekors/page-layout";
 import { forceArray } from "/lib/rodekors/arrays";
 import { buildRichText, type ProcessHtmlArgs } from "/lib/rodekors/rich-text";
 import { type DataFetchingEnvironment, type Extensions, type GraphQL, ObjectTypeName } from "@enonic-types/guillotine";
@@ -39,9 +40,6 @@ const OBJECT_TYPE_BLOCK_IMAGE = "no_rodekors_docs_BlockImage";
 const OBJECT_TYPE_BLOCK_CARDS = "no_rodekors_docs_BlockCards";
 const OBJECT_TYPE_BLOCK_CODE = "no_rodekors_docs_BlockCode";
 const OBJECT_TYPE_BLOCK_DEMO = "no_rodekors_docs_BlockDemo";
-const OBJECT_TYPE_BLOCK_COMPONENTS = "no_rodekors_docs_BlockComponents";
-const OBJECT_TYPE_BLOCK_TOKENS = "no_rodekors_docs_BlockTokens";
-const OBJECT_TYPE_BLOCK_CHANGELOG = "no_rodekors_docs_BlockChangelog";
 const OBJECT_TYPE_BLOCK_TABLE = "no_rodekors_docs_BlockTable";
 const OBJECT_TYPE_BLOCK_HERO = "no_rodekors_docs_BlockHero";
 // Not a union member: one call-to-action nested inside BlockHero.
@@ -285,53 +283,16 @@ export function extensions(graphQL: GraphQL): Extensions {
           },
         },
       },
-      // Only the wording around the grid. The component list itself is
-      // NOT content: the Next side fetches it from the library's published
-      // manifest when rendering (services/next/src/server/designsystem-context.ts),
-      // so nothing here needs a resolver.
-      [OBJECT_TYPE_BLOCK_COMPONENTS]: {
-        description: "The component catalogue, generated from the library's published manifest",
+      no_rodekors_docs_PageLayout: {
+        description: "Editorial blocks around a fixed generated page view",
         fields: {
-          title: {
-            type: graphQL.GraphQLString,
-          },
-          intro: {
-            type: graphQL.GraphQLString,
-          },
-          showSearch: {
-            type: graphQL.GraphQLBoolean,
-          },
-        },
-      },
-      // Wording only: the tokens themselves are read from the theme's CSS
-      // in the reader's browser (see the Next side's TokensBrowser), never
-      // stored as content, so nothing here needs a resolver.
-      [OBJECT_TYPE_BLOCK_TOKENS]: {
-        description: "The design-token browser, read from the theme in the reader's browser",
-        fields: {
-          title: {
-            type: graphQL.GraphQLString,
-          },
-          intro: {
-            type: graphQL.GraphQLString,
-          },
-        },
-      },
-      // Wording and a limit; the release notes themselves are fetched from
-      // the library's published CHANGELOG.md on the Next side
-      // (services/next/src/server/changelog.ts), never stored as content.
-      [OBJECT_TYPE_BLOCK_CHANGELOG]: {
-        description: "The component library's release notes, read from its published changelog",
-        fields: {
-          title: {
-            type: graphQL.GraphQLString,
-          },
-          intro: {
-            type: graphQL.GraphQLString,
-          },
-          maxReleases: {
-            type: graphQL.GraphQLInt,
-          },
+          kind: { type: graphQL.GraphQLString },
+          title: { type: graphQL.GraphQLString },
+          intro: { type: graphQL.GraphQLString },
+          showSearch: { type: graphQL.GraphQLBoolean },
+          maxReleases: { type: graphQL.GraphQLInt },
+          before: { type: graphQL.list(graphQL.reference(OBJECT_TYPE_BLOCK)) },
+          after: { type: graphQL.list(graphQL.reference(OBJECT_TYPE_BLOCK)) },
         },
       },
       // Plain strings; the demo id is only meaningful to the frontend's
@@ -472,9 +433,6 @@ export function extensions(graphQL: GraphQL): Extensions {
           graphQL.reference(OBJECT_TYPE_BLOCK_CARDS),
           graphQL.reference(OBJECT_TYPE_BLOCK_CODE),
           graphQL.reference(OBJECT_TYPE_BLOCK_DEMO),
-          graphQL.reference(OBJECT_TYPE_BLOCK_COMPONENTS),
-          graphQL.reference(OBJECT_TYPE_BLOCK_TOKENS),
-          graphQL.reference(OBJECT_TYPE_BLOCK_CHANGELOG),
           graphQL.reference(OBJECT_TYPE_BLOCK_TABLE),
           graphQL.reference(OBJECT_TYPE_BLOCK_SUMMARY),
           graphQL.reference(OBJECT_TYPE_BLOCK_HERO),
@@ -489,6 +447,10 @@ export function extensions(graphQL: GraphQL): Extensions {
     creationCallbacks: {
       HeadlessCms: (params): void => {
         params.addFields({
+          pageLayout: {
+            type: graphQL.reference("no_rodekors_docs_PageLayout"),
+            args: { key: graphQL.nonNull(graphQL.GraphQLID) },
+          },
           [FIELD_BLOCKS]: {
             type: graphQL.list(graphQL.reference(OBJECT_TYPE_BLOCK)),
             args: {
@@ -534,6 +496,12 @@ export function extensions(graphQL: GraphQL): Extensions {
           env.source.imageId ? getOne({ key: env.source.imageId }) : null,
       },
       HeadlessCms: {
+        pageLayout: (env) => {
+          const content = getOne<Content<PageLayoutData>>({ key: env.args.key });
+          if (!content) return null;
+          const layout = getPageLayout(content.data);
+          return { ...layout, before: layout.before.map(resolveBlocks), after: layout.after.map(resolveBlocks) };
+        },
         [FIELD_BLOCKS]: (env): unknown[] => {
           const content = getOne<Content<Blocks>>({
             key: env.args.key,
@@ -667,25 +635,6 @@ type ResolvedDemoBlock = {
   title?: string;
 };
 
-type ResolvedComponentsBlock = {
-  __typename: typeof OBJECT_TYPE_BLOCK_COMPONENTS;
-  title?: string;
-  intro?: string;
-  showSearch?: boolean;
-};
-type ResolvedTokensBlock = {
-  __typename: typeof OBJECT_TYPE_BLOCK_TOKENS;
-  title?: string;
-  intro?: string;
-};
-
-type ResolvedChangelogBlock = {
-  __typename: typeof OBJECT_TYPE_BLOCK_CHANGELOG;
-  title?: string;
-  intro?: string;
-  maxReleases?: number;
-};
-
 type ResolvedAccordionBlock = {
   __typename: typeof OBJECT_TYPE_BLOCK_ACCORDION;
   title?: string;
@@ -704,9 +653,6 @@ function resolveBlocks(
   | ResolvedCardsBlock
   | ResolvedCodeBlock
   | ResolvedDemoBlock
-  | ResolvedComponentsBlock
-  | ResolvedTokensBlock
-  | ResolvedChangelogBlock
   | ResolvedTableBlock
   | ResolvedSummaryBlock
   | ResolvedHeroBlock
@@ -880,28 +826,6 @@ function resolveBlocks(
         __typename: OBJECT_TYPE_BLOCK_DEMO,
         demo: block["blocks-demo"].demo,
         title: block["blocks-demo"].title,
-      };
-    case "blocks-components":
-      return {
-        __typename: OBJECT_TYPE_BLOCK_COMPONENTS,
-        title: block["blocks-components"].title,
-        intro: block["blocks-components"].intro,
-        showSearch: block["blocks-components"].showSearch,
-      };
-    case "blocks-tokens":
-      return {
-        __typename: OBJECT_TYPE_BLOCK_TOKENS,
-        title: block["blocks-tokens"].title,
-        intro: block["blocks-tokens"].intro,
-      };
-    case "blocks-changelog":
-      return {
-        __typename: OBJECT_TYPE_BLOCK_CHANGELOG,
-        title: block["blocks-changelog"].title,
-        intro: block["blocks-changelog"].intro,
-        // The Long input stores a number; undefined when the editor left
-        // it empty, which the block reads as "no limit".
-        maxReleases: block["blocks-changelog"].maxReleases,
       };
   }
 

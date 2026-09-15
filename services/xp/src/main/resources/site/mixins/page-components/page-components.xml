@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mixin xmlns="urn:enonic:xp:model:1.0">
+  <display-name i18n="mixin.page-components.displayName">Component catalogue</display-name>
+  <description i18n="mixin.page-components.description">Every component in the library, linked to its Storybook documentation</description>
+
+  <form>
+    <input name="title" type="TextLine">
+      <label i18n="mixin.page-components.title">Title</label>
+      <occurrences minimum="0" maximum="1"/>
+    </input>
+
+    <input name="intro" type="TextLine">
+      <label i18n="mixin.page-components.intro">Intro</label>
+      <help-text i18n="mixin.page-components.intro.helpText">One sentence above the grid, e.g. what Storybook is</help-text>
+      <occurrences minimum="0" maximum="1"/>
+    </input>
+
+    <!-- Checked by default: the grid holds ~46 entries, and filtering by
+         name is how the old docs site made it usable. -->
+    <input name="showSearch" type="CheckBox">
+      <label i18n="mixin.page-components.showSearch">Show search field</label>
+      <default>checked</default>
+      <occurrences minimum="0" maximum="1"/>
+    </input>
+  </form>
+</mixin>

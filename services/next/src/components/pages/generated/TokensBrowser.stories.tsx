@@ -1,13 +1,13 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import { expect, userEvent, waitFor, within } from "storybook/test";
-import { classifyToken, groupTokens } from "@/components/blocks/designTokens";
-import { TokensBrowser } from "@/components/blocks/TokensBrowser";
+import { classifyToken, groupTokens } from "@/components/pages/generated/designTokens";
+import { TokensBrowser } from "@/components/pages/generated/TokensBrowser";
 
 // Storybook loads rk-designsystem/styles.css (see .storybook/preview.ts), so
 // the browser reads the REAL theme here - the stories assert against tokens
 // the library is known to define, not a fixture.
 const storyMeta = {
-  title: "Blocks/TokensBrowser",
+  title: "Pages/TokensBrowser",
   component: TokensBrowser,
   parameters: { layout: "padded" },
   tags: ["autodocs"],

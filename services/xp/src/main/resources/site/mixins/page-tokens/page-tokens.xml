@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mixin xmlns="urn:enonic:xp:model:1.0">
+  <display-name i18n="mixin.page-tokens.displayName">Token browser</display-name>
+  <description i18n="mixin.page-tokens.description">Every design token in the theme, with previews and copy buttons</description>
+
+  <form>
+    <input name="title" type="TextLine">
+      <label i18n="mixin.page-tokens.title">Title</label>
+      <occurrences minimum="0" maximum="1"/>
+    </input>
+
+    <input name="intro" type="TextLine">
+      <label i18n="mixin.page-tokens.intro">Intro</label>
+      <help-text i18n="mixin.page-tokens.intro.helpText">One sentence above the browser, e.g. where the tokens come from</help-text>
+      <occurrences minimum="0" maximum="1"/>
+    </input>
+  </form>
+</mixin>

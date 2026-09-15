@@ -3,9 +3,7 @@ import type { FunctionComponent } from "react";
 import type { Block, BlockByTypename } from "@/types/blocks";
 import { AccordionBlock } from "./AccordionBlock";
 import { CardsBlock } from "./CardsBlock";
-import { ChangelogBlock } from "./ChangelogBlock";
 import { CodeBlock } from "./CodeBlock";
-import { ComponentsBlock } from "./ComponentsBlock";
 import { DemoBlock } from "./DemoBlock";
 import { FactboxBlock } from "./FactboxBlock";
 import { HeroBlock } from "./HeroBlock";
@@ -14,7 +12,6 @@ import { QuoteBlock } from "./QuoteBlock";
 import { SummaryBlock } from "./SummaryBlock";
 import { TableBlock } from "./TableBlock";
 import { TextBlock } from "./TextBlock";
-import { TokensBlock } from "./TokensBlock";
 
 /**
  * The single source of truth for "which React component renders which
@@ -44,12 +41,6 @@ export const blockComponents: BlockRegistry = {
   no_rodekors_docs_BlockDemo: DemoBlock,
   // Copyable code snippet — the first LOCAL block (docs-specific mixin).
   no_rodekors_docs_BlockCode: CodeBlock,
-  // Component catalogue generated from the library's published manifest
-  // (local block; async server component, see ComponentsBlock).
-  no_rodekors_docs_BlockComponents: ComponentsBlock,
-  // Release notes fetched from the library's published CHANGELOG.md
-  // (local block; async server component, see ChangelogBlock).
-  no_rodekors_docs_BlockChangelog: ChangelogBlock,
   // Link-card grid; links pre-resolved by XP (see CardsBlock).
   no_rodekors_docs_BlockCards: CardsBlock,
   // Gallery of figures; images arrive pre-scaled from XP (see ImagesBlock).
@@ -60,7 +51,4 @@ export const blockComponents: BlockRegistry = {
   no_rodekors_docs_BlockSummary: SummaryBlock,
   // Landing panel with the notched corner (local block).
   no_rodekors_docs_BlockHero: HeroBlock,
-  // Design-token browser, read from the theme in the reader's browser
-  // (local block; see TokensBrowser).
-  no_rodekors_docs_BlockTokens: TokensBlock,
 };

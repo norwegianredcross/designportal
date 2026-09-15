@@ -1,28 +1,11 @@
-import type { MetaData } from "@enonic/nextjs-adapter/types/componentProps";
 import { Heading, Link, Paragraph } from "rk-designsystem";
 import { designsystemContextUrl, fetchCatalogue } from "@/server/designsystem-context";
-import type { BlockByTypename } from "@/types/blocks";
 import { ComponentsCatalogue } from "./ComponentsCatalogue";
 import styles from "./ComponentsCatalogue.module.css";
+import type { GeneratedSectionSettings } from "./types";
 
-type ComponentsData = BlockByTypename<"no_rodekors_docs_BlockComponents">;
-
-interface ComponentsProps {
-  data: ComponentsData;
-  meta: MetaData;
-}
-
-/**
- * Docs-specific block: the component catalogue. An async SERVER component -
- * it fetches the library's published manifest (see server/designsystem-context)
- * and hands the resulting list to the client-side grid. Editors only own the
- * title, intro and whether the search field shows; the list is never content.
- *
- * When the manifest can't be fetched the block degrades to a sentence with a
- * link to Storybook rather than failing the page: the rest of the article
- * is still worth rendering.
- */
-export async function ComponentsBlock({ data }: ComponentsProps) {
+/** Fixed generated section; the page owns its placement and editorial regions. */
+export async function ComponentsSection({ data }: { data: GeneratedSectionSettings }) {
   const catalogue = await fetchCatalogue();
   // The CheckBox's default is "checked", but content saved before the field
   // existed has no value at all - treat missing as on, matching the form.

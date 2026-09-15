@@ -69,6 +69,27 @@ Typical refresh after editing content types in XP:
 npm run introspect && npm run generate
 ```
 
+If your sandbox uses another port, override the introspection URL without changing
+the shared GraphQL configuration:
+
+```sh
+ENONIC_INTROSPECT_URL=http://localhost:8080/site/designsystem-docs/master npm run introspect
+npm run generate
+```
+
+### Generated page views
+
+`SidePage` renders the CMS page's `pageLayout` result: editorial blocks before,
+a fixed components/changelog/tokens section, then editorial blocks after. The
+specialized renderers and their Storybook stories live in
+`src/components/pages/generated/`; they are not entries in the block registry.
+Both editorial areas and the blocks part share `getEditorialBlocksFragment` and
+`renderBlocks`. Keep GraphQL comments out of that fragment: the adapter's fragment
+extractor does not support them.
+
+See [the XP editor and migration instructions](../xp/README.md#generated-documentation-pages)
+when creating these pages or restoring a dump made with the old block model.
+
 ### Storybook
 
 Components have colocated `*.stories.tsx` files. Storybook runs on port 6006 with the Vitest, a11y, docs, and MCP addons enabled.

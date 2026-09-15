@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import { expect, userEvent, within } from "storybook/test";
-import { ComponentsCatalogue } from "@/components/blocks/ComponentsCatalogue";
+import { ComponentsCatalogue } from "@/components/pages/generated/ComponentsCatalogue";
 import { storybookDocsUrl } from "@/utils";
 
 // A fixture in the exact shape fetchCatalogue() produces, so the stories
@@ -13,7 +13,7 @@ const names = ["Alert", "Button", "Card", "DatePicker", "Suggestion", "ToggleGro
 const components = names.map((name) => ({ name, docsUrl: storybookDocsUrl(storybookUrl, name) }));
 
 const storyMeta = {
-  title: "Blocks/ComponentsCatalogue",
+  title: "Pages/ComponentsCatalogue",
   component: ComponentsCatalogue,
   parameters: { layout: "padded" },
   tags: ["autodocs"],

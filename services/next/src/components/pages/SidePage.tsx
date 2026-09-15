@@ -1,13 +1,13 @@
 import { getUrl } from "@enonic/nextjs-adapter";
 import type { MetaData } from "@enonic/nextjs-adapter/types/componentProps";
 import RichTextView from "@enonic/nextjs-adapter/views/RichTextView";
-import type { FunctionComponent } from "react";
-import { Heading, Paragraph } from "rk-designsystem";
-import { blockComponents } from "@/components/blocks/registry";
+import { Heading } from "rk-designsystem";
 import type { Block } from "@/types/blocks";
 import { forceArray, isRichTextData, notNullOrUndefined } from "@/utils";
-import { blockWrapperClass } from "../parts/BlocksView";
+import { renderBlocks } from "../parts/BlocksView";
 import blockStyles from "../parts/BlocksView.module.css";
+import { GeneratedPageSection } from "./generated/GeneratedPageSection";
+import type { PageLayout } from "./generated/types";
 import styles from "./SidePage.module.css";
 
 interface NavChild {
@@ -27,7 +27,7 @@ interface SidePageProps {
       children?: (NavChild | null)[] | null;
       parent?: { _path?: string | null; children?: (NavChild | null)[] | null } | null;
     } | null;
-    blocks?: unknown[] | null;
+    layout?: PageLayout | null;
   };
   meta: MetaData;
 }
@@ -70,7 +70,10 @@ const SidePage = ({ data, meta }: SidePageProps) => {
   // The real block union rather than `{ __typename: string }`: the loose cast
   // let this index the registry with any string, which is exactly what the
   // typed registry is there to prevent.
-  const blocks = forceArray(data?.blocks).filter(notNullOrUndefined) as Block[];
+  const blocks = forceArray(data?.layout?.before).filter(notNullOrUndefined) as Block[];
+  const layout = data?.layout;
+  const after = forceArray(layout?.after).filter(notNullOrUndefined) as Block[];
+  const hasGeneratedSection = ["components", "changelog", "tokens"].includes(layout?.kind ?? "");
   const leadsWithHero = blocks[0]?.__typename === "no_rodekors_docs_BlockHero";
   return (
     <div className={styles.layout}>
@@ -107,11 +110,12 @@ const SidePage = ({ data, meta }: SidePageProps) => {
               {header?.title}
             </Heading>
             {isRichTextData(header?.intro) ? (
-              <Paragraph data-size="lg" asChild className={styles.ingress}>
-                <div>
-                  <RichTextView className="rk-prose" data={header.intro} meta={meta} renderMacroInEditMode={false} />
-                </div>
-              </Paragraph>
+              // Rich text can contain several paragraphs. Use the design
+              // system's typography class on its container; Paragraph's
+              // asChild slot fails across this server/client boundary.
+              <div data-size="lg" className={`ds-paragraph ${styles.ingress}`}>
+                <RichTextView className="rk-prose" data={header.intro} meta={meta} renderMacroInEditMode={false} />
+              </div>
             ) : null}
             <hr className={styles.leadRule} />
           </header>
@@ -119,24 +123,13 @@ const SidePage = ({ data, meta }: SidePageProps) => {
         {/* Same container as BlocksView so a Side and a blocks-view part space
             their blocks identically — the rhythm has one owner. */}
         <div className={blockStyles.blocks}>
-          {blocks.map((block, index) => {
-            // Same widening as BlocksView: the registry is correlated per
-            // typename, but TypeScript cannot narrow the lookup and the union
-            // together.
-            const BlockView = blockComponents[block.__typename] as
-              | FunctionComponent<{ data: Block; meta: MetaData }>
-              | undefined;
-            if (!BlockView) return null;
-            return (
-              // Same wrapper as BlocksView — see its module for why blocks
-              // need their own boundary element, and blockWrapperClass for why
-              // the class is decided there rather than in each render path.
-              // biome-ignore lint/suspicious/noArrayIndexKey: block order is stable
-              <div key={`block-${index}`} className={blockWrapperClass(block)} data-block={block.__typename}>
-                <BlockView data={block} meta={meta} />
-              </div>
-            );
-          })}
+          {renderBlocks({ data: blocks, meta })}
+          {hasGeneratedSection && layout ? (
+            <div className={blockStyles.block} data-page-view={layout.kind}>
+              <GeneratedPageSection layout={layout} />
+            </div>
+          ) : null}
+          {renderBlocks({ data: after, meta })}
         </div>
       </article>
     </div>

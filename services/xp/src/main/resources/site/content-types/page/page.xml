@@ -1,15 +1,38 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<!-- The one editorial content type: a page IS a content header plus a
-     sequence of blocks. Both parts come from mixins so the same form pieces
-     can be reused by x-data and parts. The editor form you see in Content
-     Studio for a "Side" is exactly these two mixins. -->
 <content-type xmlns="urn:enonic:xp:model:1.0">
   <display-name i18n="contentType.page.displayName">Page</display-name>
   <description i18n="contentType.page.description">Versatile page for block based content</description>
   <super-type>base:structured</super-type>
-
   <form>
-    <mixin name="content-header" />
-    <mixin name="blocks" />
+    <mixin name="content-header"/>
+    <field-set>
+      <label>Innhold før listen / vanlig sideinnhold</label>
+      <items><mixin name="blocks"/></items>
+    </field-set>
+    <option-set name="pageView">
+      <label>Sidevisning</label>
+      <help-text>La stå tom for en vanlig side. Velg en visning for en automatisk liste mellom innholdsområdene.</help-text>
+      <occurrences minimum="0" maximum="1"/>
+      <options minimum="1" maximum="1">
+        <option name="components">
+          <label>Komponentoversikt</label>
+          <items><mixin name="page-components"/></items>
+        </option>
+        <option name="changelog">
+          <label>Endringslogg</label>
+          <items><mixin name="page-changelog"/></items>
+        </option>
+        <option name="tokens">
+          <label>Design-tokens</label>
+          <items><mixin name="page-tokens"/></items>
+        </option>
+      </options>
+    </option-set>
+    <item-set name="afterContent">
+      <label>Innhold etter listen</label>
+      <help-text>Legg til forklaringer, eksempler eller lenker under den automatiske listen.</help-text>
+      <occurrences minimum="0" maximum="1"/>
+      <items><mixin name="blocks"/></items>
+    </item-set>
   </form>
 </content-type>
