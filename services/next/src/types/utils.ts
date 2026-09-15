@@ -1,5 +1,6 @@
-import type { PartData } from "@enonic/nextjs-adapter/types/component";
+import type { PageData, PartData } from "@enonic/nextjs-adapter/types/component";
 import type { MetaData } from "@enonic/nextjs-adapter/types/componentProps";
+import type { CommonQuery } from "./queries";
 
 type Unwrap<T> = NonNullable<T> extends ReadonlyArray<infer U> ? NonNullable<U> : NonNullable<T>;
 
@@ -34,10 +35,20 @@ export type ExtractByTypename<T, Names extends string> = T extends { __typename:
     : T
   : never;
 
-export interface PartProps<Data = any> {
+export type Common = CommonQuery["guillotine"];
+
+export interface PageProps<Data = unknown> {
+  page: PageData;
+  path: string;
+  data?: Data;
+  common?: Common;
+  meta: MetaData;
+}
+
+export interface PartProps<Data = unknown> {
   part: PartData;
   path: string;
   data?: Data;
-  common?: any;
+  common?: Common;
   meta: MetaData;
 }

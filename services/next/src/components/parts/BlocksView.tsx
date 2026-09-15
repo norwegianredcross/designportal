@@ -15,7 +15,7 @@ type GetBlocksQueryBlock = NonNullable<Get<GetBlocksQuery, "guillotine.blocks">>
  * column.
  *
  * It lives here rather than inline because there are two render paths — this
- * part and SidePage — and they had already drifted into two copies of the
+ * part and the Default page’s after-content area — and they had already drifted into two copies of the
  * wrapper. A width choice that only one of them honoured would look like a
  * broken editor field, not like a missing line of code.
  */
@@ -31,7 +31,7 @@ const BlocksView = (props: PartProps<GetBlocksQueryBlock[]>) => {
   return <div className={styles.blocks}>{renderBlocks(props)}</div>;
 };
 
-const renderBlocks = (props: PartProps<GetBlocksQueryBlock[]>) => {
+export const renderBlocks = (props: Pick<PartProps<GetBlocksQueryBlock[]>, "data" | "meta">) => {
   return forceArray(props.data).map((data, index) => {
     // The registry is correlated per typename, but TypeScript cannot narrow the
     // lookup and the block union together, so widen to the union the

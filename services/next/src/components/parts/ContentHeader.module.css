@@ -1,0 +1,19 @@
+.kicker {
+  font-size: var(--ds-font-size-2);
+  font-weight: var(--ds-font-weight-semibold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ds-color-neutral-text-subtle);
+  margin: 0 0 var(--ds-size-3);
+}
+
+.ingress {
+  color: var(--ds-color-primary-color-red-text-default);
+}
+
+.leadRule {
+  border: none;
+  border-top: 2px solid var(--ds-color-primary-color-red-base-default);
+  width: var(--ds-size-30);
+  margin: var(--ds-size-6) 0 var(--ds-size-8);
+}

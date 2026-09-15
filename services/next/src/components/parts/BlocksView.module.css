@@ -14,7 +14,8 @@
   flex-direction: column;
 }
 
-.block + .block {
+.block + .block,
+.region:has([data-block]) + .block {
   margin-top: var(--ds-size-12);
 }
 
@@ -27,7 +28,8 @@
  * Keyed on the block's own __typename, which the renderer stamps on every
  * wrapper. An earlier version asked ImagesBlock to mark itself, and the
  * attribute was silently lost the moment another change rewrote that element. */
-.block + .block[data-block$="BlockImages"] {
+.block + .block[data-block$="BlockImages"],
+.region:has([data-block]) + .block[data-block$="BlockImages"] {
   margin-top: var(--ds-size-5);
 }
 

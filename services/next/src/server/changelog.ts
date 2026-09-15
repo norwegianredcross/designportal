@@ -1,4 +1,4 @@
-import { parseChangelog, type Release } from "@/components/blocks/parseChangelog";
+import { parseChangelog, type Release } from "@/components/pages/generated/parseChangelog";
 import { designsystemContextUrl } from "./designsystem-context";
 
 /**

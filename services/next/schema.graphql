@@ -230,7 +230,6 @@ input ExistsFilterInput {
 type ExtraData {
   no_rodekors_docs: XData_no_rodekors_docs_ApplicationConfig
   media: XData_media_ApplicationConfig
-  com_enonic_app_menu: XData_com_enonic_app_menu_ApplicationConfig
   base: XData_base_ApplicationConfig
 }
 
@@ -365,11 +364,11 @@ input HasValueFilterInput {
 """Headless CMS"""
 type HeadlessCms {
   queryDsl(query: QueryDSLInput, offset: Int, first: Int, sort: [SortDslInput]): [Content]
+  pageLayout(key: ID!): no_rodekors_docs_PageLayout
   blocks(key: ID!): [no_rodekors_docs_Block]
   getPermissions(key: ID): Permissions
   query(query: String, offset: Int, first: Int, sort: String, contentTypes: [String], filters: [FilterInput]): [Content]
   getChildrenConnection(key: ID, after: String, first: Int, sort: String): ContentConnection
-  menu: Menu
   getChildren(key: ID, offset: Int, first: Int, sort: String): [Content]
   queryConnection(query: String!, after: String, first: Int, sort: String, contentTypes: [String], aggregations: [AggregationInput], filters: [FilterInput]): QueryContentConnection
   getType(name: String!): ContentType
@@ -574,20 +573,6 @@ type MediaUploader {
   focalPoint: MediaFocalPoint
 }
 
-"""Menu"""
-type Menu {
-  items: [MenuItem]
-}
-
-"""Menu Item"""
-type MenuItem {
-  title: String
-  path: String
-  name: String
-  items: [MenuItem]
-  content: Content
-}
-
 """MinAggregation input type"""
 input MinAggregationInput {
   field: String!
@@ -624,6 +609,12 @@ type PageComponentData {
   customized: Boolean
   template: Content
   configAsJson: JSON
+  config: PageComponentDataConfig
+}
+
+"""Page component config."""
+type PageComponentDataConfig {
+  no_rodekors_docs: Page_no_rodekors_docs_ComponentDataApplicationConfig
 }
 
 """PageInfo"""
@@ -631,6 +622,18 @@ type PageInfo {
   startCursor: String!
   endCursor: String!
   hasNext: Boolean!
+}
+
+"""Page component application config for application ['no.rodekors.docs']"""
+type Page_no_rodekors_docs_ComponentDataApplicationConfig {
+  default: Page_no_rodekors_docs_default
+}
+
+"""
+Page component application config for application ['no.rodekors.docs'] and descriptor ['default']
+"""
+type Page_no_rodekors_docs_default {
+  variant: String
 }
 
 """Part component data."""
@@ -678,9 +681,6 @@ type Part_no_rodekors_docs_blocks_view_Blocks {
   blocks_demo: Part_no_rodekors_docs_blocks_view_BlocksDemo
   blocks_summary: Part_no_rodekors_docs_blocks_view_BlocksSummary
   blocks_table: Part_no_rodekors_docs_blocks_view_BlocksTable
-  blocks_components: Part_no_rodekors_docs_blocks_view_BlocksComponents
-  blocks_tokens: Part_no_rodekors_docs_blocks_view_BlocksTokens
-  blocks_changelog: Part_no_rodekors_docs_blocks_view_BlocksChangelog
 }
 
 """Accordion"""
@@ -702,25 +702,11 @@ type Part_no_rodekors_docs_blocks_view_BlocksCards {
   width: String
 }
 
-"""Release notes"""
-type Part_no_rodekors_docs_blocks_view_BlocksChangelog {
-  title: String
-  intro: String
-  maxReleases: String
-}
-
 """Code"""
 type Part_no_rodekors_docs_blocks_view_BlocksCode {
   code: String
   language: String
   label: String
-}
-
-"""Component catalogue"""
-type Part_no_rodekors_docs_blocks_view_BlocksComponents {
-  title: String
-  intro: String
-  showSearch: Boolean
 }
 
 """Component demo"""
@@ -788,12 +774,6 @@ type Part_no_rodekors_docs_blocks_view_BlocksText {
   text(processHtml: ProcessHtmlInput): RichText
 }
 
-"""Token browser"""
-type Part_no_rodekors_docs_blocks_view_BlocksTokens {
-  title: String
-  intro: String
-}
-
 """Content blocks option enum."""
 enum Part_no_rodekors_docs_blocks_view_Blocks_OptionEnum {
   blocks_text
@@ -807,9 +787,6 @@ enum Part_no_rodekors_docs_blocks_view_Blocks_OptionEnum {
   blocks_demo
   blocks_summary
   blocks_table
-  blocks_components
-  blocks_tokens
-  blocks_changelog
 }
 
 """External"""
@@ -1184,19 +1161,6 @@ type XData_base_gpsInfo_DataConfig {
   direction: String
 }
 
-"""XDataApplicationConfig for application ['com.enonic.app.menu']"""
-type XData_com_enonic_app_menu_ApplicationConfig {
-  menu_item: XData_com_enonic_app_menu_menu_item_DataConfig
-}
-
-"""
-Extra data config for application ['com.enonic.app.menu}'] and descriptor ['menu-item']
-"""
-type XData_com_enonic_app_menu_menu_item_DataConfig {
-  menuItem: Boolean
-  menuName: String
-}
-
 """XDataApplicationConfig for application ['media']"""
 type XData_media_ApplicationConfig {
   imageInfo: XData_media_imageInfo_DataConfig
@@ -1278,9 +1242,6 @@ type XData_no_rodekors_docs_site_content_DataConfig_Blocks {
   blocks_demo: XData_no_rodekors_docs_site_content_DataConfig_BlocksDemo
   blocks_summary: XData_no_rodekors_docs_site_content_DataConfig_BlocksSummary
   blocks_table: XData_no_rodekors_docs_site_content_DataConfig_BlocksTable
-  blocks_components: XData_no_rodekors_docs_site_content_DataConfig_BlocksComponents
-  blocks_tokens: XData_no_rodekors_docs_site_content_DataConfig_BlocksTokens
-  blocks_changelog: XData_no_rodekors_docs_site_content_DataConfig_BlocksChangelog
 }
 
 """Accordion"""
@@ -1302,25 +1263,11 @@ type XData_no_rodekors_docs_site_content_DataConfig_BlocksCards {
   width: String
 }
 
-"""Release notes"""
-type XData_no_rodekors_docs_site_content_DataConfig_BlocksChangelog {
-  title: String
-  intro: String
-  maxReleases: String
-}
-
 """Code"""
 type XData_no_rodekors_docs_site_content_DataConfig_BlocksCode {
   code: String
   language: String
   label: String
-}
-
-"""Component catalogue"""
-type XData_no_rodekors_docs_site_content_DataConfig_BlocksComponents {
-  title: String
-  intro: String
-  showSearch: Boolean
 }
 
 """Component demo"""
@@ -1388,12 +1335,6 @@ type XData_no_rodekors_docs_site_content_DataConfig_BlocksText {
   text(processHtml: ProcessHtmlInput): RichText
 }
 
-"""Token browser"""
-type XData_no_rodekors_docs_site_content_DataConfig_BlocksTokens {
-  title: String
-  intro: String
-}
-
 """Content blocks option enum."""
 enum XData_no_rodekors_docs_site_content_DataConfig_Blocks_OptionEnum {
   blocks_text
@@ -1407,9 +1348,6 @@ enum XData_no_rodekors_docs_site_content_DataConfig_Blocks_OptionEnum {
   blocks_demo
   blocks_summary
   blocks_table
-  blocks_components
-  blocks_tokens
-  blocks_changelog
 }
 
 """External"""
@@ -2301,7 +2239,7 @@ type media_Video_Data {
 }
 
 """Your page content is build by a sequence of blocks."""
-union no_rodekors_docs_Block = no_rodekors_docs_BlockText | no_rodekors_docs_BlockAccordion | no_rodekors_docs_BlockQuote | no_rodekors_docs_BlockFactbox | no_rodekors_docs_BlockImages | no_rodekors_docs_BlockCards | no_rodekors_docs_BlockCode | no_rodekors_docs_BlockDemo | no_rodekors_docs_BlockComponents | no_rodekors_docs_BlockTokens | no_rodekors_docs_BlockChangelog | no_rodekors_docs_BlockTable | no_rodekors_docs_BlockSummary | no_rodekors_docs_BlockHero
+union no_rodekors_docs_Block = no_rodekors_docs_BlockText | no_rodekors_docs_BlockAccordion | no_rodekors_docs_BlockQuote | no_rodekors_docs_BlockFactbox | no_rodekors_docs_BlockImages | no_rodekors_docs_BlockCards | no_rodekors_docs_BlockCode | no_rodekors_docs_BlockDemo | no_rodekors_docs_BlockTable | no_rodekors_docs_BlockSummary | no_rodekors_docs_BlockHero
 
 """A list of expandable sections"""
 type no_rodekors_docs_BlockAccordion {
@@ -2334,29 +2272,11 @@ type no_rodekors_docs_BlockCards {
   contentPath: String
 }
 
-"""
-The component library's release notes, read from its published changelog
-"""
-type no_rodekors_docs_BlockChangelog {
-  title: String
-  intro: String
-  maxReleases: Int
-}
-
 """A copyable block of code with a language label"""
 type no_rodekors_docs_BlockCode {
   code: String
   language: String
   label: String
-}
-
-"""
-The component catalogue, generated from the library's published manifest
-"""
-type no_rodekors_docs_BlockComponents {
-  title: String
-  intro: String
-  showSearch: Boolean
 }
 
 """A live example of a design system component"""
@@ -2449,12 +2369,6 @@ type no_rodekors_docs_BlockText {
   text(processHtml: ProcessHtmlInput): RichText
 }
 
-"""The design-token browser, read from the theme in the reader's browser"""
-type no_rodekors_docs_BlockTokens {
-  title: String
-  intro: String
-}
-
 """Page - no.rodekors.docs:page"""
 type no_rodekors_docs_Page implements Content {
   _id: ID!
@@ -2490,10 +2404,32 @@ type no_rodekors_docs_Page implements Content {
   data: no_rodekors_docs_Page_Data
 }
 
+"""Editorial blocks around a fixed generated page view"""
+type no_rodekors_docs_PageLayout {
+  kind: String
+  title: String
+  intro: String
+  showSearch: Boolean
+  maxReleases: Int
+  before: [no_rodekors_docs_Block]
+  after: [no_rodekors_docs_Block]
+}
+
 """Call to action"""
 type no_rodekors_docs_Page_Actions {
   linkText: String
   link: no_rodekors_docs_Page_Link
+}
+
+"""Call to action"""
+type no_rodekors_docs_Page_Actions_2 {
+  linkText: String
+  link: no_rodekors_docs_Page_Link_5
+}
+
+"""Innhold etter listen"""
+type no_rodekors_docs_Page_AfterContent {
+  blocks(offset: Int, first: Int): [no_rodekors_docs_Page_Blocks_2]
 }
 
 """Content blocks"""
@@ -2510,15 +2446,19 @@ type no_rodekors_docs_Page_Blocks {
   blocks_demo: no_rodekors_docs_Page_BlocksDemo
   blocks_summary: no_rodekors_docs_Page_BlocksSummary
   blocks_table: no_rodekors_docs_Page_BlocksTable
-  blocks_components: no_rodekors_docs_Page_BlocksComponents
-  blocks_tokens: no_rodekors_docs_Page_BlocksTokens
-  blocks_changelog: no_rodekors_docs_Page_BlocksChangelog
 }
 
 """Accordion"""
 type no_rodekors_docs_Page_BlocksAccordion {
   title: String
   items(offset: Int, first: Int): [no_rodekors_docs_Page_Items]
+  theme: String
+}
+
+"""Accordion"""
+type no_rodekors_docs_Page_BlocksAccordion_2 {
+  title: String
+  items(offset: Int, first: Int): [no_rodekors_docs_Page_Items_5]
   theme: String
 }
 
@@ -2534,11 +2474,16 @@ type no_rodekors_docs_Page_BlocksCards {
   width: String
 }
 
-"""Release notes"""
-type no_rodekors_docs_Page_BlocksChangelog {
+"""Cards"""
+type no_rodekors_docs_Page_BlocksCards_2 {
   title: String
   intro: String
-  maxReleases: String
+  imageClass: String
+  columnsClass: String
+  items(offset: Int, first: Int): [no_rodekors_docs_Page_Items_7]
+  linkText: String
+  link: no_rodekors_docs_Page_Link_7
+  width: String
 }
 
 """Code"""
@@ -2548,11 +2493,11 @@ type no_rodekors_docs_Page_BlocksCode {
   label: String
 }
 
-"""Component catalogue"""
-type no_rodekors_docs_Page_BlocksComponents {
-  title: String
-  intro: String
-  showSearch: Boolean
+"""Code"""
+type no_rodekors_docs_Page_BlocksCode_2 {
+  code: String
+  language: String
+  label: String
 }
 
 """Component demo"""
@@ -2561,8 +2506,21 @@ type no_rodekors_docs_Page_BlocksDemo {
   title: String
 }
 
+"""Component demo"""
+type no_rodekors_docs_Page_BlocksDemo_2 {
+  demo: String
+  title: String
+}
+
 """Factbox"""
 type no_rodekors_docs_Page_BlocksFactbox {
+  title: String
+  text(processHtml: ProcessHtmlInput): RichText
+  theme: String
+}
+
+"""Factbox"""
+type no_rodekors_docs_Page_BlocksFactbox_2 {
   title: String
   text(processHtml: ProcessHtmlInput): RichText
   theme: String
@@ -2579,6 +2537,17 @@ type no_rodekors_docs_Page_BlocksHero {
   actions(offset: Int, first: Int): [no_rodekors_docs_Page_Actions]
 }
 
+"""Hero"""
+type no_rodekors_docs_Page_BlocksHero_2 {
+  badge: String
+  badgeMeta: String
+  kicker: String
+  title: String
+  lead: String
+  image: Content
+  actions(offset: Int, first: Int): [no_rodekors_docs_Page_Actions_2]
+}
+
 """Images"""
 type no_rodekors_docs_Page_BlocksImages {
   items(offset: Int, first: Int): [no_rodekors_docs_Page_Items_2]
@@ -2588,8 +2557,26 @@ type no_rodekors_docs_Page_BlocksImages {
   width: String
 }
 
+"""Images"""
+type no_rodekors_docs_Page_BlocksImages_2 {
+  items(offset: Int, first: Int): [no_rodekors_docs_Page_Items_6]
+  size: String
+  alignment: String
+  form: no_rodekors_docs_Page_Form_2
+  width: String
+}
+
 """Quote"""
 type no_rodekors_docs_Page_BlocksQuote {
+  text(processHtml: ProcessHtmlInput): RichText
+  author: String
+  imageId: Content
+  publicationTitle: String
+  publicationUrl: String
+}
+
+"""Quote"""
+type no_rodekors_docs_Page_BlocksQuote_2 {
   text(processHtml: ProcessHtmlInput): RichText
   author: String
   imageId: Content
@@ -2608,8 +2595,25 @@ type no_rodekors_docs_Page_BlocksSummary {
   width: String
 }
 
+"""Summary"""
+type no_rodekors_docs_Page_BlocksSummary_2 {
+  title: String
+  intro: String
+  items(offset: Int, first: Int): [no_rodekors_docs_Page_Items_8]
+  alignment: String
+  linkText: String
+  link: no_rodekors_docs_Page_Link_8
+  width: String
+}
+
 """Table"""
 type no_rodekors_docs_Page_BlocksTable {
+  title: String
+  table(processHtml: ProcessHtmlInput): RichText
+}
+
+"""Table"""
+type no_rodekors_docs_Page_BlocksTable_2 {
   title: String
   table(processHtml: ProcessHtmlInput): RichText
 }
@@ -2620,10 +2624,26 @@ type no_rodekors_docs_Page_BlocksText {
   text(processHtml: ProcessHtmlInput): RichText
 }
 
-"""Token browser"""
-type no_rodekors_docs_Page_BlocksTokens {
+"""Text"""
+type no_rodekors_docs_Page_BlocksText_2 {
   title: String
-  intro: String
+  text(processHtml: ProcessHtmlInput): RichText
+}
+
+"""Content blocks"""
+type no_rodekors_docs_Page_Blocks_2 {
+  _selected: no_rodekors_docs_Page_Blocks_OptionEnum_2
+  blocks_text: no_rodekors_docs_Page_BlocksText_2
+  blocks_hero: no_rodekors_docs_Page_BlocksHero_2
+  blocks_accordion: no_rodekors_docs_Page_BlocksAccordion_2
+  blocks_quote: no_rodekors_docs_Page_BlocksQuote_2
+  blocks_factbox: no_rodekors_docs_Page_BlocksFactbox_2
+  blocks_images: no_rodekors_docs_Page_BlocksImages_2
+  blocks_cards: no_rodekors_docs_Page_BlocksCards_2
+  blocks_code: no_rodekors_docs_Page_BlocksCode_2
+  blocks_demo: no_rodekors_docs_Page_BlocksDemo_2
+  blocks_summary: no_rodekors_docs_Page_BlocksSummary_2
+  blocks_table: no_rodekors_docs_Page_BlocksTable_2
 }
 
 """Content blocks option enum."""
@@ -2639,9 +2659,35 @@ enum no_rodekors_docs_Page_Blocks_OptionEnum {
   blocks_demo
   blocks_summary
   blocks_table
-  blocks_components
-  blocks_tokens
-  blocks_changelog
+}
+
+"""Content blocks option enum."""
+enum no_rodekors_docs_Page_Blocks_OptionEnum_2 {
+  blocks_text
+  blocks_hero
+  blocks_accordion
+  blocks_quote
+  blocks_factbox
+  blocks_images
+  blocks_cards
+  blocks_code
+  blocks_demo
+  blocks_summary
+  blocks_table
+}
+
+"""Endringslogg"""
+type no_rodekors_docs_Page_Changelog {
+  title: String
+  intro: String
+  maxReleases: String
+}
+
+"""Komponentoversikt"""
+type no_rodekors_docs_Page_Components {
+  title: String
+  intro: String
+  showSearch: Boolean
 }
 
 """Page - no.rodekors.docs:page data"""
@@ -2651,6 +2697,8 @@ type no_rodekors_docs_Page_Data {
   showInMenu: Boolean
   intro(processHtml: ProcessHtmlInput): RichText
   blocks(offset: Int, first: Int): [no_rodekors_docs_Page_Blocks]
+  pageView: no_rodekors_docs_Page_PageView
+  afterContent: no_rodekors_docs_Page_AfterContent
 }
 
 """External"""
@@ -2673,6 +2721,26 @@ type no_rodekors_docs_Page_External_4 {
   externalLink: String
 }
 
+"""External"""
+type no_rodekors_docs_Page_External_5 {
+  externalLink: String
+}
+
+"""External"""
+type no_rodekors_docs_Page_External_6 {
+  externalLink: String
+}
+
+"""External"""
+type no_rodekors_docs_Page_External_7 {
+  externalLink: String
+}
+
+"""External"""
+type no_rodekors_docs_Page_External_8 {
+  externalLink: String
+}
+
 """Shape"""
 type no_rodekors_docs_Page_Form {
   _selected: no_rodekors_docs_Page_Form_OptionEnum
@@ -2680,8 +2748,21 @@ type no_rodekors_docs_Page_Form {
   notch: no_rodekors_docs_Page_Notch
 }
 
+"""Shape"""
+type no_rodekors_docs_Page_Form_2 {
+  _selected: no_rodekors_docs_Page_Form_OptionEnum_2
+  rounded: String
+  notch: no_rodekors_docs_Page_Notch_2
+}
+
 """Shape option enum."""
 enum no_rodekors_docs_Page_Form_OptionEnum {
+  rounded
+  notch
+}
+
+"""Shape option enum."""
+enum no_rodekors_docs_Page_Form_OptionEnum_2 {
   rounded
   notch
 }
@@ -2703,6 +2784,26 @@ type no_rodekors_docs_Page_Internal_3 {
 
 """Internal"""
 type no_rodekors_docs_Page_Internal_4 {
+  internalLink: Content
+}
+
+"""Internal"""
+type no_rodekors_docs_Page_Internal_5 {
+  internalLink: Content
+}
+
+"""Internal"""
+type no_rodekors_docs_Page_Internal_6 {
+  internalLink: Content
+}
+
+"""Internal"""
+type no_rodekors_docs_Page_Internal_7 {
+  internalLink: Content
+}
+
+"""Internal"""
+type no_rodekors_docs_Page_Internal_8 {
   internalLink: Content
 }
 
@@ -2731,6 +2832,36 @@ type no_rodekors_docs_Page_Items_3 {
 
 """Key figure"""
 type no_rodekors_docs_Page_Items_4 {
+  label: String
+  value: String
+  description: String
+}
+
+"""Accordion element"""
+type no_rodekors_docs_Page_Items_5 {
+  title: String
+  text(processHtml: ProcessHtmlInput): RichText
+}
+
+"""Image"""
+type no_rodekors_docs_Page_Items_6 {
+  imageId: Content
+  altText: String
+  caption: String
+}
+
+"""Cards"""
+type no_rodekors_docs_Page_Items_7 {
+  title: String
+  link: no_rodekors_docs_Page_Link_6
+  kicker: String
+  text: String
+  imageId: Content
+  theme: String
+}
+
+"""Key figure"""
+type no_rodekors_docs_Page_Items_8 {
   label: String
   value: String
   description: String
@@ -2768,6 +2899,38 @@ type no_rodekors_docs_Page_Link_4 {
   none: String
 }
 
+"""Link"""
+type no_rodekors_docs_Page_Link_5 {
+  _selected: no_rodekors_docs_Page_Link_OptionEnum_5
+  internal: no_rodekors_docs_Page_Internal_5
+  external: no_rodekors_docs_Page_External_5
+  none: String
+}
+
+"""Link"""
+type no_rodekors_docs_Page_Link_6 {
+  _selected: no_rodekors_docs_Page_Link_OptionEnum_6
+  internal: no_rodekors_docs_Page_Internal_6
+  external: no_rodekors_docs_Page_External_6
+  none: String
+}
+
+"""Link"""
+type no_rodekors_docs_Page_Link_7 {
+  _selected: no_rodekors_docs_Page_Link_OptionEnum_7
+  internal: no_rodekors_docs_Page_Internal_7
+  external: no_rodekors_docs_Page_External_7
+  none: String
+}
+
+"""Link"""
+type no_rodekors_docs_Page_Link_8 {
+  _selected: no_rodekors_docs_Page_Link_OptionEnum_8
+  internal: no_rodekors_docs_Page_Internal_8
+  external: no_rodekors_docs_Page_External_8
+  none: String
+}
+
 """Link option enum."""
 enum no_rodekors_docs_Page_Link_OptionEnum {
   internal
@@ -2796,11 +2959,67 @@ enum no_rodekors_docs_Page_Link_OptionEnum_4 {
   none
 }
 
+"""Link option enum."""
+enum no_rodekors_docs_Page_Link_OptionEnum_5 {
+  internal
+  external
+  none
+}
+
+"""Link option enum."""
+enum no_rodekors_docs_Page_Link_OptionEnum_6 {
+  internal
+  external
+  none
+}
+
+"""Link option enum."""
+enum no_rodekors_docs_Page_Link_OptionEnum_7 {
+  internal
+  external
+  none
+}
+
+"""Link option enum."""
+enum no_rodekors_docs_Page_Link_OptionEnum_8 {
+  internal
+  external
+  none
+}
+
 """Notch (cutout)"""
 type no_rodekors_docs_Page_Notch {
   corner: String
   width: String
   depth: String
+}
+
+"""Notch (cutout)"""
+type no_rodekors_docs_Page_Notch_2 {
+  corner: String
+  width: String
+  depth: String
+}
+
+"""Sidevisning"""
+type no_rodekors_docs_Page_PageView {
+  _selected: no_rodekors_docs_Page_PageView_OptionEnum
+  components: no_rodekors_docs_Page_Components
+  changelog: no_rodekors_docs_Page_Changelog
+  tokens: no_rodekors_docs_Page_Tokens
+}
+
+"""Sidevisning option enum."""
+enum no_rodekors_docs_Page_PageView_OptionEnum {
+  components
+  changelog
+  tokens
+}
+
+"""Design-tokens"""
+type no_rodekors_docs_Page_Tokens {
+  title: String
+  intro: String
 }
 
 """Fragment - portal:fragment"""

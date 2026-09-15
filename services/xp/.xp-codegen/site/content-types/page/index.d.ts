@@ -669,16 +669,22 @@ export type Page = {
           table: string;
         };
       }
+  >;
+
+  /**
+   * Sidevisning
+   */
+  pageView?:
     | {
         /**
          * Selected
          */
-        _selected: "blocks-components";
+        _selected: "components";
 
         /**
-         * Component catalogue
+         * Komponentoversikt
          */
-        "blocks-components": {
+        components: {
           /**
            * Title
            */
@@ -699,33 +705,12 @@ export type Page = {
         /**
          * Selected
          */
-        _selected: "blocks-tokens";
+        _selected: "changelog";
 
         /**
-         * Token browser
+         * Endringslogg
          */
-        "blocks-tokens": {
-          /**
-           * Title
-           */
-          title?: string;
-
-          /**
-           * Intro
-           */
-          intro?: string;
-        };
-      }
-    | {
-        /**
-         * Selected
-         */
-        _selected: "blocks-changelog";
-
-        /**
-         * Release notes
-         */
-        "blocks-changelog": {
+        changelog: {
           /**
            * Title
            */
@@ -742,5 +727,681 @@ export type Page = {
           maxReleases?: number;
         };
       }
-  >;
+    | {
+        /**
+         * Selected
+         */
+        _selected: "tokens";
+
+        /**
+         * Design-tokens
+         */
+        tokens: {
+          /**
+           * Title
+           */
+          title?: string;
+
+          /**
+           * Intro
+           */
+          intro?: string;
+        };
+      };
+
+  /**
+   * Innhold etter listen
+   */
+  afterContent?: {
+    /**
+     * Content blocks
+     */
+    blocks?: Array<
+      | {
+          /**
+           * Selected
+           */
+          _selected: "blocks-text";
+
+          /**
+           * Text
+           */
+          "blocks-text": {
+            /**
+             * Title
+             */
+            title?: string;
+
+            /**
+             * Text
+             */
+            text?: string;
+          };
+        }
+      | {
+          /**
+           * Selected
+           */
+          _selected: "blocks-hero";
+
+          /**
+           * Hero
+           */
+          "blocks-hero": {
+            /**
+             * Badge
+             */
+            badge?: string;
+
+            /**
+             * Badge meta
+             */
+            badgeMeta?: string;
+
+            /**
+             * Kicker
+             */
+            kicker?: string;
+
+            /**
+             * Title
+             */
+            title: string;
+
+            /**
+             * Lead
+             */
+            lead?: string;
+
+            /**
+             * Photo
+             */
+            image?: string;
+
+            /**
+             * Call to action
+             */
+            actions?: Array<{
+              /**
+               * Button text
+               */
+              linkText: string;
+
+              /**
+               * Link
+               */
+              link:
+                | {
+                    /**
+                     * Selected
+                     */
+                    _selected: "internal";
+
+                    /**
+                     * Internal
+                     */
+                    internal: {
+                      /**
+                       * Internal link
+                       */
+                      internalLink: string;
+                    };
+                  }
+                | {
+                    /**
+                     * Selected
+                     */
+                    _selected: "external";
+
+                    /**
+                     * External
+                     */
+                    external: {
+                      /**
+                       * External link
+                       */
+                      externalLink: string;
+                    };
+                  }
+                | {
+                    /**
+                     * Selected
+                     */
+                    _selected: "none";
+
+                    /**
+                     * None
+                     */
+                    none: Record<string, unknown>;
+                  };
+            }>;
+          };
+        }
+      | {
+          /**
+           * Selected
+           */
+          _selected: "blocks-accordion";
+
+          /**
+           * Accordion
+           */
+          "blocks-accordion": {
+            /**
+             * Title
+             */
+            title?: string;
+
+            /**
+             * Accordion element
+             */
+            items: Array<{
+              /**
+               * Title
+               */
+              title: string;
+
+              /**
+               * Text
+               */
+              text: string;
+            }>;
+
+            /**
+             * Theme
+             */
+            theme?: string;
+          };
+        }
+      | {
+          /**
+           * Selected
+           */
+          _selected: "blocks-quote";
+
+          /**
+           * Quote
+           */
+          "blocks-quote": {
+            /**
+             * Text
+             */
+            text: string;
+
+            /**
+             * Name of person quoted
+             */
+            author?: string;
+
+            /**
+             * Author Image
+             */
+            imageId?: string;
+
+            /**
+             * Title
+             */
+            publicationTitle?: string;
+
+            /**
+             * Url
+             */
+            publicationUrl?: string;
+          };
+        }
+      | {
+          /**
+           * Selected
+           */
+          _selected: "blocks-factbox";
+
+          /**
+           * Factbox
+           */
+          "blocks-factbox": {
+            /**
+             * Title
+             */
+            title?: string;
+
+            /**
+             * Text
+             */
+            text: string;
+
+            /**
+             * Theme
+             */
+            theme?: string;
+          };
+        }
+      | {
+          /**
+           * Selected
+           */
+          _selected: "blocks-images";
+
+          /**
+           * Images
+           */
+          "blocks-images": {
+            /**
+             * Image
+             */
+            items: Array<{
+              /**
+               * Image
+               */
+              imageId: string;
+
+              /**
+               * Description of the image for visually impaired users (alt text)
+               */
+              altText: string;
+
+              /**
+               * Caption
+               */
+              caption?: string;
+            }>;
+
+            /**
+             * Size
+             */
+            size?: "full" | "medium" | "small";
+
+            /**
+             * Alignment
+             */
+            alignment?: "left" | "right";
+
+            /**
+             * Shape
+             */
+            form?:
+              | {
+                  /**
+                   * Selected
+                   */
+                  _selected: "rounded";
+
+                  /**
+                   * Rounded
+                   */
+                  rounded: Record<string, unknown>;
+                }
+              | {
+                  /**
+                   * Selected
+                   */
+                  _selected: "notch";
+
+                  /**
+                   * Notch (cutout)
+                   */
+                  notch: {
+                    /**
+                     * Corner
+                     */
+                    corner?: "bottom-right" | "bottom-left" | "top-right" | "top-left";
+
+                    /**
+                     * Cutout width in percent
+                     */
+                    width?: number;
+
+                    /**
+                     * Cutout depth in percent
+                     */
+                    depth?: number;
+                  };
+                };
+
+            /**
+             * Width
+             */
+            width?: "column" | "wide";
+          };
+        }
+      | {
+          /**
+           * Selected
+           */
+          _selected: "blocks-cards";
+
+          /**
+           * Cards
+           */
+          "blocks-cards": {
+            /**
+             * Title
+             */
+            title?: string;
+
+            /**
+             * Intro
+             */
+            intro?: string;
+
+            /**
+             * Image placement
+             */
+            imageClass: "blocks-card--image-left" | "blocks-card--image-right" | "blocks-card--image-top" | "blocks-card--image-bottom";
+
+            /**
+             * Column count
+             */
+            columnsClass: "blocks-card--cols-1" | "blocks-card--cols-2" | "blocks-card--cols-3";
+
+            /**
+             * Cards
+             */
+            items: Array<{
+              /**
+               * Title
+               */
+              title?: string;
+
+              /**
+               * Link
+               */
+              link:
+                | {
+                    /**
+                     * Selected
+                     */
+                    _selected: "internal";
+
+                    /**
+                     * Internal
+                     */
+                    internal: {
+                      /**
+                       * Internal link
+                       */
+                      internalLink: string;
+                    };
+                  }
+                | {
+                    /**
+                     * Selected
+                     */
+                    _selected: "external";
+
+                    /**
+                     * External
+                     */
+                    external: {
+                      /**
+                       * External link
+                       */
+                      externalLink: string;
+                    };
+                  }
+                | {
+                    /**
+                     * Selected
+                     */
+                    _selected: "none";
+
+                    /**
+                     * None
+                     */
+                    none: Record<string, unknown>;
+                  };
+
+              /**
+               * Kicker
+               */
+              kicker?: string;
+
+              /**
+               * Text
+               */
+              text?: string;
+
+              /**
+               * Image
+               */
+              imageId?: string;
+
+              /**
+               * Theme
+               */
+              theme?: string;
+            }>;
+
+            /**
+             * Link text
+             */
+            linkText?: string;
+
+            /**
+             * Link
+             */
+            link?:
+              | {
+                  /**
+                   * Selected
+                   */
+                  _selected: "internal";
+
+                  /**
+                   * Internal
+                   */
+                  internal: {
+                    /**
+                     * Internal link
+                     */
+                    internalLink: string;
+                  };
+                }
+              | {
+                  /**
+                   * Selected
+                   */
+                  _selected: "external";
+
+                  /**
+                   * External
+                   */
+                  external: {
+                    /**
+                     * External link
+                     */
+                    externalLink: string;
+                  };
+                }
+              | {
+                  /**
+                   * Selected
+                   */
+                  _selected: "none";
+
+                  /**
+                   * None
+                   */
+                  none: Record<string, unknown>;
+                };
+
+            /**
+             * Width
+             */
+            width?: "column" | "wide";
+          };
+        }
+      | {
+          /**
+           * Selected
+           */
+          _selected: "blocks-code";
+
+          /**
+           * Code
+           */
+          "blocks-code": {
+            /**
+             * Code
+             */
+            code: string;
+
+            /**
+             * Language
+             */
+            language?: "tsx" | "ts" | "js" | "css" | "html" | "bash" | "json" | "graphql" | "xml";
+
+            /**
+             * Label
+             */
+            label?: string;
+          };
+        }
+      | {
+          /**
+           * Selected
+           */
+          _selected: "blocks-demo";
+
+          /**
+           * Component demo
+           */
+          "blocks-demo": {
+            /**
+             * Demo
+             */
+            demo: "button-variants" | "alert-severities" | "card-scopes" | "details-basic" | "tag-badge";
+
+            /**
+             * Title
+             */
+            title?: string;
+          };
+        }
+      | {
+          /**
+           * Selected
+           */
+          _selected: "blocks-summary";
+
+          /**
+           * Summary
+           */
+          "blocks-summary": {
+            /**
+             * Title
+             */
+            title?: string;
+
+            /**
+             * Intro
+             */
+            intro?: string;
+
+            /**
+             * Key figure
+             */
+            items: Array<{
+              /**
+               * Label
+               */
+              label?: string;
+
+              /**
+               * Value
+               */
+              value: string;
+
+              /**
+               * Description
+               */
+              description?: string;
+            }>;
+
+            /**
+             * Alignment
+             */
+            alignment?: "left" | "center" | "spread";
+
+            /**
+             * Link text
+             */
+            linkText?: string;
+
+            /**
+             * Link
+             */
+            link:
+              | {
+                  /**
+                   * Selected
+                   */
+                  _selected: "internal";
+
+                  /**
+                   * Internal
+                   */
+                  internal: {
+                    /**
+                     * Internal link
+                     */
+                    internalLink: string;
+                  };
+                }
+              | {
+                  /**
+                   * Selected
+                   */
+                  _selected: "external";
+
+                  /**
+                   * External
+                   */
+                  external: {
+                    /**
+                     * External link
+                     */
+                    externalLink: string;
+                  };
+                }
+              | {
+                  /**
+                   * Selected
+                   */
+                  _selected: "none";
+
+                  /**
+                   * None
+                   */
+                  none: Record<string, unknown>;
+                };
+
+            /**
+             * Width
+             */
+            width?: "column" | "wide";
+          };
+        }
+      | {
+          /**
+           * Selected
+           */
+          _selected: "blocks-table";
+
+          /**
+           * Table
+           */
+          "blocks-table": {
+            /**
+             * Title
+             */
+            title?: string;
+
+            /**
+             * Table
+             */
+            table: string;
+          };
+        }
+    >;
+  };
 };

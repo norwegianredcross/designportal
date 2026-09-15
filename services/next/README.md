@@ -1,6 +1,6 @@
 # Røde kors webpage (NextJS)
 
-Next.js 16 frontend for rodekors.no. Pulls content from the sibling Enonic XP service (`services/xp/`) over Guillotine GraphQL, and renders pages using the [@enonic/nextjs-adapter](https://developer.enonic.com/learn/next.xp/stable) integration.
+Next.js 16 frontend for designportal. Pulls content from the sibling Enonic XP service (`services/xp/`) over Guillotine GraphQL, and renders pages using the [@enonic/nextjs-adapter](https://developer.enonic.com/learn/next.xp/stable) integration.
 
 [[_TOC_]]
 
@@ -10,7 +10,7 @@ Next.js 16 frontend for rodekors.no. Pulls content from the sibling Enonic XP se
 
 - Node.js 22 (LTS); 20.9+ minimum (matches the `node:22-alpine` Docker image). With [nvm](https://github.com/nvm-sh/nvm), run `nvm use` (or `nvm install`) to pick up the version from `.nvmrc`.
 - npm
-- The Enonic XP service running locally on `http://localhost:8081` (started from `services/xp/`). Without it, `dev`, `introspect`, and any page render will fail.
+- The Enonic XP service running locally on `http://localhost:8081` (started with `npm run dev` from `services/xp/`). Without it, `dev`, `introspect`, and any page render will fail.
 
 Install dependencies:
 
@@ -38,7 +38,7 @@ ENONIC_API_TOKEN=mySecretKey
 
 ```bash
 MODE=production
-ENONIC_API=https://rodekors-xp7prod.enonic.cloud/api/guillotine/site
+ENONIC_API=https://<your-designportal-xp-host>/api/guillotine/site
 ENONIC_API_TOKEN=mySecretKey
 ```
 
@@ -69,13 +69,54 @@ Typical refresh after editing content types in XP:
 npm run introspect && npm run generate
 ```
 
+If your sandbox uses another port, override the introspection URL without changing
+the shared GraphQL configuration:
+
+```sh
+ENONIC_INTROSPECT_URL=http://localhost:8081/site/designsystem-docs/master npm run introspect
+npm run generate
+```
+
+### Page rendering and templates
+
+The rendering structure matches `CMS100003-webpage`:
+
+```text
+app/[[...contentPath]]/page.tsx — fetchContent → MainView
+  components/_mappings.tsx — page controller and part registrations
+    pages/Default.tsx — Header, Sidebar, header/main regions, Footer
+      parts/ContentHeader.tsx — page title, kicker and introduction
+      parts/BlocksView.tsx — editorial blocks from the content form
+```
+
+`no.rodekors.docs:page` has no direct content-type view. Content Studio's selected
+page template/controller decides the composition, including in preview and inline
+editing. The **Standard side** template uses the **Standard** controller, with
+**Content header** in `header` and **Blocks view** in `main`. New Side content
+inherits this template automatically. See [template setup](../xp/README.md#page-template-setup)
+when restoring an older preview dump.
+
+The docs-specific extensions are the sidebar, main-menu selection and generated
+page sections. `Default` places the fixed components/changelog/tokens section after
+the `main` region, followed by the page's **Innhold etter listen** blocks. These
+renderers live in `src/components/pages/generated/` and are not block-picker entries.
+The shared `getEditorialBlocksFragment` and `renderBlocks` keep both editorial
+areas consistent. Keep GraphQL comments out of that fragment: the adapter's
+fragment extractor does not support them.
+
+A leading Hero owns the page heading, so `ContentHeader` suppresses its duplicate.
+The page controller also exposes the reference project's narrow/wide layout choice.
+
+See [the XP editor and migration instructions](../xp/README.md#generated-documentation-pages)
+for generated page settings and older block-based content.
+
 ### Storybook
 
-Components have colocated `*.stories.tsx` files. Storybook runs on port 6006 with the Vitest, a11y, docs, and MCP addons enabled.
+Components have colocated `*.stories.tsx` files. Storybook runs on port 6106 with the Vitest, a11y, docs, and MCP addons enabled.
 
 | Command | What it does |
 | ------- | ------------ |
-| `npm run storybook` | Start the Storybook dev server on port 6006. Also exposes the Storybook MCP server at `http://localhost:6006/mcp` (see `.mcp.json`). |
+| `npm run storybook` | Start the Storybook dev server on port 6106. Also exposes the Storybook MCP server at `http://localhost:6106/mcp` (see `.mcp.json`). |
 | `npm run build-storybook` | Static Storybook build for hosting. |
 | `npm run test` | Run all story tests (Vitest + Playwright + a11y checks) once. |
 
@@ -98,11 +139,11 @@ services/next/
 │   ├── app/                 Next.js App Router entry, globals.css, API routes
 │   ├── components/
 │   │   ├── blocks/          Content blocks (Accordion, Text, …) + colocated stories
-│   │   ├── pages/           Page-type views (Default)
-│   │   ├── partials/        Header / Footer / Details (rk-designsystem re-exports)
+│   │   ├── pages/           Page controllers (Default) and generated sections
+│   │   ├── partials/        Header / Footer / Sidebar / Details
 │   │   ├── parts/           Composable parts (BlocksView, ContentHeader) + stories
 │   │   ├── queries/         GraphQL query strings consumed by codegen
-│   │   └── _mappings.tsx    Wires Enonic content types → React components
+│   │   └── _mappings.tsx    Wires Enonic page controllers and parts → React views
 │   ├── types/
 │   │   ├── queries.d.ts     Generated GraphQL types (do not edit)
 │   │   └── utils.ts         Shared TS helpers (PartProps, Get<>, …)
@@ -122,4 +163,4 @@ This project ships a `.mcp.json` declaring the Storybook MCP server. When Storyb
 - Look up real prop types and example stories before using a component
 - Run story tests and get preview URLs
 
-The server only resolves while `npm run storybook` is running on port 6006.
+The server only resolves while `npm run storybook` is running on port 6106.

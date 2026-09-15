@@ -13,7 +13,7 @@ query Common($path:ID!){
     }
     # Header navigation: the pages editors ticked "Show in main menu" on,
     # in the site's childOrder. Same "/docs" <-> ENONIC_MAPPINGS coupling
-    # as the sidebar query in getSidePage.
+    # as the sidebar query in getPageDefault.
     menu: get(key:"/docs") {
       children(first:100) {
         displayName
